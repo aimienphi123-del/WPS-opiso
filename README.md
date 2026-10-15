@@ -6,8 +6,8 @@ App Android đọc, chuyển đổi và soạn tài liệu, **chạy offline ho�
 
 | Giai đoạn | Nội dung | Trạng thái |
 |---|---|---|
-| 1 | Khung app, đọc TXT/PDF, "Mở bằng", Nhật ký lỗi, build APK | Có trong bản này |
-| 2 | Đọc EPUB, DOCX, MOBI | Chưa làm |
+| 1 | Khung app, đọc TXT/PDF, "Mở bằng", Nhật ký lỗi, build APK | Đã build thành công |
+| 2 | Đọc EPUB, DOCX, MOBI | Có trong bản này |
 | 3 | Soạn văn bản, xuất DOCX/PDF | Chưa làm |
 | 4 | Chuyển đổi định dạng | Chưa làm |
 
@@ -28,7 +28,9 @@ Phiên bản: Node 22, Java 21, Capacitor 8.5.3 (Gradle 8.14.3 đi kèm bản An
 
 ## Giới hạn hiện tại
 
-- Chỉ đọc được PDF và TXT. Mở EPUB/DOCX/MOBI sẽ báo "chưa hỗ trợ".
 - PDF: hiển thị từng trang, chưa chọn/chép chữ trong PDF, chưa hỗ trợ PDF có mật khẩu, PDF dạng ảnh quét không có chữ để tìm.
 - TXT: nhận UTF-8, UTF-16 và Windows-1258. Các bảng mã tiếng Việt cũ như TCVN3, VNI không tự nhận được. Tệp TXT rất lớn (hàng chục MB) có thể mở chậm.
+- EPUB: đọc theo từng phần, bỏ CSS riêng của sách (dùng kiểu chữ của app), bỏ liên kết ra ngoài. EPUB có DRM báo lỗi.
+- DOCX: giữ chữ, tiêu đề, đậm/nghiêng/gạch chân, danh sách, bảng cơ bản, ảnh. Không giữ bố cục trang, cột, hộp văn bản, chú thích cuối trang. Không đọc được DOC (Word cũ).
+- MOBI/PRC/AZW: hỗ trợ nén PalmDOC và không nén. Nén HUFF/CDIC và DRM báo lỗi. Liên kết nội bộ trong MOBI (ví dụ mục lục dạng liên kết) chưa bấm được. AZW3/KF8 có thể mất ảnh và định dạng.
 - Khi bấm mở tệp tải từ web, Android chỉ hiện WPScraft nếu nhận ra loại tệp. Nếu không thấy, dùng nút "Mở tài liệu" trong app hoặc "Chia sẻ" → WPScraft.

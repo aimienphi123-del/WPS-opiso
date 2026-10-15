@@ -33,7 +33,7 @@ export function mountHome(root, params, app) {
   const hint = el(
     'p',
     { class: 'muted' },
-    'Đọc được: PDF, TXT. Bạn cũng có thể tải tệp về, bấm mở và chọn WPScraft trong danh sách "Mở bằng".',
+    'Đọc được: PDF, TXT, EPUB, DOCX, MOBI. Bạn cũng có thể tải tệp về, bấm mở và chọn WPScraft trong danh sách "Mở bằng".',
   );
 
   const list = el('div', { class: 'recent' });

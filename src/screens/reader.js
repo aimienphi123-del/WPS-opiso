@@ -6,6 +6,7 @@ import { toggleTheme, themeIcon } from '../core/theme.js';
 import { logError } from '../core/errorLog.js';
 import { openTxt } from '../readers/txt.js';
 import { openPdf } from '../readers/pdf.js';
+import { openBook } from '../readers/book.js';
 
 const HAS_VI = /[àáâãèéêìíòóôõùúýăđĩũơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]/i;
 
@@ -13,6 +14,24 @@ export function friendlyMessage(name, e) {
   const msg = e && e.message ? String(e.message) : '';
   if (HAS_VI.test(msg)) return msg;
   return `Không mở được "${name}". Tệp có thể bị hỏng hoặc không đúng định dạng. Bấm "Xem nhật ký lỗi" để lấy chi tiết gửi cho người hỗ trợ.`;
+}
+
+async function openByKind(kind, body, bytes, ctx) {
+  if (kind === 'pdf') return openPdf(body, bytes, ctx);
+  if (kind === 'txt') return openTxt(body, bytes, ctx);
+  if (kind === 'epub') {
+    const { parseEpub } = await import('../readers/epub.js');
+    return openBook(body, await parseEpub(bytes), ctx);
+  }
+  if (kind === 'docx') {
+    const { parseDocx } = await import('../readers/docx.js');
+    return openBook(body, await parseDocx(bytes), ctx);
+  }
+  if (kind === 'mobi') {
+    const { parseMobi } = await import('../readers/mobi.js');
+    return openBook(body, await parseMobi(bytes), ctx);
+  }
+  throw new Error('Định dạng chưa được hỗ trợ: ' + kind);
 }
 
 export function mountReader(root, params, app) {
@@ -66,7 +85,8 @@ export function mountReader(root, params, app) {
     el('div', { class: 'topbar-title', text: entry.name }),
     themeBtn,
   );
-  const bar = el('footer', { class: 'toolbar' }, el('div', { class: 'row slider-row' }, slider, label), el('div', { class: 'row' }, smallerBtn, biggerBtn));
+  const buttonRow = el('div', { class: 'row' }, smallerBtn, biggerBtn);
+  const bar = el('footer', { class: 'toolbar' }, el('div', { class: 'row slider-row' }, slider, label), buttonRow);
   const screen = el('div', { class: 'screen reader' }, top, body, bar);
   body.addEventListener('click', () => screen.classList.toggle('immersive'));
   root.append(screen);
@@ -99,8 +119,15 @@ export function mountReader(root, params, app) {
       if (destroyed) return;
       setBusy('Đang dựng nội dung...');
       await new Promise((r) => setTimeout(r, 30));
-      controller = isPdf ? await openPdf(body, bytes, ctx) : openTxt(body, bytes, ctx);
-      if (destroyed && controller) controller.destroy();
+      controller = await openByKind(kind, body, bytes, ctx);
+      if (destroyed && controller) {
+        controller.destroy();
+        return;
+      }
+      if (controller.toc) {
+        const tocBtn = el('button', { class: 'btn', 'aria-label': 'Mục lục', onclick: () => controller.toc() }, '☰  Mục lục');
+        buttonRow.append(tocBtn);
+      }
       hideBusy();
     } catch (e) {
       hideBusy();

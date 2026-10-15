@@ -51,8 +51,7 @@ const MIME_KIND = {
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
   'application/msword': 'doc',
 };
-const SUPPORTED = new Set(['pdf', 'txt']);
-const KIND_NAME = { epub: 'EPUB', mobi: 'MOBI', docx: 'DOCX', doc: 'DOC' };
+const SUPPORTED = new Set(['pdf', 'txt', 'epub', 'mobi', 'docx']);
 
 function kindFromInfo(info) {
   return EXT_KIND[extOf(info.name)] || MIME_KIND[(info.mime || '').toLowerCase()] || '';
@@ -62,7 +61,12 @@ async function sniffKind(info) {
   const b = await readBytes(info);
   const head = (n) => String.fromCharCode(...b.slice(0, n));
   if (head(1024).includes('%PDF-')) return 'pdf';
-  if (head(2) === 'PK') return 'zip';
+  if (head(2) === 'PK') {
+    const h = head(2000);
+    if (h.includes('application/epub+zip')) return 'epub';
+    if (h.includes('[Content_Types].xml') || h.includes('word/')) return 'docx';
+    return 'zip';
+  }
   if (b.length > 68 && String.fromCharCode(...b.slice(60, 68)) === 'BOOKMOBI') return 'mobi';
   const sample = b.slice(0, 4000);
   if ((b[0] === 0xff && b[1] === 0xfe) || (b[0] === 0xfe && b[1] === 0xff)) return 'txt';
@@ -87,9 +91,10 @@ async function openInfo(info) {
 
     if (!SUPPORTED.has(kind)) {
       await discard(info);
-      const msg = KIND_NAME[kind]
-        ? `Định dạng ${KIND_NAME[kind]} chưa được hỗ trợ trong phiên bản này. Hiện app đọc được PDF và TXT. EPUB, DOCX, MOBI sẽ có ở các bản cập nhật sau.`
-        : `Không nhận ra định dạng của "${info.name}". Hiện app đọc được PDF và TXT.`;
+      const msg =
+        kind === 'doc'
+          ? 'Định dạng DOC (Word cũ) không được hỗ trợ. Hãy lưu lại thành DOCX rồi mở lại.'
+          : `Không nhận ra định dạng của "${info.name}". Hiện app đọc được PDF, TXT, EPUB, DOCX và MOBI.`;
       await showError(msg, undefined, 'open.unsupported:' + (kind || 'unknown') + ':' + info.name);
       return;
     }

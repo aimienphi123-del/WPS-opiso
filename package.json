@@ -1,6 +1,6 @@
 {
   "name": "wpscraft",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "WPScraft - đọc, chuyển đổi và soạn tài liệu, chạy offline.",
@@ -14,6 +14,8 @@
     "@capacitor/core": "8.5.3",
     "@capacitor/filesystem": "8.1.4",
     "@capacitor/share": "8.0.3",
+    "jszip": "3.10.2",
+    "mammoth": "1.13.0",
     "pdfjs-dist": "5.7.284"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 // Nhật ký lỗi ("hộp đen"): ghi lỗi vào bộ nhớ máy để người dùng sao chép gửi lại khi cần sửa.
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0';
 
 const KEY = 'wps_errlog';
 const MAX_ENTRIES = 200;
