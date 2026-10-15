@@ -1,0 +1,26 @@
+{
+  "name": "wpscraft",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "WPScraft - đọc, chuyển đổi và soạn tài liệu, chạy offline.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/filesystem": "8.1.4",
+    "@capacitor/share": "8.0.3",
+    "pdfjs-dist": "5.7.284"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.3",
+    "vite": "8.3.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

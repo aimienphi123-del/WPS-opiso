@@ -1,0 +1,8 @@
+{
+  "appId": "vn.wpscraft.app",
+  "appName": "WPScraft",
+  "webDir": "dist",
+  "android": {
+    "allowMixedContent": false
+  }
+}

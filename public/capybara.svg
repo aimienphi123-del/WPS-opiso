@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#F3E6C8"/>
+  <!-- thân -->
+  <ellipse cx="256" cy="480" rx="190" ry="95" fill="#8F5F36"/>
+  <!-- tai nhỏ -->
+  <ellipse cx="150" cy="188" rx="26" ry="22" fill="#7A4E2B"/>
+  <ellipse cx="362" cy="188" rx="26" ry="22" fill="#7A4E2B"/>
+  <!-- đầu: khối vuông bo tròn -->
+  <rect x="92" y="176" width="328" height="244" rx="92" fill="#A9703F"/>
+  <!-- mõm to, tù -->
+  <rect x="140" y="250" width="232" height="150" rx="64" fill="#C58E5C"/>
+  <!-- mũi -->
+  <rect x="186" y="246" width="140" height="74" rx="30" fill="#5A3820"/>
+  <ellipse cx="226" cy="282" rx="10" ry="13" fill="#2E1B0E"/>
+  <ellipse cx="286" cy="282" rx="10" ry="13" fill="#2E1B0E"/>
+  <!-- miệng -->
+  <path d="M228 358 Q256 380 284 358" fill="none" stroke="#5A3820" stroke-width="9" stroke-linecap="round"/>
+  <!-- mắt nhỏ, xa nhau -->
+  <ellipse cx="156" cy="236" rx="13" ry="16" fill="#2E1B0E"/>
+  <ellipse cx="356" cy="236" rx="13" ry="16" fill="#2E1B0E"/>
+  <circle cx="160" cy="230" r="4.5" fill="#fff"/>
+  <circle cx="360" cy="230" r="4.5" fill="#fff"/>
+  <!-- cuốn sách nhỏ -->
+  <path d="M170 440 L256 426 L342 440 L342 482 L256 468 L170 482 Z" fill="#2F7D6B"/>
+  <path d="M256 426 L256 468" stroke="#F3E6C8" stroke-width="5"/>
+</svg>

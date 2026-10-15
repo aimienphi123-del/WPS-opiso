@@ -1,0 +1,62 @@
+name: Build APK
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Lấy mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Cài Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: In phiên bản công cụ
+        run: |
+          node -v
+          npm -v
+          java -version
+
+      - name: Cài thư viện (npm ci)
+        run: npm ci
+
+      - name: Build phần web
+        run: npm run build
+
+      - name: Tạo dự án Android (cap add android)
+        run: npx cap add android
+
+      - name: Vá Android (Mở bằng, plugin nhận tệp, biểu tượng)
+        run: node scripts/patch-android.mjs
+
+      - name: Đồng bộ web vào Android (cap sync)
+        run: npx cap sync android
+
+      - name: Build APK debug bằng Gradle
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Tải APK lên (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: WPScraft-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
