@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "dung/chay.py": {
-    "mtime": 1794938544.5551758,
-    "seen": 1794938909.9853878,
-    "ast_hash": "eff99f0be900f2eb262a6b295d78f29f",
+    "mtime": 1794953436.7977433,
+    "seen": 1794953782.5178692,
+    "ast_hash": "73ae3dace25cbac9a7c9dc67ebd0f46d",
     "semantic_hash": ""
   },
   "dung/lam-3d.py": {
@@ -192,9 +192,9 @@
     "semantic_hash": ""
   },
   "DU-AN.md": {
-    "mtime": 1794938902.6991997,
-    "seen": 1794938909.9854248,
-    "ast_hash": "0c50cb71971339621c1b1e8ffbcff1f7",
+    "mtime": 1794953771.1513073,
+    "seen": 1794953782.5179307,
+    "ast_hash": "2bcbf984dd7d054af7b9782fc37cccd0",
     "semantic_hash": ""
   },
   "thu/kiem_js.txt": {
@@ -203,268 +203,274 @@
     "ast_hash": "ed3693c5c095ca9c695917e5886fef6f",
     "semantic_hash": ""
   },
-  "thu/as-dt-0-dang-mo.png": {
-    "mtime": 1794938745.1704073,
-    "seen": 1794938909.9854267,
-    "ast_hash": "addf580c67ecda17d7f8c8038ea2c8b4",
+  "dung/lam-an-hien.py": {
+    "mtime": 1794953436.7931867,
+    "seen": 1794953782.5178754,
+    "ast_hash": "a17210c4f41019680c2a60956e802f31",
     "semantic_hash": ""
   },
-  "thu/as-dt-1-hero.png": {
-    "mtime": 1794938747.9984076,
-    "seen": 1794938909.9854276,
-    "ast_hash": "598e763a26789fb09f63e1dca3aec427",
+  "as-dt-0-dang-mo.png": {
+    "mtime": 1794953661.9524806,
+    "seen": 1794953782.5179343,
+    "ast_hash": "7a9ca0cabee6b45189235699d7e7e525",
     "semantic_hash": ""
   },
-  "thu/as-dt-2-dang-lam.png": {
-    "mtime": 1794938750.1544075,
-    "seen": 1794938909.9854286,
-    "ast_hash": "d089fa694ee98f8b1ac7b2a94eb053f4",
+  "as-dt-1-hero.png": {
+    "mtime": 1794953664.7945836,
+    "seen": 1794953782.5179365,
+    "ast_hash": "a7425b8372ef71a6e3ec5a33e08d8218",
     "semantic_hash": ""
   },
-  "thu/as-dt-3-san-pham.png": {
-    "mtime": 1794938752.2064078,
-    "seen": 1794938909.9854295,
-    "ast_hash": "a4179f4e4f3b6ea040f210b8703f9fdb",
+  "as-dt-2-dang-lam.png": {
+    "mtime": 1794953666.9825838,
+    "seen": 1794953782.517938,
+    "ast_hash": "fa58514cbd993c1aca67080dba95bb64",
     "semantic_hash": ""
   },
-  "thu/as-dt-4-game.png": {
-    "mtime": 1794938754.2424078,
-    "seen": 1794938909.9854305,
-    "ast_hash": "af7695ad5c078ce89731f6997e57bfc4",
+  "as-dt-3-san-pham.png": {
+    "mtime": 1794953668.986584,
+    "seen": 1794953782.5179396,
+    "ast_hash": "87d7a344ea1160d34de64ad01ba1d308",
     "semantic_hash": ""
   },
-  "thu/as-dt-5-ve-minh.png": {
-    "mtime": 1794938756.254408,
-    "seen": 1794938909.9854317,
-    "ast_hash": "ee274a04c7ad7e1ea4228153c928a294",
+  "as-dt-4-game.png": {
+    "mtime": 1794953670.962584,
+    "seen": 1794953782.5179415,
+    "ast_hash": "ffd1baa01ce8f621b2982d4553e12b04",
     "semantic_hash": ""
   },
-  "thu/as-dt-5b-phim.png": {
-    "mtime": 1794938758.246408,
-    "seen": 1794938909.9854324,
-    "ast_hash": "5b7f27e177d536b4c529ae2d8f918523",
+  "as-dt-5-ve-minh.png": {
+    "mtime": 1794953673.0025842,
+    "seen": 1794953782.5179424,
+    "ast_hash": "94d61a19a82ecf718ded8a507eaa7d8c",
     "semantic_hash": ""
   },
-  "thu/as-dt-6-lien-he.png": {
-    "mtime": 1794938760.2464082,
-    "seen": 1794938909.985433,
-    "ast_hash": "a299d6c48c1747b0e4569290ff097c4b",
+  "as-dt-5b-phim.png": {
+    "mtime": 1794953675.0225842,
+    "seen": 1794953782.5179436,
+    "ast_hash": "0a458aaf570f961fe9993c504eff5476",
     "semantic_hash": ""
   },
-  "thu/as-dt-7-chi-tiet.png": {
-    "mtime": 1794938762.7904084,
-    "seen": 1794938909.9854338,
-    "ast_hash": "89e10a2fe2fcc7a79846c625d896b16a",
+  "as-dt-6-lien-he.png": {
+    "mtime": 1794953677.0625844,
+    "seen": 1794953782.5179448,
+    "ast_hash": "bbe8dc816e7010fb661fcd35bb3e9ca0",
     "semantic_hash": ""
   },
-  "thu/as-mt-0-dang-mo.png": {
-    "mtime": 1794938716.3990517,
-    "seen": 1794938909.9854364,
-    "ast_hash": "0ef376b3a329af54dd4d5f2738db3d71",
+  "as-dt-7-chi-tiet.png": {
+    "mtime": 1794953679.6745844,
+    "seen": 1794953782.5179474,
+    "ast_hash": "b40b4823ce9fc400684177a044765ac5",
     "semantic_hash": ""
   },
-  "thu/as-mt-1-hero.png": {
-    "mtime": 1794938719.594406,
-    "seen": 1794938909.9854374,
-    "ast_hash": "0b0c4858fc3c3317b24d6110442b6ae8",
+  "as-mt-0-dang-mo.png": {
+    "mtime": 1794953632.9025817,
+    "seen": 1794953782.5179484,
+    "ast_hash": "56b7714951d2de8f280d8b828c81cbe8",
     "semantic_hash": ""
   },
-  "thu/as-mt-2-dang-lam.png": {
-    "mtime": 1794938722.514406,
-    "seen": 1794938909.9854383,
-    "ast_hash": "913ba71d2eecd9ae435d7f6729dc96a9",
+  "as-mt-1-hero.png": {
+    "mtime": 1794953635.942582,
+    "seen": 1794953782.517949,
+    "ast_hash": "f8986922264ae59247cbc7af169d6ad5",
     "semantic_hash": ""
   },
-  "thu/as-mt-3-san-pham.png": {
-    "mtime": 1794938724.954406,
-    "seen": 1794938909.9854395,
-    "ast_hash": "fbcc47dc97c89863c4d49d9c205e7f91",
+  "as-mt-2-dang-lam.png": {
+    "mtime": 1794953638.874582,
+    "seen": 1794953782.5179505,
+    "ast_hash": "cd974e7ea4b9a87548c8f05f3ff2da6f",
     "semantic_hash": ""
   },
-  "thu/as-mt-4-game.png": {
-    "mtime": 1794938727.3944063,
-    "seen": 1794938909.9854403,
-    "ast_hash": "7f8f5b84a708b76d985f1b337037d540",
+  "as-mt-3-san-pham.png": {
+    "mtime": 1794953641.3625822,
+    "seen": 1794953782.5179515,
+    "ast_hash": "c9c56d330f045907df8d2e3fb3081f11",
     "semantic_hash": ""
   },
-  "thu/as-mt-5-ve-minh.png": {
-    "mtime": 1794938729.8544064,
-    "seen": 1794938909.9854414,
-    "ast_hash": "33aef2daca5d9f23564acb31a28a6c34",
+  "as-mt-4-game.png": {
+    "mtime": 1794953643.7985823,
+    "seen": 1794953782.5179524,
+    "ast_hash": "313f8a666aae3293b58be32d3b0ed694",
     "semantic_hash": ""
   },
-  "thu/as-mt-5b-phim.png": {
-    "mtime": 1794938732.2184064,
-    "seen": 1794938909.9854426,
-    "ast_hash": "5c6dbca10987e560cf5b8fd0be7207ab",
+  "as-mt-5-ve-minh.png": {
+    "mtime": 1794953646.1825826,
+    "seen": 1794953782.5179539,
+    "ast_hash": "a7418d3b8307e9683d2fb9f320e04902",
     "semantic_hash": ""
   },
-  "thu/as-mt-6-lien-he.png": {
-    "mtime": 1794938734.5824068,
-    "seen": 1794938909.9854434,
-    "ast_hash": "8a1e21b626f23ec5475e7208568826f7",
+  "as-mt-5b-phim.png": {
+    "mtime": 1794953648.5985827,
+    "seen": 1794953782.517955,
+    "ast_hash": "9397fda7d7125e46f44816c08bab4c67",
     "semantic_hash": ""
   },
-  "thu/as-mt-7-chi-tiet.png": {
-    "mtime": 1794938738.450407,
-    "seen": 1794938909.9854443,
-    "ast_hash": "37996b3715e841bce7b7b997e1051888",
+  "as-mt-6-lien-he.png": {
+    "mtime": 1794953651.1145828,
+    "seen": 1794953782.517956,
+    "ast_hash": "dfc0d90f189a773060a09aea03538b35",
     "semantic_hash": ""
   },
-  "thu/dt2-dt-dang-lam.png": {
-    "mtime": 1794938651.9064019,
-    "seen": 1794938909.9854457,
-    "ast_hash": "0516f2efa512ab4afc33aad7ca6ab33f",
+  "as-mt-7-chi-tiet.png": {
+    "mtime": 1794953655.0305831,
+    "seen": 1794953782.5179572,
+    "ast_hash": "99230dbfd1d7ba2184c79aeaabf31a50",
     "semantic_hash": ""
   },
-  "thu/dt2-dt-lien-he.png": {
-    "mtime": 1794938658.8864021,
-    "seen": 1794938909.9854467,
-    "ast_hash": "b3a8fcf90e48dcd3106bdadbd31f2c10",
+  "dt2-dt-dang-lam.png": {
+    "mtime": 1794953566.4665778,
+    "seen": 1794953782.517958,
+    "ast_hash": "0d383a43cabc0161fa157ec6fef6a2ea",
     "semantic_hash": ""
   },
-  "thu/dt2-dt-phim.png": {
-    "mtime": 1794938656.566402,
-    "seen": 1794938909.985448,
-    "ast_hash": "936fd95a14446f4722272e3df983d864",
+  "dt2-dt-lien-he.png": {
+    "mtime": 1794953573.5105782,
+    "seen": 1794953782.5179589,
+    "ast_hash": "820ce152379ba0b0c71db264de943b43",
     "semantic_hash": ""
   },
-  "thu/dt2-dt-rap.png": {
-    "mtime": 1794938675.9424033,
-    "seen": 1794938909.985449,
-    "ast_hash": "f86d172f981477a7b2d2f8424d462804",
+  "dt2-dt-phim.png": {
+    "mtime": 1794953571.154578,
+    "seen": 1794953782.5179598,
+    "ast_hash": "010ba30b2251398a42f9303ea4302d86",
     "semantic_hash": ""
   },
-  "thu/dt2-dt-san-pham.png": {
-    "mtime": 1794938654.2024019,
-    "seen": 1794938909.98545,
-    "ast_hash": "e630ae206042037c0b646a638adfd027",
+  "dt2-dt-rap.png": {
+    "mtime": 1794953590.9145792,
+    "seen": 1794953782.517961,
+    "ast_hash": "a9cdbd5d6d43d4babbe49a2be0564022",
     "semantic_hash": ""
   },
-  "thu/dt2-dt-sp-mo.png": {
-    "mtime": 1794938664.8944025,
-    "seen": 1794938909.985451,
-    "ast_hash": "e7c7a094330ad72edfe6d21b0fcf7e9e",
+  "dt2-dt-san-pham.png": {
+    "mtime": 1794953568.762578,
+    "seen": 1794953782.5179622,
+    "ast_hash": "51d738838cb2afdf60731b549644f380",
     "semantic_hash": ""
   },
-  "thu/dt2-mt-dang-lam.png": {
-    "mtime": 1794938615.4543996,
-    "seen": 1794938909.985452,
-    "ast_hash": "6266fb3d6e15a0db2eda75e325f69490",
+  "dt2-dt-sp-mo.png": {
+    "mtime": 1794953579.6065786,
+    "seen": 1794953782.5179632,
+    "ast_hash": "9b5540e477db67d19f882e30c6d107a5",
     "semantic_hash": ""
   },
-  "thu/dt2-mt-lien-he.png": {
-    "mtime": 1794938622.4464,
-    "seen": 1794938909.9854531,
-    "ast_hash": "fda0c5565a3b11dc4d16bb331cf76ff5",
+  "dt2-mt-dang-lam.png": {
+    "mtime": 1794953530.2585757,
+    "seen": 1794953782.5179644,
+    "ast_hash": "23a8416dfe9166cd73453e7b93d68a64",
     "semantic_hash": ""
   },
-  "thu/dt2-mt-phim.png": {
-    "mtime": 1794938620.1104,
-    "seen": 1794938909.985454,
-    "ast_hash": "09adb66225dec6f220d86409def3be9d",
+  "dt2-mt-lien-he.png": {
+    "mtime": 1794953537.138576,
+    "seen": 1794953782.5179653,
+    "ast_hash": "51cf2200e7a26bac4a8fd0805476bf13",
     "semantic_hash": ""
   },
-  "thu/dt2-mt-rap.png": {
-    "mtime": 1794938631.1864007,
-    "seen": 1794938909.985455,
-    "ast_hash": "e5227dd4cc34d875d5dc8d182bcf7746",
+  "dt2-mt-phim.png": {
+    "mtime": 1794953534.8185759,
+    "seen": 1794953782.517966,
+    "ast_hash": "b78fe220a110b2aa865b2ca131ceeb5d",
     "semantic_hash": ""
   },
-  "thu/dt2-mt-san-pham.png": {
-    "mtime": 1794938617.8263998,
-    "seen": 1794938909.9854562,
-    "ast_hash": "415207d34496a69ee66488a9765b1988",
+  "dt2-mt-rap.png": {
+    "mtime": 1794953545.7425766,
+    "seen": 1794953782.517967,
+    "ast_hash": "5d76394b13fa6b32b0404d9c18ae5593",
     "semantic_hash": ""
   },
-  "thu/dt2-mt-sp-doi.png": {
-    "mtime": 1794938625.5104003,
-    "seen": 1794938909.985457,
-    "ast_hash": "365b1d88f0e4d1cb8fc856ddfabf08f3",
+  "dt2-mt-san-pham.png": {
+    "mtime": 1794953532.5625758,
+    "seen": 1794953782.5179682,
+    "ast_hash": "961aadf16051e79d58dab3876bffd10b",
     "semantic_hash": ""
   },
-  "thu/fx-dt-0-intro.png": {
-    "mtime": 1794938828.7464123,
-    "seen": 1794938909.9854581,
-    "ast_hash": "a33b5022c7b9387a4c327e0e770bebbf",
+  "dt2-mt-sp-doi.png": {
+    "mtime": 1794953540.058576,
+    "seen": 1794953782.5179691,
+    "ast_hash": "ba1588b7afd0fe0f6581d38ae01cd9df",
     "semantic_hash": ""
   },
-  "thu/fx-dt-1-xong.png": {
-    "mtime": 1794938834.8464127,
-    "seen": 1794938909.985459,
-    "ast_hash": "dd116cac1f6955847b3704ef872f5545",
+  "fx-dt-0-intro.png": {
+    "mtime": 1794953624.3630338,
+    "seen": 1794953782.51797,
+    "ast_hash": "d072eae4e9a99709e884f8954ade253a",
     "semantic_hash": ""
   },
-  "thu/fx-mt-0-intro.png": {
-    "mtime": 1794938811.8784113,
-    "seen": 1794938909.9854603,
-    "ast_hash": "2c265f2c613b9a434cc848fd7c03a2eb",
+  "fx-dt-1-xong.png": {
+    "mtime": 1794953630.4305816,
+    "seen": 1794953782.5179713,
+    "ast_hash": "d8d30ac7c8c0deaffdba37fdb6ee491b",
     "semantic_hash": ""
   },
-  "thu/fx-mt-1-bay.png": {
-    "mtime": 1794938813.1640263,
-    "seen": 1794938909.9854615,
-    "ast_hash": "88882cb7315fb40177037b051e53e24a",
+  "fx-mt-0-intro.png": {
+    "mtime": 1794953605.3145282,
+    "seen": 1794953782.5179722,
+    "ast_hash": "8e958cabedeaf9854b412468888f9b55",
     "semantic_hash": ""
   },
-  "thu/fx-mt-2-xong.png": {
-    "mtime": 1794938817.6984117,
-    "seen": 1794938909.9854631,
-    "ast_hash": "86334d5c67cd60f2e08cb5b7d4bf024f",
+  "fx-mt-1-bay.png": {
+    "mtime": 1794953606.486874,
+    "seen": 1794953782.5179734,
+    "ast_hash": "fa5b6c3a6de1bc5d737069bdc23bf33e",
     "semantic_hash": ""
   },
-  "thu/fx-mt-3-tu-truong.png": {
-    "mtime": 1794938820.3024118,
-    "seen": 1794938909.9854643,
-    "ast_hash": "c7e20b94e7aae6a3512902b020fd8392",
+  "fx-mt-2-xong.png": {
+    "mtime": 1794953611.0505805,
+    "seen": 1794953782.5179749,
+    "ast_hash": "253231555e712a27b2742e623f372147",
     "semantic_hash": ""
   },
-  "thu/g-dt-1-dau.png": {
-    "mtime": 1794938589.274398,
-    "seen": 1794938909.9854653,
-    "ast_hash": "4177a2b6a71319a3878c6b549244fd0f",
+  "fx-mt-3-tu-truong.png": {
+    "mtime": 1794953613.7065806,
+    "seen": 1794953782.5179758,
+    "ast_hash": "0161f1931e9c6b7889ebbb9a8294fe94",
     "semantic_hash": ""
   },
-  "thu/g-dt-2-khung.png": {
-    "mtime": 1794938591.3063982,
-    "seen": 1794938909.9854665,
-    "ast_hash": "a86ba3f8bfde425a19b88376eb29fe8b",
+  "g-dt-1-dau.png": {
+    "mtime": 1794953502.5465739,
+    "seen": 1794953782.517977,
+    "ast_hash": "1f9a57ba839726244b7659ad60152458",
     "semantic_hash": ""
   },
-  "thu/g-dt-3-ke.png": {
-    "mtime": 1794938593.3063984,
-    "seen": 1794938909.9854677,
-    "ast_hash": "1093b2eb2fb9e0c3db4fb746c8d95a98",
+  "g-dt-2-khung.png": {
+    "mtime": 1794953504.622574,
+    "seen": 1794953782.5179782,
+    "ast_hash": "a29f54360d8096277f9853dc77bfda6f",
     "semantic_hash": ""
   },
-  "thu/g-dt-4-toan-man.png": {
-    "mtime": 1794938598.5383985,
-    "seen": 1794938909.9854686,
-    "ast_hash": "babf5e85c970535588aa32daf18789ac",
+  "g-dt-3-ke.png": {
+    "mtime": 1794953506.6625743,
+    "seen": 1794953782.5179791,
+    "ast_hash": "441d5529ae3b24887c4b5962f3317b61",
     "semantic_hash": ""
   },
-  "thu/g-mt-1-khung.png": {
-    "mtime": 1794938567.1023967,
-    "seen": 1794938909.98547,
-    "ast_hash": "4c6c09e752a049b6f78a40a95a68daed",
+  "g-dt-4-toan-man.png": {
+    "mtime": 1794953513.4065747,
+    "seen": 1794953782.51798,
+    "ast_hash": "9c7078c02704d5b6ff8c8f866e5fe536",
     "semantic_hash": ""
   },
-  "thu/g-mt-2-dang-choi.png": {
-    "mtime": 1794938571.378397,
-    "seen": 1794938909.985471,
-    "ast_hash": "62fe98db342448ed76608c0b007ccb08",
+  "g-mt-1-khung.png": {
+    "mtime": 1794953477.8625724,
+    "seen": 1794953782.5179815,
+    "ast_hash": "e277b2aa64003f58e8b6aace2cd71052",
     "semantic_hash": ""
   },
-  "thu/g-mt-3-toan-man.png": {
-    "mtime": 1794938579.4503975,
-    "seen": 1794938909.9854724,
-    "ast_hash": "5bfae2c775844b18c2f6adb841583ff8",
+  "g-mt-2-dang-choi.png": {
+    "mtime": 1794953482.3265727,
+    "seen": 1794953782.5179822,
+    "ast_hash": "705a00ac5a07584b55f60a73fa1167c4",
     "semantic_hash": ""
   },
-  "thu/g-mt-4-loi.png": {
-    "mtime": 1794938607.6703992,
-    "seen": 1794938909.9854736,
-    "ast_hash": "ff864ceadfcb14b2c8a7ac9cb00e3a10",
+  "g-mt-3-toan-man.png": {
+    "mtime": 1794953492.2705734,
+    "seen": 1794953782.5179832,
+    "ast_hash": "b2c01a7506e814fab696f7785cde3ac1",
+    "semantic_hash": ""
+  },
+  "g-mt-4-loi.png": {
+    "mtime": 1794953522.4425752,
+    "seen": 1794953782.5179842,
+    "ast_hash": "f398ebf74289c09df9e9b28db5ce9b9c",
     "semantic_hash": ""
   }
 }

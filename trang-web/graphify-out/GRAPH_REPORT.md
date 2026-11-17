@@ -1,17 +1,17 @@
 # Graph Report - trang-web  (2026-11-17)
 
 ## Corpus Check
-- 33 files · ~29,750 words
+- 34 files · ~29,948 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 2 file(s) not represented in the graph (top: (none) 2)
 
 ## Summary
-- 133 nodes · 128 edges · 21 communities (7 shown, 14 thin omitted)
+- 135 nodes · 129 edges · 21 communities (6 shown, 15 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 5 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `09205b95`
+- Built from commit: `c62cea92`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,20 +22,19 @@
 - Trang web cá nhân của Bùi Tuấn Khanh
 - lam-sao.py
 - kiem_trang.cjs
-- chup.cjs
 - bien-3d.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `Trang web cá nhân của Bùi Tuấn Khanh` - 9 edges
 2. `vong()` - 5 edges
-3. `ve()` - 3 edges
-4. `path_lop()` - 3 edges
-5. `may()` - 3 edges
-6. `lung_khung_long()` - 3 edges
-7. `ruong_bac_thang()` - 3 edges
-8. `them_may()` - 3 edges
-9. `ve()` - 2 edges
-10. `cuon()` - 2 edges
+3. `lung_khung_long()` - 3 edges
+4. `may()` - 3 edges
+5. `path_lop()` - 3 edges
+6. `ruong_bac_thang()` - 3 edges
+7. `them_may()` - 3 edges
+8. `ve()` - 3 edges
+9. `Cấu trúc thư mục` - 2 edges
+10. `rung()` - 2 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `chay()` --indirect_call--> `vong()`  [INFERRED]
@@ -46,7 +45,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (21 total, 14 thin omitted)
+## Communities (21 total, 15 thin omitted)
 
 ### Community 0 - "ref_playwright"
 Cohesion: 0.10
@@ -62,22 +61,18 @@ Nodes (5): chay(), cuon(), ve(), vong(), chay()
 
 ### Community 4 - "Trang web cá nhân của Bùi Tuấn Khanh"
 Cohesion: 0.18
-Nodes (10): Ba chủ đề màu, Bản đồ dự án (graphify), Các phần của trang (theo thứ tự), Cấu trúc thư mục, Kiểm tra trước khi giao, Những điều chủ trang đã chốt, Sửa cái gì thì mở đâu, Thứ tự 19 bước dựng (`dung/chay.py`) (+2 more)
+Nodes (10): Ba chủ đề màu, Bản đồ dự án (graphify), Các phần của trang (theo thứ tự), Cấu trúc thư mục, Kiểm tra trước khi giao, Những điều chủ trang đã chốt, Sửa cái gì thì mở đâu, Thứ tự 20 bước dựng (`dung/chay.py`) (+2 more)
 
 ### Community 6 - "kiem_trang.cjs"
-Cohesion: 0.18
-Nodes (8): { chromium }, fs, JS, [url, ra], { chromium }, fs, JS, [url, ra]
-
-### Community 7 - "chup.cjs"
-Cohesion: 0.29
-Nodes (5): { chromium, devices }, fs, path, PHAN, RA
+Cohesion: 0.11
+Nodes (13): { chromium, devices }, fs, path, PHAN, RA, { chromium }, fs, JS (+5 more)
 
 ### Community 8 - "bien-3d.js"
 Cohesion: 0.40
 Nodes (3): chay(), cuon(), ve()
 
 ## Knowledge Gaps
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -92,3 +87,5 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Should `lam-nui.py` be split into smaller, more focused modules?**
   _Cohesion score 0.13970588235294118 - nodes in this community are weakly interconnected._
+- **Should `kiem_trang.cjs` be split into smaller, more focused modules?**
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._

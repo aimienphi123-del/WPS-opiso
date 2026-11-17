@@ -41,8 +41,8 @@ trang-web/
   ban-moi-nhat/trang.html   bản trang mới nhất (chính là tệp đem đăng)
   dung/                     cách dựng ra trang
     trang-as.html           bản gốc (đã sửa tay nhiều lần trước khi có các bước bên dưới)
-    lam-*.py                19 bước, mỗi bước đọc tệp của bước trước, vá thêm một phần, ghi ra tệp mới
-    chay.py                 chạy hết 19 bước theo đúng thứ tự, chép kết quả sang ban-moi-nhat/
+    lam-*.py                20 bước, mỗi bước đọc tệp của bước trước, vá thêm một phần, ghi ra tệp mới
+    chay.py                 chạy hết 20 bước theo đúng thứ tự, chép kết quả sang ban-moi-nhat/
   canh-3d/                  mã 3 cảnh nền 3D (được nhúng vào trang ở các bước lam-3d, lam-troi, lam-bien)
   thu-vien/                 Three.js r160 và GSAP 3.13 (ScrollTrigger, CustomEase); trang nhúng sẵn, không tải ngoài
   thu/                      bài thử tự động và công cụ kiểm tra
@@ -50,11 +50,11 @@ trang-web/
   graphify-out/             bản đồ dự án do graphify tạo ra (GRAPH_REPORT.md, graph.json, graph.html)
 ```
 
-### Thứ tự 19 bước dựng (`dung/chay.py`)
+### Thứ tự 20 bước dựng (`dung/chay.py`)
 
-`trang-as.html` → motion (motion graphic sản phẩm) → motion-2 → logo (logo TK tự vẽ nét) → doi-mau (3 bảng màu) → chu-de (3 chủ đề + biểu tượng) → sao (trời sao SVG) → nui (núi Tây Bắc SVG) → 3d (núi 3D) → troi (trời sao 3D) → gsap (đổi thư viện chuyển động sang GSAP) → bien (biển hoàng hôn 3D) → apple (khung bo góc có chiều sâu) → emil (đường cong chuyển động nhanh, nút lún khi bấm) → taste (sửa lỗi theo bộ kiểm tra Taste Skill) → tro-chu (lấy lại chữ trồi từng ký tự) → lay-lai (lấy lại thị sai, chữ né chuột, con trỏ riêng, nút hút) → dao (thanh đầu trang kiểu đảo nổi) → dao-dong (chuyển động cho đảo, bỏ chữ "Đang nhận việc") → bo-cham (bỏ chấm trạng thái, chỉ còn giờ TP.HCM).
+`trang-as.html` → motion (motion graphic sản phẩm) → motion-2 → logo (logo TK tự vẽ nét) → doi-mau (3 bảng màu) → chu-de (3 chủ đề + biểu tượng) → sao (trời sao SVG) → nui (núi Tây Bắc SVG) → 3d (núi 3D) → troi (trời sao 3D) → gsap (đổi thư viện chuyển động sang GSAP) → bien (biển hoàng hôn 3D) → apple (khung bo góc có chiều sâu) → emil (đường cong chuyển động nhanh, nút lún khi bấm) → taste (sửa lỗi theo bộ kiểm tra Taste Skill) → tro-chu (lấy lại chữ trồi từng ký tự) → lay-lai (lấy lại thị sai, chữ né chuột, con trỏ riêng, nút hút) → dao (thanh đầu trang kiểu đảo nổi) → dao-dong (chuyển động cho đảo, bỏ chữ "Đang nhận việc") → bo-cham (bỏ chấm trạng thái, chỉ còn giờ TP.HCM) → an-hien (thanh đầu trang tự ẩn khi cuộn xuống, tự hiện khi cuộn lên, thay cho kiểu thu gọn).
 
-Mỗi bước nằm ở cuối tệp trong một khối `<style id="...">` hoặc `<script>` riêng, ghi đè lên các bước trước. Muốn biết một phần hiện trông thế nào thì tìm id khối mới nhất có nhắc tới phần đó. Ví dụ thanh đầu trang: `dao-noi`, rồi `dao-dong`, rồi `bo-cham`.
+Mỗi bước nằm ở cuối tệp trong một khối `<style id="...">` hoặc `<script>` riêng, ghi đè lên các bước trước. Muốn biết một phần hiện trông thế nào thì tìm id khối mới nhất có nhắc tới phần đó. Ví dụ thanh đầu trang: `dao-noi`, rồi `dao-dong`, rồi `bo-cham`, rồi `an-hien`.
 
 ## Sửa cái gì thì mở đâu
 
@@ -101,7 +101,7 @@ Phải giữ. Muốn đổi thì hỏi trước.
   - Không dùng ánh sáng đỏ, không dùng màu bạc hà.
   - Rừng sương phải là núi Tây Bắc hùng vĩ, không thấp và rợn (chủ trang là người Tây Bắc).
 - **Chuyển động:**
-  - Giữ: chữ trồi từng ký tự, chữ nền và ảnh trôi lệch theo cuộn và theo chuột, chữ tiêu đề né theo chuột, con trỏ chuột tự vẽ, nút hút theo chuột, thanh đầu trang kiểu đảo nổi co giãn khi cuộn.
+  - Giữ: chữ trồi từng ký tự, chữ nền và ảnh trôi lệch theo cuộn và theo chuột, chữ tiêu đề né theo chuột, con trỏ chuột tự vẽ, nút hút theo chuột, thanh đầu trang kiểu đảo nổi; cuộn xuống thì thanh tự ẩn, cuộn lên thì tự hiện (như cơ chế ban đầu, không thu gọn).
   - Đã bỏ: gợn sóng trong nút, điện thoại nghiêng theo tốc độ cuộn, vạch tiến độ ở mép trên trang.
 - **Còn chờ chủ trang quyết:**
   - Font tiêu đề (đang dùng Anton; các bản xem thử là Fraunces, Lora, Cormorant Garamond).

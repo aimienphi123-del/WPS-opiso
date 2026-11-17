@@ -774,7 +774,7 @@ a, button { cursor: pointer; }
   document.addEventListener('click', (e) => { const a = e.target.closest('a[href^="#"]'); if (!a) return; e.preventDefault(); ghi('bấm', a.getAttribute('href')); cuonToi(a.getAttribute('href')); });
   // thanh trên: cuộn xuống thì ẩn, cuộn lên thì hiện
   const tren = $('#tren'); let yTruoc = 0;
-  const theoCuon = (y) => { tren.classList.toggle('dac', y > 40); (window.__doiDao || ((c, b) => tren.classList.toggle(c, b)))('thu-gon', y > yTruoc && y > innerHeight * 0.6); yTruoc = y; };
+  const theoCuon = (y) => { tren.classList.toggle('dac', y > 40); tren.classList.toggle('an', y > yTruoc && y > innerHeight * 0.6 && !tren.classList.contains('mo-ra')); yTruoc = y; };
   lenis ? lenis.on('scroll', (e) => theoCuon(e.scroll)) : addEventListener('scroll', () => theoCuon(scrollY), { passive: true });
 
   // tách hết chữ có data-tach (đợi phông xong để đo đúng)
@@ -2380,4 +2380,10 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
 @media (hover: hover) and (pointer: fine) { #tren .viec:hover { background: rgba(var(--chu-rgb), .1); } }
 #tren.thu-gon:not(.mo-ra) .viec-o { display: none; }
 @media (max-width: 900px) { #tren .viec-o { display: none; } }   /* điện thoại không hiện giờ: bỏ luôn ô */
+</style>
+<style id="an-hien">
+/* thanh đầu trang: cuộn xuống thì trượt lên khuất hẳn, cuộn lên thì trượt xuống hiện lại */
+#tren.an { transform: translateY(calc(-100% - 24px)); }
+#tren.an:focus-within { transform: none; }
+@media (prefers-reduced-motion: reduce) { #tren { transition: none; } }
 </style>
