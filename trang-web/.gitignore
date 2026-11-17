@@ -1,0 +1,10 @@
+# tệp sinh ra khi dựng (chạy dung/chay.py), không cần lưu
+dung/trang-*.html
+!dung/trang-as.html
+dung/xem-*.html
+ban-moi-nhat/xem.html
+thu/anh/
+graphify-out/cache/
+node_modules/
+__pycache__/
+thu/*.png

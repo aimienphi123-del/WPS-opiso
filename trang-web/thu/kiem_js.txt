@@ -1,0 +1,59 @@
+
+(daXetCu) => {
+  const kq = {chu: [], nho: [], nut: [], tran: [], che: [], khoa: []};
+  const W = document.documentElement.clientWidth;
+  const rgba = s => { const m = s.match(/[\d.]+/g); return m ? m.map(Number) : [0,0,0,0]; };
+  const L = c => { const f = v => { v/=255; return v<=0.04045? v/12.92 : ((v+0.055)/1.055)**2.4; };
+                   return 0.2126*f(c[0])+0.7152*f(c[1])+0.0722*f(c[2]); };
+  const tron = (a, b) => { const al = a[3] ?? 1; return [0,1,2].map(i => a[i]*al + b[i]*(1-al)); };
+  const nenCua = (el, x, y) => {       // nền thật: các lớp nằm DƯỚI điểm giữa chữ, từ trên xuống, trộn lớp trong suốt
+    const lop = []; let anh = false;
+    for (const e of document.elementsFromPoint(x, y)) {
+      if (el.contains(e) && e !== el) continue;
+      const cs = getComputedStyle(e);
+      if (cs.backgroundImage && cs.backgroundImage !== 'none') anh = true;
+      if (e.tagName === 'IMG' || e.tagName === 'VIDEO' || e.tagName === 'CANVAS') { anh = true; continue; }
+      const c = rgba(cs.backgroundColor); if ((c[3] ?? 1) > 0) lop.push(c);
+      if ((c[3] ?? 1) >= 1) break;
+    }
+    let nen = [255,255,255];
+    for (let i = lop.length-1; i >= 0; i--) nen = tron(lop[i], nen);
+    return {nen, anh};
+  };
+  const ten = el => (el.id ? '#'+el.id : el.tagName.toLowerCase() + (el.className && typeof el.className==='string' ? '.'+el.className.trim().split(/\s+/)[0] : ''));
+  const thay = el => { const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+    return r.width>0 && r.height>0 && cs.visibility!=='hidden' && cs.display!=='none' && +cs.opacity>0.05; };
+  const co = el => { const cs = getComputedStyle(el); return cs.position === 'fixed' || cs.position === 'sticky'; };
+  const coDinh = el => { for (let e = el; e && e.nodeType === 1; e = e.parentElement) if (co(e)) return true; return false; };
+  const daXet = new Set();
+  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (tw.nextNode()) {
+    const t = tw.currentNode; if (!t.textContent.trim()) continue;
+    const el = t.parentElement; if (!el || daXet.has(el) || !thay(el)) continue; daXet.add(el);
+    const r = el.getBoundingClientRect(), x = r.left + r.width/2, y = r.top + r.height/2;
+    if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight) continue;   // chưa cuộn tới
+    const cs = getComputedStyle(el), px = parseFloat(cs.fontSize), dam = +cs.fontWeight >= 700;
+    const fx = coDinh(el);
+    const {nen, anh} = nenCua(el, x, y); const mau = tron(rgba(cs.color), nen);
+    const khoa = (fx ? 'F' : '') + ten(el) + '|' + t.textContent.trim().slice(0,30) + (fx ? '|' + nen.map(Math.round) : '');
+    if (daXetCu.includes(khoa)) continue; kq.khoa.push(khoa);
+    const a = L(mau), b = L(nen), tp = (Math.max(a,b)+0.05)/(Math.min(a,b)+0.05);
+    const lon = px >= 24 || (dam && px >= 18.66), can = lon ? 3 : 4.5;
+    const chu = t.textContent.trim().slice(0, 30);
+    if (tp < can) kq.chu.push({chu, o: ten(el), tp: +tp.toFixed(2), can, anh});
+    else if (anh) kq.chu.push({chu, o: ten(el), tp: +tp.toFixed(2), can, anh, chiNghi: true});
+    if (px < 12) kq.nho.push({chu, o: ten(el), px});
+    // bị che: có phần tử khác (không phải menu cố định) nằm đè lên giữa chữ
+    const tren = document.elementFromPoint(x, y);
+    if (tren && tren !== el && !el.contains(tren) && !tren.contains(el) && !coDinh(tren)) kq.che.push({chu, o: ten(el), boi: ten(tren)});
+  }
+  document.querySelectorAll('a,button,input,select,textarea,[role=button],[onclick]').forEach(el => {
+    if (!thay(el)) return; const r = el.getBoundingClientRect();
+    if (r.width < 24 || r.height < 24) kq.nut.push({o: ten(el), kt: Math.round(r.width)+'×'+Math.round(r.height)});
+  });
+  document.querySelectorAll('body *').forEach(el => { const r = el.getBoundingClientRect();
+    if (thay(el) && r.right > W + 1 && getComputedStyle(el).position !== 'fixed') kq.tran.push({o: ten(el), phai: Math.round(r.right - W)}); });
+  kq.cuonNgang = document.documentElement.scrollWidth > W + 1;
+  kq.tran = kq.tran.slice(0, 10);
+  return kq;
+}
