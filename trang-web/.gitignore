@@ -7,4 +7,4 @@ thu/anh/
 graphify-out/cache/
 node_modules/
 __pycache__/
-thu/*.png
+*.png
