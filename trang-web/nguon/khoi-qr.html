@@ -5,6 +5,15 @@
 #khoi-qr .mp, #khoi-qr .thanh-tt, #khoi-qr #chi-dan, #khoi-qr #nut-chi-dan { display: none !important; }
 /* bỏ tab Thỏi vàng, nút đếm mặt quét được (6/6) và số đếm trên tiêu đề khối; khối vẫn tự tụ thành thỏi vàng khi giữ xoay hoặc để yên */
 #khoi-qr #nut-mo-vang, #khoi-qr #nut-sau-mat, #khoi-qr #so-tieu { display: none !important; }
+/* thanh tiến độ thay chữ trên tiêu đề khối: rãnh mảnh, phần đầy màu nhấn; đang ghép thì có vệt sáng chạy qua, xong thì loé nhẹ một lần */
+#khoi-qr .kqr-td { --td: 0; position: relative; flex: 1; height: 6px; margin: 0 6px 0 2px; border-radius: 99px; background: rgba(255, 255, 255, .14); box-shadow: inset 0 1px 1px rgba(0, 0, 0, .3); overflow: hidden; }
+#khoi-qr .kqr-td b { position: absolute; inset: 0; border-radius: inherit; transform-origin: left; transform: scaleX(var(--td));
+  background: linear-gradient(90deg, var(--do-dam), var(--do)); transition: transform .6s cubic-bezier(.22, 1, .36, 1); }
+#khoi-qr .kqr-td.dang-lam b::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent); background-size: 40% 100%; background-repeat: no-repeat; animation: kqr-vet 1.4s cubic-bezier(.45, 0, .55, 1) infinite; }
+#khoi-qr .kqr-td.xong b { animation: kqr-loe .9s cubic-bezier(.22, 1, .36, 1) 1; }
+@keyframes kqr-vet { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+@keyframes kqr-loe { 0% { box-shadow: 0 0 0 rgba(var(--do-rgb), 0); filter: brightness(1); } 35% { box-shadow: 0 0 10px rgba(var(--do-rgb), .8); filter: brightness(1.35); } 100% { box-shadow: 0 0 0 rgba(var(--do-rgb), 0); filter: brightness(1); } }
+@media (prefers-reduced-motion: reduce) { #khoi-qr .kqr-td b { transition: none; } #khoi-qr .kqr-td.dang-lam b::after, #khoi-qr .kqr-td.xong b { animation: none; } }
 #khoi-qr .kqr-an { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 /* ===== KHỐI QR: khung tối theo trang, giữ chút chất cổ (thanh tiêu đề KHOI_QR.EXE, nút nổi khối, chữ máy) =====
    Mọi kiểu đều nằm trong #khoi-qr để không đụng tên lớp của phần khác. Sân khối luôn là giấy trắng để máy quét đọc được. */
@@ -139,7 +148,7 @@
 
     <!-- khối: sân giấy để quét được, dòng kết quả, nút mặt, thanh trạng thái -->
     <section class="cs kqr-khoi" id="cs-khoi" aria-labelledby="ten-khoi">
-      <div class="tieu"><svg class="bt" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="#fff"/><rect x="3" y="3" width="4" height="4"/><rect x="9" y="3" width="4" height="4"/><rect x="3" y="9" width="4" height="4"/><rect x="10" y="10" width="2" height="2"/></svg><p class="ten" id="ten-khoi">Khối QR</p><span class="so" id="so-tieu" aria-hidden="true"></span>
+      <div class="tieu"><svg class="bt" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="#fff"/><rect x="3" y="3" width="4" height="4"/><rect x="9" y="3" width="4" height="4"/><rect x="3" y="9" width="4" height="4"/><rect x="10" y="10" width="2" height="2"/></svg><p class="ten kqr-an" id="ten-khoi">Khối QR</p><div class="kqr-td" id="tien-do-tieu" role="progressbar" aria-label="Tiến độ ghép khối" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><b></b></div><span class="so" id="so-tieu" aria-hidden="true"></span>
         <button type="button" class="nut-tieu" id="nut-chi-dan" aria-label="Xem lại mẹo">?</button></div>
       <div class="than">
       <div class="san" id="san">

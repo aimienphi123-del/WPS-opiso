@@ -1616,6 +1616,12 @@
   }
   function veTienDo(td) {
     var thanh = $('tien-do'), dangLam = !!td && !td.het;
+    var tdt = $('tien-do-tieu');   // thanh tiến độ trên tiêu đề khung khối (trang web): chạy theo đúng các bước ghép, xong thì đầy
+    if (tdt) {
+      var ti = !td ? 0 : (td.het ? 1 : td.xong / td.tong);
+      tdt.style.setProperty('--td', ti.toFixed(3)); tdt.setAttribute('aria-valuenow', Math.round(ti * 100));
+      tdt.classList.toggle('dang-lam', dangLam); tdt.classList.toggle('xong', !!td && td.het);
+    }
     $('thanh-tt').classList.toggle('dang-lam', dangLam);
     $('san').classList.toggle('dang-lam', dangLam || !!tt.loc);
     thanh.hidden = !dangLam; $('tt-buoc').hidden = !dangLam; $('tt-o').hidden = dangLam; $('tt-khoi').hidden = dangLam;

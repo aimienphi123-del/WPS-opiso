@@ -94,7 +94,7 @@ Khi ghép, lệnh `dung.py` làm theo thứ tự sau:
 
 Sửa xong thì chạy `python3 dung.py` rồi kiểm tra như phần dưới.
 
-- **Khối QR:** khung và chữ trong `nguon/khoi-qr.html`, chữ thông báo trong khối `CHU` của `khoi-qr/app.js`. Trên trang đã ẩn (vẫn còn trong khung vì app.js ghi vào): dòng kết quả và nút mặt dưới khối, thanh trạng thái, cửa sổ Mẹo, tab Thỏi vàng, nút đếm 6/6 và số đếm trên tiêu đề. Khối vẫn tự tụ thành thỏi vàng khi giữ xoay hoặc để yên 15 giây. Mặc định là mã QR thường, ảnh mẫu chỉ hiện khi bấm "Dùng ảnh mẫu".
+- **Khối QR:** khung và chữ trong `nguon/khoi-qr.html`, chữ thông báo trong khối `CHU` của `khoi-qr/app.js`. Tiêu đề khung khối không có chữ mà là thanh tiến độ ghép (`#tien-do-tieu`, app.js `veTienDo` cập nhật theo các bước thật: xếp khối, thử quét 6 mặt). Nút tải ảnh gọi ô chọn tệp được ẩn bằng `kqr-an`, không dùng `hidden`, để webview điện thoại vẫn mở được. Trên trang đã ẩn (vẫn còn trong khung vì app.js ghi vào): dòng kết quả và nút mặt dưới khối, thanh trạng thái, cửa sổ Mẹo, tab Thỏi vàng, nút đếm 6/6 và số đếm trên tiêu đề. Khối vẫn tự tụ thành thỏi vàng khi giữ xoay hoặc để yên 15 giây. Mặc định là mã QR thường, ảnh mẫu chỉ hiện khi bấm "Dùng ảnh mẫu".
 
 ## Kiểm tra trước khi giao
 
