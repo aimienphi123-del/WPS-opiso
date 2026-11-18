@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "DU-AN.md": {
-    "mtime": 1795026884.9220006,
-    "seen": 1795026890.040702,
-    "ast_hash": "3d32b370ad8b378e9af4defb4d00ecee",
+    "mtime": 1795029866.8530645,
+    "seen": 1795029868.9926274,
+    "ast_hash": "5e49786b8d95dc000198007ed9e16cd1",
     "semantic_hash": ""
   },
   "thu/kiem_js.txt": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "dung.py": {
-    "mtime": 1794980405.3841813,
-    "seen": 1794981633.637523,
-    "ast_hash": "7d43b98ea0b7f4d2723a217c752f3645",
+    "mtime": 1795029118.4823103,
+    "seen": 1795029868.9925752,
+    "ast_hash": "008e84311a1b19b77cd58df2db2bc5c1",
     "semantic_hash": ""
   },
   "nguon/chung.js": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "khoi-qr/app.js": {
-    "mtime": 1795026696.1808383,
-    "seen": 1795026890.0406547,
-    "ast_hash": "1bd29953063bf8aaa93fc6ff6da1c290",
+    "mtime": 1795029319.68693,
+    "seen": 1795029868.9925804,
+    "ast_hash": "9f8a748992fd7422df1934a496b48625",
     "semantic_hash": ""
   },
   "khoi-qr/jsqr.min.js": {
@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "khoi-qr/may.js": {
-    "mtime": 1794980225.5359533,
-    "seen": 1794981633.6375308,
-    "ast_hash": "a0c5917f8cf06d164099d57dcf84eacf",
+    "mtime": 1795028659.5630515,
+    "seen": 1795029868.992587,
+    "ast_hash": "27fe9923d825b178def9344ed39e2475",
     "semantic_hash": ""
   },
   "khoi-qr/omggif.js": {
@@ -276,21 +276,27 @@
     "semantic_hash": ""
   },
   "khoi-qr/ve.js": {
-    "mtime": 1794980225.5362048,
-    "seen": 1794981633.6375382,
-    "ast_hash": "73c7a3e5779caa221f44dc77923d00c7",
+    "mtime": 1795028675.3295703,
+    "seen": 1795029868.992595,
+    "ast_hash": "3de21edb8cbccb7e2f1ce75169458f7e",
     "semantic_hash": ""
   },
   "thu/khoi-qr.cjs": {
-    "mtime": 1794980630.1720533,
-    "seen": 1794981633.6375577,
-    "ast_hash": "391258f63bbcbe0f606562bd1fc53531",
+    "mtime": 1795029405.9501486,
+    "seen": 1795029868.9926147,
+    "ast_hash": "01baa5ded4a12d7a022bda4fe621c1bb",
     "semantic_hash": ""
   },
   "nguon/khoi-qr.html": {
-    "mtime": 1795026696.4142134,
-    "seen": 1795026890.0407107,
-    "ast_hash": "c9d0a9b00197b43b6cbfe578eee02d79",
+    "mtime": 1795029482.3615987,
+    "seen": 1795029868.9926345,
+    "ast_hash": "abdc62d99895e5a0892953ce9361a7e7",
+    "semantic_hash": ""
+  },
+  "khoi-qr/chinh-anh.js": {
+    "mtime": 1795029675.9548967,
+    "seen": 1795029868.9925823,
+    "ast_hash": "f0e0d83e3e67a091369cc318ba20c3c8",
     "semantic_hash": ""
   }
 }

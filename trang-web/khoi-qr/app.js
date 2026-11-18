@@ -274,6 +274,8 @@
     taiVe: null,  // quyền tải file của khung xem Claude (mục 9c); null trên website riêng
     loc: null,    // lốc xoáy đang chạy (mục 7c)
     taiAnim: null,// animation 3D khi tải ảnh QR (mục 9c)
+    giuMau: true, // ghép ảnh giữ màu của ảnh (ô tối giữ sắc tối, ô sáng giữ sắc sáng); tắt thì mã trắng đen
+    coPng: 2048,  // cỡ ảnh QR phẳng khi tải PNG (người xem chọn 1024 / 2048 / 4096)
     maGoc: null   // nội dung đọc từ mã có sẵn (mục 9c): { that: đúng từng ký tự, phang: như ô Link giữ được (bỏ xuống dòng) }   // ảnh động (mục 9b): các khung ảnh, các lưới đã xếp, có đang chạy                          // soKhoi: số khối của khối đang hiện; cuaSo: trang công cụ đang mở
   };
   THANH_CHINH.forEach(function (t) { tt.chinh[t.ma] = t.macDinh; });
@@ -788,7 +790,7 @@
   function chinhChoMay() {
     var c = tt.chinh;
     // thanh "Dời" đẩy ẢNH đi, còn máy nhận hướng trượt của Ô LẤY ẢNH, nên đổi dấu
-    return { phong: c.phong / 100, doiX: -c.doiX / 100, doiY: -c.doiY / 100, tuongPhan: c.tuongPhan, doSang: c.doSang };
+    return { phong: c.phong / 100, doiX: -c.doiX / 100, doiY: -c.doiY / 100, tuongPhan: c.tuongPhan, doSang: c.doSang, giuMau: tt.giuMau };
   }
 
   function huyViecCu() {
@@ -949,7 +951,7 @@
           tt.tho = new Worker(tt.urlTho);
           tt.tho.onmessage = onMsg;
           tt.tho.onerror = onErr;
-          tt.tho.postMessage({ mat: { n: m.mat.n, o: m.mat.o }, hat: hat, viec: viec, vang: CAU_HINH.THOI_VANG && tt.boVe.coBay() });
+          tt.tho.postMessage({ mat: { n: m.mat.n, o: m.mat.o, mau: m.mat.mau, bang: m.mat.bang }, hat: hat, viec: viec, vang: CAU_HINH.THOI_VANG && tt.boVe.coBay() });
           hopDen.ghi('luồng phụ module lỗi, chuyển sang luồng phụ JS');
           return;
         } catch (_) {}
@@ -960,7 +962,7 @@
     }
     tt.tho.onmessage = onMsg;
     tt.tho.onerror = onErr;
-    tt.tho.postMessage({ mat: { n: m.mat.n, o: m.mat.o }, hat: hat, viec: viec, vang: CAU_HINH.THOI_VANG && tt.boVe.coBay() });
+    tt.tho.postMessage({ mat: { n: m.mat.n, o: m.mat.o, mau: m.mat.mau, bang: m.mat.bang }, hat: hat, viec: viec, vang: CAU_HINH.THOI_VANG && tt.boVe.coBay() });
   }
 
   function nhanKetQua(r, m, viec, luc0, bangTho, lyDo) {
@@ -1048,7 +1050,7 @@
       hopDen.ghi('luồng phụ hỏng, xếp khung ngay trên trang', String(e && e.message));
       trenTrang();
     };
-    tt.tho.postMessage({ mat: { n: m.mat.n, o: m.mat.o }, hat: hat, viec: viec, vang: false });
+    tt.tho.postMessage({ mat: { n: m.mat.n, o: m.mat.o, mau: m.mat.mau, bang: m.mat.bang }, hat: hat, viec: viec, vang: false });
   }
   function xongDong(d) {
     d.san = true;
@@ -1177,12 +1179,17 @@
     if (!tt.coKhoi || tt.dangGhep || !tt.matNay) { bao.textContent = CHU.taiChuaCo; return; }
     var m = tt.dong && tt.dong.san ? (tt.dong.mat[tt.dong.chiSo] || tt.matNay.mat) : tt.matNay.mat;
     var le = CAU_HINH.LE_MA * tt.matNay.oCon, tong = Math.max(m.n, tt.matNay.canhMa + 2 * le), lech = Math.floor((tong - m.n) / 2);
-    var k = Math.max(2, Math.floor(CAU_HINH.PNG_CO / tong)), co = tong * k;
+    var k = Math.max(2, Math.floor((tt.coPng || CAU_HINH.PNG_CO) / tong)), co = tong * k;
     var c = document.createElement('canvas'); c.width = co; c.height = co;
     var g = c.getContext('2d'), MUC = Ve.CAU_HINH_VE.MUC;
     g.fillStyle = '#fff'; g.fillRect(0, 0, co, co);
-    g.fillStyle = 'rgb(' + MUC.join(',') + ')';
-    for (var y = 0; y < m.n; y++) for (var x = 0; x < m.n; x++) if (m.o[y * m.n + x]) g.fillRect((lech + x) * k, (lech + y) * k, k, k);
+    var TRANG = [255, 255, 255];
+    for (var y = 0; y < m.n; y++) for (var x = 0; x < m.n; x++) {
+      var i = y * m.n + x;
+      if (!m.o[i] && !(m.mau && m.mau[i])) continue;   // ô giấy thường: để nền trắng
+      g.fillStyle = 'rgb(' + mauCuaO(m, i, TRANG, MUC).join(',') + ')';
+      g.fillRect((lech + x) * k, (lech + y) * k, k, k);
+    }
     var url = c.toDataURL('image/png');
     hien.src = url; hien.hidden = false;
     if (!khongChuyenDong()) {
@@ -1411,9 +1418,12 @@
     var g = c.getContext('2d');
     g.fillStyle = '#fff'; g.fillRect(0, 0, w, h);   // ảnh nền trong suốt thì coi nền là trắng
     g.drawImage(nguon, 0, 0, w, h);
-    var d = g.getImageData(0, 0, w, h).data, xam = new Uint8Array(w * h);
-    for (var i = 0; i < w * h; i++) xam[i] = (d[i * 4] * 77 + d[i * 4 + 1] * 150 + d[i * 4 + 2] * 29) >> 8;
-    return { rong: w, cao: h, du: xam };
+    var d = g.getImageData(0, 0, w, h).data, xam = new Uint8Array(w * h), rgb = new Uint8Array(w * h * 3);
+    for (var i = 0; i < w * h; i++) {
+      xam[i] = (d[i * 4] * 77 + d[i * 4 + 1] * 150 + d[i * 4 + 2] * 29) >> 8;
+      rgb[i * 3] = d[i * 4]; rgb[i * 3 + 1] = d[i * 4 + 1]; rgb[i * 3 + 2] = d[i * 4 + 2];   // giữ màu (mục giữ màu ở may.js 2c)
+    }
+    return { rong: w, cao: h, du: xam, rgb: rgb };
   }
   /* Ảnh đã đổi xong: đặt lại các thanh vị trí ảnh rồi ghép lại khối. dong: các khung của ảnh động, hoặc null. */
   function nhanAnh(anh, loai, doNguoiDung, dong, ghiThem) {
@@ -1465,8 +1475,11 @@
       this.value = '';
       if (!f) return;
       hopDen.ghi('chọn file', { loai: f.type || '?', kb: Math.round(f.size / 1024) });
+      if (!laGif(f) && window.ChinhAnhQR) { window.ChinhAnhQR.mo(f); return; }   // ảnh tĩnh: mở trình chỉnh ảnh trước khi ghép
       napAnh(f, 'cua-ban', true);
     });
+    var gm = $('giu-mau');
+    if (gm) { gm.checked = tt.giuMau; gm.addEventListener('change', function () { window.KhoiQR.datGiuMau(this.checked); }); }
     $('nut-anh-mau').addEventListener('click', function () { hopDen.ghi('bấm Dùng ảnh mẫu'); napAnh(window.ANH_MAU_KHOI_QR, 'mau', true); });
     $('nut-bo-anh').addEventListener('click', function () {
       hopDen.ghi('bấm Bỏ ảnh');
@@ -1480,6 +1493,13 @@
 
   /* Ô xem trước nhỏ, ghim trên đầu mục 02 và 03 ở màn hình hẹp:
      lúc kéo thanh chỉnh thì khối đã cuộn khuất, nhìn ô này vẫn thấy mã đổi theo. Chạm vào ô thì trang cuộn lên khối. */
+  /* Màu của ô i trong hình một mặt: có bảng màu thì lấy màu đã giữ, không thì mực / nền thường. Trả [r, g, b] 0..255. */
+  function mauCuaO(m, i, NEN, MUC) {
+    var so = m.mau ? m.mau[i] : 0;
+    if (!so) return m.o[i] ? MUC : NEN;
+    var b = m.bang, j = (so - 1) * 3;
+    return [Math.round(b[j] * 255), Math.round(b[j + 1] * 255), Math.round(b[j + 2] * 255)];
+  }
   function veXemNho() {
     var c = $('xem-nho'), g = c.getContext('2d'), m = tt.coKhoi && tt.matNay ? tt.matNay.mat : null;
     if (m && tt.dong && tt.dong.san) m = tt.dong.mat[tt.dong.chiSo] || m;   // ảnh động: vẽ khung đang hiện
@@ -1493,7 +1513,7 @@
       tt.xemTam.width = n; tt.xemTam.height = n;
       var tg = tt.xemTam.getContext('2d'), anh = tg.createImageData(n, n), d = anh.data;
       for (var i = 0; i < n * n; i++) {
-        var mau = m.o[i] ? MUC : NEN;
+        var mau = mauCuaO(m, i, NEN, MUC);
         d[i * 4] = mau[0]; d[i * 4 + 1] = mau[1]; d[i * 4 + 2] = mau[2]; d[i * 4 + 3] = 255;
       }
       tg.putImageData(anh, 0, 0);
@@ -1802,7 +1822,7 @@
       var m = tt.matNay || {};
       return { coKhoi: tt.coKhoi, dangGhep: tt.dangGhep, thuXong: tt.thuXong, n: m.n || 0, soOMa: m.soOMa || 0, oCon: m.oCon || 0, canhMa: m.canhMa || 0,
         phienBan: m.phienBan || 0, phienBanNhoNhat: m.phienBanNhoNhat || 0, matDangXem: tt.matDangXem, dangHut: !!tt.hut, phong: tt.phong,
-        kqMat: tt.kqMat.slice(), link: tt.link, nguonAnh: tt.nguonAnh, coAnh: !!tt.anh, chinh: JSON.parse(JSON.stringify(tt.chinh)),
+        kqMat: tt.kqMat.slice(), link: tt.link, coMau: !!(tt.matNay && tt.matNay.mat.mau), giuMau: tt.giuMau, coPng: tt.coPng, nguonAnh: tt.nguonAnh, coAnh: !!tt.anh, chinh: JSON.parse(JSON.stringify(tt.chinh)),
         buocChiDan: tt.buocChiDan, choQuet: tt.choQuet,
         coBay: !!(tt.boVe && tt.boVe.ok && tt.boVe.coBay()), vangBat: CAU_HINH.THOI_VANG, vangSan: !!tt.vang.bay && tt.vang.bay.viec === tt.viec, vangT: tt.vang.t, vangDich: tt.vang.dich,
         vangTuDong: tt.vang.tuDong, vangDung: tt.vang.dung, vangTuBat: tt.vang.tuBat, cuaSo: tt.cuaSo, soKhoi: tt.soKhoi, loc: !!tt.loc, locLap: !!(tt.loc && tt.loc.moi && tt.loc.lucMoi), locKhung: tt.loc ? tt.loc.khung : 0, tienDo: tienDo(),
@@ -1813,6 +1833,12 @@
     hopDen: function () { return hopDen.tatCa(); },
     /* trang web báo mục Khối QR ra / vào màn hình: ra thì nghỉ vẽ, vào thì vẽ tiếp */
     anDi: function (an) { tt.anDi = !!an; if (!an) { tt.lucTruoc = 0; henVe(); henThanhVang(); } },
+    /* Trình chỉnh ảnh (chinh-anh.js) dùng: lấy thông số ghép để xem trước mã, gửi ảnh đã chỉnh vào khối */
+    thamSoGhep: function () { return { link: tt.link, chiTiet: tt.chinh.chiTiet, chinh: chinhChoMay(), giuMau: tt.giuMau, coPng: tt.coPng }; },
+    dungAnh: function (canvas, ghi) { nhanAnh(anhXam(canvas, canvas.width, canvas.height), 'cua-ban', true, null, ghi); },
+    datGiuMau: function (b) { b = !!b; if (b === tt.giuMau) return; tt.giuMau = b; var o = $('giu-mau'); if (o) o.checked = b; hopDen.ghi('giữ màu', b); if (tt.anh) yeuCauGhep(0, 'giữ màu'); },
+    datCoPng: function (co) { tt.coPng = co; hopDen.ghi('cỡ PNG', co); },
+    ghi: function (viec, chiTiet) { hopDen.ghi(viec, chiTiet); },
     /* hình đích của một mặt (đã bọc viền), để bài kiểm tra so từng ô với ảnh chụp màn hình */
     matDich: function () { return tt.matNay ? { n: tt.matNay.mat.n, o: Array.prototype.join.call(tt.matNay.mat.o, '') } : null; }
   };

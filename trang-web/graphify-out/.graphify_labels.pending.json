@@ -7,7 +7,7 @@
   "5": "chup-moc.cjs",
   "6": "kiem_trang.cjs",
   "7": "chung.js",
-  "8": "app.js",
+  "8": "yeuCauGhep",
   "9": "dung.py",
   "10": "chay-het.sh",
   "11": "dau.js",
@@ -21,10 +21,16 @@
   "19": "jsqr.min.js",
   "20": "omggif.js",
   "21": "thoi-vang.js",
+  "22": "chinh-anh.js",
   "23": "khoi-qr.cjs",
   "24": "canh-nen.cjs",
   "25": "game.cjs",
   "26": "nhac.cjs",
   "27": "k",
-  "28": "anh-mau.js"
+  "28": "anh-mau.js",
+  "29": "khoiDong",
+  "30": "capNhatNutMat",
+  "31": "ketThucLoc",
+  "32": "napAnh",
+  "33": "chayHieuUngTaiGiay"
 }

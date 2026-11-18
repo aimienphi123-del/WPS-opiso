@@ -5,6 +5,7 @@
      1. Sáu mặt của khối
      2. Tạo mã QR
      2b. Ghép ảnh vào mã (halftone), dựng hình của một mặt
+     2c. Giữ màu ảnh: bảng màu theo ô (ô tối giữ màu tối, ô sáng giữ màu sáng để máy quét vẫn đọc được)
      3. Số ngẫu nhiên có hạt (cùng đầu vào thì ra cùng một khối)
      4. Xếp khối (khối mực + khối giấy)
      5. Nhìn thẳng một mặt, so với mã
@@ -98,6 +99,11 @@
 
   /* Bọc thêm v lớp ô sáng quanh mã. Khối xếp theo cỡ đã bọc. */
   function themVien(ma, v) {
+    if (ma.mau) {   // hình có màu: bọc thêm viền cho cả bảng số màu (viền là giấy thường, số 0)
+      var nn = ma.n + 2 * v, mau = new Uint8Array(nn * nn);
+      for (var w0 = 0; w0 < ma.n; w0++) mau.set(ma.mau.subarray(w0 * ma.n, w0 * ma.n + ma.n), (w0 + v) * nn + v);
+      var kq = themVien({ n: ma.n, o: ma.o }, v); kq.mau = mau; kq.bang = ma.bang; return kq;
+    }
     var n = ma.n + 2 * v, o = new Uint8Array(n * n);
     for (var w = 0; w < ma.n; w++) for (var c = 0; c < ma.n; c++) o[(w + v) * n + c + v] = ma.o[w * ma.n + c];
     return { n: n, o: o };
@@ -190,7 +196,83 @@
         }
       }
     }
-    return { n: S, o: ra };
+    var kq = { n: S, o: ra };
+    if (chinh.giuMau && anh.rgb) datMau(kq, anh, S, chinh, giu, n, K, tam0, tam1);
+    return kq;
+  }
+
+  /* ===== 2c. GIỮ MÀU ẢNH =====
+     Mỗi ô con lấy màu trung bình của vùng ảnh dưới nó. Ô tối: kéo độ sáng xuống dưới TOI (giữ sắc màu);
+     ô sáng: pha trắng cho độ sáng lên trên SANG. Ô ở tâm ô mã (máy quét đọc chỗ này) dùng ngưỡng chặt hơn.
+     Rồi gom thành bảng tối đa SO_MAU màu tối + SO_MAU màu sáng (k-means), vì bộ vẽ nhận bảng màu cỡ cố định.
+     kq.mau[i] = số thứ tự màu (1..2*SO_MAU), 0 = màu mực / giấy thường (mắt mã, vạch định thời). kq.bang = r,g,b 0..1. */
+  var MAU = { TOI: 0.26, TOI_TAM: 0.18, SANG: 0.72, SANG_TAM: 0.8, SO_MAU: 30 };
+  function doSangMau(r, g, b) { return 0.299 * r + 0.587 * g + 0.114 * b; }
+  function epTone(c, toi, nguong) {   // c: [r,g,b] 0..1, sửa tại chỗ
+    var y = doSangMau(c[0], c[1], c[2]);
+    if (toi) { if (y > nguong) { var k = nguong / Math.max(y, 1e-4); c[0] *= k; c[1] *= k; c[2] *= k; } }
+    else if (y < nguong) { var t = (nguong - y) / Math.max(1 - y, 1e-4); c[0] += (1 - c[0]) * t; c[1] += (1 - c[1]) * t; c[2] += (1 - c[2]) * t; }
+    return c;
+  }
+  function layLuoiMau(anh, S, chinh) {
+    var phong = chinh.phong || 1, doiX = chinh.doiX || 0, doiY = chinh.doiY || 0;
+    var tp = 1 + (chinh.tuongPhan || 0) / 100, ds = (chinh.doSang || 0) / 100;
+    var canh = Math.min(anh.rong, anh.cao) / Math.max(1, phong);
+    var trai = (anh.rong - canh) / 2 * (1 + doiX), tren = (anh.cao - canh) / 2 * (1 + doiY);
+    function kep(v, a, b) { return v < a ? a : (v > b ? b : v); }
+    var ra = new Float32Array(S * S * 3), rgb = anh.rgb, rong = anh.rong;
+    for (var y = 0; y < S; y++) {
+      var y0 = kep(Math.floor(tren + y / S * canh), 0, anh.cao - 1), y1 = kep(Math.ceil(tren + (y + 1) / S * canh), y0 + 1, anh.cao);
+      for (var x = 0; x < S; x++) {
+        var x0 = kep(Math.floor(trai + x / S * canh), 0, anh.rong - 1), x1 = kep(Math.ceil(trai + (x + 1) / S * canh), x0 + 1, anh.rong);
+        var r = 0, g = 0, b = 0, so = (x1 - x0) * (y1 - y0);
+        for (var yy = y0; yy < y1; yy++) for (var xx = x0; xx < x1; xx++) { var j = (yy * rong + xx) * 3; r += rgb[j]; g += rgb[j + 1]; b += rgb[j + 2]; }
+        var i = (y * S + x) * 3;
+        ra[i] = kep((r / so / 255 - 0.5) * tp + 0.5 + ds, 0, 1);
+        ra[i + 1] = kep((g / so / 255 - 0.5) * tp + 0.5 + ds, 0, 1);
+        ra[i + 2] = kep((b / so / 255 - 0.5) * tp + 0.5 + ds, 0, 1);
+      }
+    }
+    return ra;
+  }
+  /* k-means đơn giản, có hạt cố định: cùng ảnh thì ra cùng bảng màu */
+  function gomMau(ds, k) {   // ds: mảng [r,g,b]; trả { tam: k tâm, chon(c) -> chỉ số }
+    var so = ds.length, tam = [];
+    if (!so) return { tam: [], chon: function () { return 0; } };
+    var mau = ds.slice().sort(function (a, b) { return doSangMau(a[0], a[1], a[2]) - doSangMau(b[0], b[1], b[2]); });
+    k = Math.min(k, so);
+    for (var t = 0; t < k; t++) tam.push(mau[Math.floor((t + 0.5) * so / k)].slice());
+    var buoc = Math.max(1, Math.floor(so / 4000));
+    function gan(c) {
+      var tot = 0, gan0 = 1e9;
+      for (var t2 = 0; t2 < tam.length; t2++) { var a = tam[t2], d0 = a[0] - c[0], d1 = a[1] - c[1], d2 = a[2] - c[2], dd = d0 * d0 + d1 * d1 + d2 * d2; if (dd < gan0) { gan0 = dd; tot = t2; } }
+      return tot;
+    }
+    for (var lan = 0; lan < 6; lan++) {
+      var tong = tam.map(function () { return [0, 0, 0, 0]; });
+      for (var i = 0; i < so; i += buoc) { var c = ds[i], g = gan(c), s0 = tong[g]; s0[0] += c[0]; s0[1] += c[1]; s0[2] += c[2]; s0[3]++; }
+      for (t = 0; t < tam.length; t++) if (tong[t][3]) tam[t] = [tong[t][0] / tong[t][3], tong[t][1] / tong[t][3], tong[t][2] / tong[t][3]];
+    }
+    return { tam: tam, chon: gan };
+  }
+  function datMau(kq, anh, S, chinh, giu, n, K, tam0, tam1) {
+    var luoi = layLuoiMau(anh, S, chinh), toi = [], sang = [], viTriToi = [], viTriSang = [];
+    for (var y = 0; y < S; y++) for (var x = 0; x < S; x++) {
+      var mx = (x / K) | 0, my = (y / K) | 0, i = y * S + x;
+      if (giu[my * n + mx]) continue;
+      var laTam = x % K >= tam0 && x % K < tam1 && y % K >= tam0 && y % K < tam1;
+      var c = [luoi[i * 3], luoi[i * 3 + 1], luoi[i * 3 + 2]];
+      if (kq.o[i]) { toi.push(epTone(c, true, laTam ? MAU.TOI_TAM : MAU.TOI)); viTriToi.push(i); }
+      else { sang.push(epTone(c, false, laTam ? MAU.SANG_TAM : MAU.SANG)); viTriSang.push(i); }
+    }
+    var gT = gomMau(toi, MAU.SO_MAU), gS = gomMau(sang, MAU.SO_MAU);
+    var bang = new Float32Array(MAU.SO_MAU * 2 * 3), mau = new Uint8Array(S * S), t;
+    // tâm đã là trung bình của các màu đã ép, ép lại lần nữa cho chắc ngưỡng (lấy ngưỡng chặt)
+    for (t = 0; t < gT.tam.length; t++) bang.set(epTone(gT.tam[t], true, MAU.TOI_TAM), t * 3);
+    for (t = 0; t < gS.tam.length; t++) bang.set(epTone(gS.tam[t], false, MAU.SANG_TAM), (MAU.SO_MAU + t) * 3);
+    for (t = 0; t < toi.length; t++) mau[viTriToi[t]] = 1 + gT.chon(toi[t]);
+    for (t = 0; t < sang.length; t++) mau[viTriSang[t]] = 1 + MAU.SO_MAU + gS.chon(sang[t]);
+    kq.mau = mau; kq.bang = bang;
   }
 
   /* Hình của một mặt (sáu mặt dùng chung hình này).
@@ -434,16 +516,25 @@
   ];
   var TAM_GIAC = [0, 1, 2, 0, 2, 3];
 
-  function ghiMat(dinh, vt, x, y, z, h) {
+  function ghiMat(dinh, vt, x, y, z, h, so) {   // so: số màu trong bảng (0 = màu mực / giấy thường), ghi vào byte thứ tư
     for (var t = 0; t < 6; t++) {
       var g = GOC[h][TAM_GIAC[t]];
-      dinh[vt++] = x + g[0]; dinh[vt++] = y + g[1]; dinh[vt++] = z + g[2]; dinh[vt++] = 0;
+      dinh[vt++] = x + g[0]; dinh[vt++] = y + g[1]; dinh[vt++] = z + g[2]; dinh[vt++] = so || 0;
     }
     return vt;
   }
+  /* Số màu của mặt hướng h của khối (x, y, z): lấy ô ảnh mà người nhìn thẳng từ hướng h thấy ở đó.
+     Khối khác loại với ô (mực mà ô sáng, hay ngược lại) thì dùng màu thường. */
+  var MAT_CUA_HUONG = [1, 3, 4, 5, 0, 2];   // HUONG +x,-x,+y,-y,+z,-z -> mặt trong MAT
+  function soMauCua(mat, n, x, y, z, h, laMuc) {
+    var m = MAT[MAT_CUA_HUONG[h]], p = [x, y, z], ar = truc(m.r), au = truc(m.u);
+    var c = m.r[ar] > 0 ? p[ar] : n - 1 - p[ar], w = m.u[au] > 0 ? n - 1 - p[au] : p[au], i = w * n + c;
+    return (mat.o[i] ? 1 : 0) === (laMuc ? 1 : 0) ? mat.mau[i] : 0;
+  }
 
   /* Lưới của cả khối. Mặt nào áp vào khối khác thì bỏ vì không ai thấy. */
-  function luoiKhoi(khoi, n) {
+  function luoiKhoi(khoi, n, mat) {
+    var coMau = !!(mat && mat.mau && mat.n === n);
     var n2 = n * n, dem = new Int32Array(12), x, y, z, mau, i, luot, nhom, base, xBase, xyBase;
     var khoang = new Int32Array(24), con = new Int32Array(12), dinh = null;
     for (luot = 0; luot < 2; luot++) {   // lượt 0 đếm, lượt 1 ghi
@@ -455,12 +546,12 @@
             i = xyBase + z; mau = khoi[i];
             if (!mau) continue;
             base = (mau - 1) * 6;
-            if (x + 1 >= n || !khoi[i + n2]) { if (luot === 0) dem[base]++; else con[base] = ghiMat(dinh, con[base], x, y, z, 0); }
-            if (x === 0 || !khoi[i - n2])     { if (luot === 0) dem[base + 1]++; else con[base + 1] = ghiMat(dinh, con[base + 1], x, y, z, 1); }
-            if (y + 1 >= n || !khoi[i + n])  { if (luot === 0) dem[base + 2]++; else con[base + 2] = ghiMat(dinh, con[base + 2], x, y, z, 2); }
-            if (y === 0 || !khoi[i - n])      { if (luot === 0) dem[base + 3]++; else con[base + 3] = ghiMat(dinh, con[base + 3], x, y, z, 3); }
-            if (z + 1 >= n || !khoi[i + 1])  { if (luot === 0) dem[base + 4]++; else con[base + 4] = ghiMat(dinh, con[base + 4], x, y, z, 4); }
-            if (z === 0 || !khoi[i - 1])      { if (luot === 0) dem[base + 5]++; else con[base + 5] = ghiMat(dinh, con[base + 5], x, y, z, 5); }
+            if (x + 1 >= n || !khoi[i + n2]) { if (luot === 0) dem[base]++; else con[base] = ghiMat(dinh, con[base], x, y, z, 0, coMau ? soMauCua(mat, n, x, y, z, 0, mau === MUC) : 0); }
+            if (x === 0 || !khoi[i - n2])     { if (luot === 0) dem[base + 1]++; else con[base + 1] = ghiMat(dinh, con[base + 1], x, y, z, 1, coMau ? soMauCua(mat, n, x, y, z, 1, mau === MUC) : 0); }
+            if (y + 1 >= n || !khoi[i + n])  { if (luot === 0) dem[base + 2]++; else con[base + 2] = ghiMat(dinh, con[base + 2], x, y, z, 2, coMau ? soMauCua(mat, n, x, y, z, 2, mau === MUC) : 0); }
+            if (y === 0 || !khoi[i - n])      { if (luot === 0) dem[base + 3]++; else con[base + 3] = ghiMat(dinh, con[base + 3], x, y, z, 3, coMau ? soMauCua(mat, n, x, y, z, 3, mau === MUC) : 0); }
+            if (z + 1 >= n || !khoi[i + 1])  { if (luot === 0) dem[base + 4]++; else con[base + 4] = ghiMat(dinh, con[base + 4], x, y, z, 4, coMau ? soMauCua(mat, n, x, y, z, 4, mau === MUC) : 0); }
+            if (z === 0 || !khoi[i - 1])      { if (luot === 0) dem[base + 5]++; else con[base + 5] = ghiMat(dinh, con[base + 5], x, y, z, 5, coMau ? soMauCua(mat, n, x, y, z, 5, mau === MUC) : 0); }
           }
         }
       }
@@ -470,17 +561,19 @@
         dinh = new Uint8Array(tong * 24);
       }
     }
-    return { n: n, dinh: dinh, khoang: khoang, soMat: dinh.length / 24 };
+    return { n: n, dinh: dinh, khoang: khoang, soMat: dinh.length / 24, bang: coMau ? mat.bang : null };
   }
 
   /* Lưới phẳng: chỉ hình của một mặt, đặt ở mặt trước (+z). Dựng tức thì, dùng để xem trước trong lúc khối đang được xếp. */
   function luoiPhang(mat) {
-    var n = mat.n, w, c, soO = 0, vt = 0;
-    for (w = 0; w < n * n; w++) if (mat.o[w]) soO++;
-    var dinh = new Uint8Array(soO * 24), khoang = new Int32Array(24);
+    var n = mat.n, w, c, soO = 0, soSang = 0, vt = 0, coMau = !!mat.mau;
+    for (w = 0; w < n * n; w++) { if (mat.o[w]) soO++; else if (coMau && mat.mau[w]) soSang++; }
+    var dinh = new Uint8Array((soO + soSang) * 24), khoang = new Int32Array(24);
     khoang[4 * 2 + 1] = soO * 6;   // nhóm 4 = khối mực, hướng +z
-    for (w = 0; w < n; w++) for (c = 0; c < n; c++) if (mat.o[w * n + c]) vt = ghiMat(dinh, vt, c, n - 1 - w, n - 1, 4);
-    return { n: n, dinh: dinh, khoang: khoang, soMat: soO };
+    khoang[10 * 2] = soO * 6; khoang[10 * 2 + 1] = soSang * 6;   // nhóm 10 = khối giấy, hướng +z (chỉ ô sáng có màu; ô giấy thường lẫn vào nền)
+    for (w = 0; w < n; w++) for (c = 0; c < n; c++) if (mat.o[w * n + c]) vt = ghiMat(dinh, vt, c, n - 1 - w, n - 1, 4, coMau ? mat.mau[w * n + c] : 0);
+    if (soSang) for (w = 0; w < n; w++) for (c = 0; c < n; c++) if (!mat.o[w * n + c] && mat.mau[w * n + c]) vt = ghiMat(dinh, vt, c, n - 1 - w, n - 1, 4, mat.mau[w * n + c]);
+    return { n: n, dinh: dinh, khoang: khoang, soMat: soO + soSang, bang: coMau ? mat.bang : null };
   }
 
   /* Trọn một việc: sáu mặt cùng hình mat -> xếp khối -> kiểm từng ô ở cả sáu mặt -> dựng lưới.
@@ -496,7 +589,7 @@
     for (var lan = 0; lan < 3; lan++) { x = hamXep(sau, hat + lan); if (x.soSai === 0) break; }
     var lech = 0;
     for (var f = 0; f < 6; f++) lech += soOKhac(nhinMat(x.khoi, x.n, f), mat);
-    var luoi = luoiKhoi(x.khoi, x.n);
+    var luoi = luoiKhoi(x.khoi, x.n, mat);
     return { n: x.n, luoi: luoi, khoi: x.khoi, soMuc: x.soMuc, soGiay: x.soGiay, soSai: x.soSai, soLech: lech, soBuoc: x.soBuoc, msXep: x.ms, ms: Date.now() - t0, engine: x.engine || 'js' };
   }
 
@@ -512,7 +605,7 @@
     oGiuNguyen: oGiuNguyen, ghepAnh: ghepAnh, taoMat: taoMat,
     hatTuChu: hatTuChu, hatTuMang: hatTuMang, taoNgauNhien: taoNgauNhien,
     xepKhoi: xepKhoi, nhinMat: nhinMat, soOKhac: soOKhac,
-    luoiKhoi: luoiKhoi, luoiPhang: luoiPhang, xepVaDungLuoi: xepVaDungLuoi
+    luoiKhoi: luoiKhoi, MAU: MAU, luoiPhang: luoiPhang, xepVaDungLuoi: xepVaDungLuoi
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = goc.MayKhoiQR;
 })(typeof window !== 'undefined' ? window : globalThis);

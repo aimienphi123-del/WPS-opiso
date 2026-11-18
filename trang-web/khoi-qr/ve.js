@@ -31,9 +31,15 @@
   var HUONG = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];   // cùng thứ tự với may.js
 
   // u_lech: dời cả hình một khoảng rất nhỏ (nửa điểm ảnh) để mép ô trùng mép điểm ảnh khi đã hút thẳng
-  var MA_DINH = 'attribute vec3 a_vt; uniform mat3 u_xoay; uniform vec3 u_ti; uniform float u_nua; uniform float u_lech;' +
-    'void main(){ vec3 p = u_xoay * (a_vt - vec3(u_nua)); gl_Position = vec4(p.x*u_ti.x + u_lech, p.y*u_ti.y + u_lech, -p.z*u_ti.z, 1.0); }';
-  var MA_DIEM = 'precision mediump float; uniform vec3 u_mau; void main(){ gl_FragColor = vec4(u_mau, 1.0); }';
+  // a_vt.w: số màu trong bảng (0 = màu thường của nhóm). Có màu thì mặt nghiêng pha theo cùng cách với màu thường:
+  // khối mực sáng dần (u_ng.y = 1), khối giấy tối dần (u_ng.y = 0); u_ng.x = độ nghiêng của hướng đang vẽ.
+  var SO_BANG = 60;   // khớp may.js: 2 x MAU.SO_MAU
+  var MA_DINH = 'attribute vec4 a_vt; uniform mat3 u_xoay; uniform vec3 u_ti; uniform float u_nua; uniform float u_lech;' +
+    'uniform vec3 u_mau; uniform vec3 u_bang[' + SO_BANG + ']; uniform vec2 u_ng; varying vec3 v_mau;' +
+    'void main(){ vec3 p = u_xoay * (a_vt.xyz - vec3(u_nua)); gl_Position = vec4(p.x*u_ti.x + u_lech, p.y*u_ti.y + u_lech, -p.z*u_ti.z, 1.0);' +
+    ' if (a_vt.w > 0.5) { vec3 b = u_bang[int(a_vt.w + 0.5) - 1]; vec3 nghieng = u_ng.y > 0.5 ? b * 0.7 + vec3(0.3) : b * 0.63; v_mau = mix(b, nghieng, u_ng.x); }' +
+    ' else v_mau = u_mau; }';
+  var MA_DIEM = 'precision mediump float; varying vec3 v_mau; void main(){ gl_FragColor = vec4(v_mau, 1.0); }';
 
   // Khối bay: s = tiến độ riêng của khối (đã làm mượt), vị trí = giữa chỗ trên mã và chỗ trên thỏi vàng, cộng một đường cong.
   // Màu đổi từ mực/giấy sang vàng ở quãng giữa đường bay. Vàng sáng dần theo chiều cao, có một vệt bóng gần vành.
@@ -69,7 +75,7 @@
     try { gl = canvas.getContext('webgl', { antialias: true, alpha: false }) || canvas.getContext('experimental-webgl'); } catch (e) { gl = null; }
     if (!gl) return { ok: false };
 
-    var ct, viTriXoay, viTriTi, viTriNua, viTriMau, viTriLech, dem = 0;
+    var ct, viTriXoay, viTriTi, viTriNua, viTriMau, viTriLech, viTriBang, viTriNg, bangDaNap = null, dem = 0;
     var luoi = null;            // lưới đang vẽ: { n, dinh, khoang }
     var demDang = 0;            // bộ đệm của lưới đang vẽ: dem (một lưới) hoặc bộ đệm riêng của một khung ảnh động
     var dsKhung = [];           // ảnh động: mỗi khung một lưới và một bộ đệm riêng trên card đồ hoạ, đổi khung không phải nạp lại
@@ -96,6 +102,7 @@
       viTriNua = gl.getUniformLocation(ct, 'u_nua');
       viTriMau = gl.getUniformLocation(ct, 'u_mau');
       viTriLech = gl.getUniformLocation(ct, 'u_lech');
+      viTriBang = gl.getUniformLocation(ct, 'u_bang'); viTriNg = gl.getUniformLocation(ct, 'u_ng'); bangDaNap = null;
       dem = gl.createBuffer(); demDang = dem;
       gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE);
       khung = null; coKhung = 0;
@@ -269,7 +276,8 @@
       gl.uniform1f(viTriLech, (lech || 0) * 2 / rong);   // một điểm ảnh = 2/rong trong hệ toạ độ của WebGL
       gl.bindBuffer(gl.ARRAY_BUFFER, demDang);
       gl.enableVertexAttribArray(0);
-      gl.vertexAttribPointer(0, 3, gl.UNSIGNED_BYTE, false, 4, 0);
+      gl.vertexAttribPointer(0, 4, gl.UNSIGNED_BYTE, false, 4, 0);
+      if (luoi.bang && luoi.bang !== bangDaNap) { gl.uniform3fv(viTriBang, luoi.bang); bangDaNap = luoi.bang; }
       var L = C.HUONG_SANG, dai = Math.sqrt(L[0] * L[0] + L[1] * L[1] + L[2] * L[2]), daVe = 0;
       for (var h = 0; h < 6; h++) {
         var v = HUONG[h];
@@ -283,6 +291,7 @@
           if (!so) continue;
           var c = mau === 0 ? tron(C.MUC, C.MUC_NGHIENG, nghieng) : tron(C.GIAY, C.GIAY_NGHIENG, nghieng);
           gl.uniform3f(viTriMau, c[0], c[1], c[2]);
+          gl.uniform2f(viTriNg, nghieng, mau === 0 ? 1 : 0);
           gl.drawArrays(gl.TRIANGLES, luoi.khoang[nhom * 2], so);
           daVe += so;
         }

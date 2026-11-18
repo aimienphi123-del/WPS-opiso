@@ -35,7 +35,7 @@ khung = re.sub(r'<!-- @cuoi[^>]*-->', lambda _: '\n'.join(cuoi + cuoi_chung), kh
 tv = ''.join(f'<script>{doc("thu-vien/" + f).strip()}\n</script>\n' for f in ['lenis.min.js', 'gsap/gsap.min.js', 'gsap/ScrollTrigger.min.js', 'gsap/CustomEase.min.js'])
 tv += ''.join(f'<script type="text/plain" id="{i}">{doc(p)}</script>\n' for i, p in [('ma-three', 'thu-vien/three/three-gon.min.js'), ('ma-canh-3d', 'canh-3d/canh-3d.js'), ('ma-troi-3d', 'canh-3d/troi-3d.js'), ('ma-bien-3d', 'canh-3d/bien-3d.js')])
 # bộ máy Khối QR: chỉ chạy khi người xem cuộn gần tới mục (xem nguon/khoi-qr.html)
-KHOI_QR = [('ma-qr-tao', 'qrcode.min.js'), ('ma-jsqr', 'jsqr.min.js'), ('ma-gif', 'omggif.js'), ('ma-may', 'may.js'), ('ma-vang', 'thoi-vang.js'), ('ma-qr-ve', 've.js'), ('ma-qr-anh-mau', 'anh-mau.js'), ('ma-qr-app', 'app.js')]
+KHOI_QR = [('ma-qr-tao', 'qrcode.min.js'), ('ma-jsqr', 'jsqr.min.js'), ('ma-gif', 'omggif.js'), ('ma-may', 'may.js'), ('ma-vang', 'thoi-vang.js'), ('ma-qr-ve', 've.js'), ('ma-qr-anh-mau', 'anh-mau.js'), ('ma-qr-app', 'app.js'), ('ma-qr-chinh-anh', 'chinh-anh.js')]
 tv += ''.join(f'<script type="text/plain" id="{i}">{doc("khoi-qr/" + p)}</script>\n' for i, p in KHOI_QR)
 khung = re.sub(r'<!-- @thu-vien[^>]*-->', lambda _: tv.rstrip(), khung)
 khung = re.sub(r'<!-- @ma[^>]*-->', lambda _: '<script>\n' + doc('nguon/du-lieu.js').strip() + '\n</script>\n<script>\n' + doc('nguon/chung.js').strip() + '\n</script>\n' + ''.join(f'<script>/* ===== {t} ===== */\n{s}\n</script>\n' for t, s in ma if t != 'chung'), khung)

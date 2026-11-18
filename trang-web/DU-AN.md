@@ -39,7 +39,7 @@ trang-web/
     dang-lam.html  san-pham.html  game.html  ve-minh.html  phim.html  nhac.html  khoi-qr.html  lien-he.html
     phong.css + phong/    phông chữ (tệp .woff2)
     anh/                  ảnh (chân dung, biểu tượng app)
-  khoi-qr/                bộ máy Khối QR (app.js, ve.js, may.js, thoi-vang.js, jsQR, qrcode, omggif), nhúng dạng chữ, chỉ chạy khi cuộn gần tới
+  khoi-qr/                bộ máy Khối QR (app.js, ve.js, may.js, thoi-vang.js, chinh-anh.js, jsQR, qrcode, omggif), nhúng dạng chữ, chỉ chạy khi cuộn gần tới
   canh-3d/                mã 3 cảnh 3D: troi-3d.js (trời sao), canh-3d.js (núi), bien-3d.js (biển)
   thu-vien/               Lenis, GSAP 3.13 (ScrollTrigger, CustomEase), Three.js r160 bản rút gọn
   ban-moi-nhat/           tệp trang đã ghép (không sửa tay)
@@ -95,6 +95,8 @@ Khi ghép, lệnh `dung.py` làm theo thứ tự sau:
 Sửa xong thì chạy `python3 dung.py` rồi kiểm tra như phần dưới.
 
 - **Khối QR:** khung và chữ trong `nguon/khoi-qr.html`, chữ thông báo trong khối `CHU` của `khoi-qr/app.js`. Tiêu đề khung khối không có chữ mà là thanh tiến độ ghép (`#tien-do-tieu`, app.js `veTienDo` cập nhật theo các bước thật: xếp khối, thử quét 6 mặt). Nút tải ảnh gọi ô chọn tệp được ẩn bằng `kqr-an`, không dùng `hidden`, để webview điện thoại vẫn mở được. Trên trang đã ẩn (vẫn còn trong khung vì app.js ghi vào): dòng kết quả và nút mặt dưới khối, thanh trạng thái, cửa sổ Mẹo, tab Thỏi vàng, nút đếm 6/6 và số đếm trên tiêu đề. Khối vẫn tự tụ thành thỏi vàng khi giữ xoay hoặc để yên 15 giây. Mặc định là mã QR thường, ảnh mẫu chỉ hiện khi bấm "Dùng ảnh mẫu".
+- **Trình chỉnh ảnh (Khối QR):** `khoi-qr/chinh-anh.js` (mã) + khối `#ca` trong `nguon/khoi-qr.html` (khung, kiểu). Bấm "Tải ảnh lên" với ảnh tĩnh thì mở trình này; GIF đi thẳng vào khối. Công cụ: Khung (tỉ lệ Tự do, 1:1, 4:5, 9:16, 16:9, 4:3 hoặc tự nhập rộng x cao; cỡ ảnh tải lên Gốc / 2048 / 1024), Tách nền theo màu (chạm một điểm, hoặc tự tách theo màu ở mép ảnh; chủ trang chọn cách theo màu, không dùng AI), Bút cắt (điểm nối bằng đường cong, khép rồi giữ hoặc xoá phần trong vùng), Tẩy / Khôi phục, Màu (sáng, tương phản, bão hoà, giữ màu), Xoay / Lật, Xuất (cỡ PNG mã QR 1024 / 2048 / 4096, tải ảnh đã chỉnh). Có hoàn tác, làm lại, giữ để xem ảnh gốc, và ô "Xem trên mã" tự thử quét sau mỗi lần chỉnh. Đóng trình chỉnh thì bỏ ảnh khỏi bộ nhớ.
+- **Giữ màu ảnh trên khối:** `may.js` mục 2c lấy màu từng ô con, ô tối ép độ sáng dưới 0.26 (tâm ô mã 0.18), ô sáng trên 0.72 (tâm 0.8) để máy quét vẫn đọc, rồi gom thành bảng 60 màu. Số màu ghi vào byte thứ tư của mỗi đỉnh lưới, `ve.js` đọc bảng màu trong shader. Ô xem nhỏ và ảnh PNG cũng có màu. Tắt ở tab Chỉnh ("Giữ màu của ảnh") hoặc trong trình chỉnh, tab Màu. Mắt mã và vạch định thời luôn giữ đen trắng.
 
 ## Kiểm tra trước khi giao
 
@@ -104,7 +106,7 @@ Chạy ở thư mục `trang-web`:
 sh thu/chay-het.sh                  ghép trang rồi chạy các bài thử chính + kiểm tra màu, bố cục
 node thu/canh-nen.cjs               cảnh nền 3D: bật đúng cảnh, dừng, giải phóng bộ nhớ, dựng lại
 node thu/the.cjs                    thẻ chân dung: nghiêng, lật, phím, chữ mặt sau đúng bản đã duyệt
-node thu/khoi-qr.cjs                Khối QR: chạy chậm, mặc định QR thường, 6 mặt quét được, kéo xoay, đổi link, ghép ảnh, tải PNG, nghỉ khi cuộn đi
+node thu/khoi-qr.cjs                Khối QR: chạy chậm, mặc định QR thường, 6 mặt quét được, kéo xoay, đổi link, trình chỉnh ảnh (từng công cụ), ghép ảnh giữ màu và tắt giữ màu, tải PNG, nghỉ khi cuộn đi
 node thu/chup-the.cjs               chụp thẻ chân dung (mặt trước, khi nghiêng, mặt sau) vào thu/anh/the/
 node thu/nhac.cjs                   mục Nhạc (cần vào được SoundCloud; máy không vào được thì hỏng, không phải lỗi trang)
 node thu/chup.cjs                   chụp ảnh 3 chủ đề × máy tính, điện thoại vào thu/anh/
