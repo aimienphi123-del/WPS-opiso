@@ -99,7 +99,7 @@
       if (Math.abs(tx - rx) + Math.abs(ty - ry) > 0.3) requestAnimationFrame(vong); else dangVe = false;
     };
     addEventListener('pointermove', (e) => { tx = e.clientX; ty = e.clientY; document.documentElement.classList.add('co-tro'); if (!dangVe) { dangVe = true; requestAnimationFrame(vong); } }, { passive: true });
-    document.addEventListener('pointerover', (e) => { tro.classList.toggle('to-ra', !!e.target.closest('a, button')); });
+    document.addEventListener('pointerover', (e) => { tro.classList.toggle('to-ra', !!e.target.closest('a, button') && !e.target.closest('.tdd')); });   // trên thẻ chân dung giữ con trỏ nhỏ để không che ảnh
     document.querySelectorAll('.hut').forEach((n) => {
       n.addEventListener('pointermove', (e) => { const r = n.getBoundingClientRect(); n.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.25}px, ${(e.clientY - r.top - r.height / 2) * 0.35}px)`; });
       n.addEventListener('pointerleave', () => { n.style.transition = 'transform .6s cubic-bezier(.22,1.25,.36,1)'; n.style.transform = ''; setTimeout(() => { n.style.transition = ''; }, 600); });
@@ -132,7 +132,7 @@
   document.querySelectorAll('.mg2').forEach((m) => ioMg.observe(m));
   // ---------- Chuyển động lặp: chạy khoảng 5 giây khi vừa hiện ra rồi đứng yên; rê chuột / chạm thì chạy lại (chuẩn trợ năng) ----------
   {
-    const LAP = '.mg, .mg2, .tt, .cuon-xuong, .nh-cho, .gm2-trang';
+    const LAP = '.mg, .mg2, .tt, .cuon-xuong, .nh-cho, .gm2-trang, .tdd';
     const hen = new WeakMap();
     const chay = (n) => { n.classList.add('lap-chay'); clearTimeout(hen.get(n)); hen.set(n, setTimeout(() => n.classList.remove('lap-chay'), 4800)); };
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) chay(e.target); else { clearTimeout(hen.get(e.target)); e.target.classList.remove('lap-chay'); } }), { threshold: 0.3 });

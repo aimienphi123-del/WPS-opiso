@@ -77,12 +77,13 @@ Khi ghép, lệnh `dung.py` làm theo thứ tự sau:
 | `ve-minh.html` | `#ve-minh` | về mình |
 | `phim.html` | `#phim` | phim ngắn (đang là khung chờ, chưa có phim thật) |
 | `nhac.html` | `#nhac` | nhạc đang nghe (SoundCloud) |
-| `lien-he.html` | `#lien-he` | thông tin liên hệ + chân trang |
+| `lien-he.html` | `#lien-he` | thông tin liên hệ (email, Zalo, Facebook), thẻ chân dung lật được, chân trang |
 
 ## Sửa cái gì thì mở đâu
 
 - **Màu một chủ đề, bo góc, tốc độ chuyển động:** `nguon/cau-hinh.css`.
 - **Thêm, sửa app; thêm phim; đổi bước dự án:** `nguon/du-lieu.js`. Thêm app là thêm một dòng trong `SP`.
+- **Thẻ chân dung ở phần Liên hệ:** khối `tdd` trong `nguon/lien-he.html`. Thẻ dùng chung ảnh của màn đầu, không nhúng lại. Mặt trước là khung máy quay, rê chuột thì nghiêng 3D, bấm (hoặc Enter) thì lật. Chữ mặt sau đã được chủ trang duyệt từng dòng, muốn đổi thì hỏi trước.
 - **Motion graphic của một app:** thẻ `<template id="mg-<mã app>">` trong `nguon/san-pham.html`.
 - **Một phần của trang:** mở đúng tệp phần đó. Kiểu, khung và mã của phần nằm chung một tệp.
 - **Cảnh nền:** cách bật, dừng và giải phóng nằm ở bảng `CANH` trong `nguon/canh-nen.html`. Hình 3D nằm trong `canh-3d/`. Thêm chủ đề là thêm một mục trong `CANH`.
@@ -98,6 +99,8 @@ Chạy ở thư mục `trang-web`:
 ```
 sh thu/chay-het.sh                  ghép trang rồi chạy các bài thử chính + kiểm tra màu, bố cục
 node thu/canh-nen.cjs               cảnh nền 3D: bật đúng cảnh, dừng, giải phóng bộ nhớ, dựng lại
+node thu/the.cjs                    thẻ chân dung: nghiêng, lật, phím, chữ mặt sau đúng bản đã duyệt
+node thu/chup-the.cjs               chụp thẻ chân dung (mặt trước, khi nghiêng, mặt sau) vào thu/anh/the/
 node thu/nhac.cjs                   mục Nhạc (cần vào được SoundCloud; máy không vào được thì hỏng, không phải lỗi trang)
 node thu/chup.cjs                   chụp ảnh 3 chủ đề × máy tính, điện thoại vào thu/anh/
 node thu/do-nhe.cjs                 đo bộ nhớ và thời gian máy bận

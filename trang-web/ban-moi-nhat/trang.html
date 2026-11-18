@@ -748,7 +748,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .nh-khung { position: relative; height: 420px; background: var(--nen-2); border: 1px solid var(--vien); border-radius: var(--bo-l); overflow: hidden; box-shadow: var(--vien-sang), var(--bong-2); }
 /* ===== lien-he ===== */
-:root .tk2 .tk2-logo i { color: var(--do-dam); }
 .chan { padding-block: 28px calc(env(safe-area-inset-bottom, 0px) + 28px); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--mo); border-top: 1px solid var(--vien); }
 .chep:active { transform: scale(.96); transition: transform .08s; }
 .lh2 .nut-do { margin-top: 0; }
@@ -756,15 +755,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .lh2-mail { font: 400 clamp(46px, 6.4vw, 100px)/1 var(--f-to); color: var(--chu); margin: 20px 0 30px; white-space: nowrap; user-select: all; }
 .lh2-mail em { font-style: normal; color: var(--do); }
 .lh2-nut { display: flex; gap: 12px; flex-wrap: wrap; }
-@media (hover: hover) {
-  .tk2-o:hover .tk2 { transform: rotate(0); }
-}
-.tk2-logo { font: 400 clamp(28px, 3vw, 40px)/1 var(--f-to); }
-.tk2-logo i { font-style: normal; color: var(--do); }
-.tk2-ten { font: 400 clamp(30px, 3.2vw, 46px)/1 var(--f-to); text-transform: uppercase; }
-.tk2-vai { color: var(--do-dam); font-weight: 700; font-size: 13px; margin-top: 6px; }
-.tk2-dong { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; font-size: 14px; color: #4A4843; }
-.tk2-lk { display: flex; gap: 16px; }
 .lh2-dong { display: block; will-change: transform; }
 #lien-he { overflow-x: clip; }
 @media (max-width: 900px) {
@@ -773,16 +763,105 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .thu-bay { width: 120px; margin-bottom: 18px; }
 .thu-bay svg { width: 100%; height: auto; display: block; }
-@keyframes dq-ve {0% { stroke-dashoffset: 700; } 60%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 700; }}
-@keyframes dq-nhoi {0%, 56% { transform: scale(1); } 64% { transform: scale(1.8); } 72%, 100% { transform: scale(1); }}
-.tk2 { position: absolute; inset: 0; background: var(--chu); color: var(--nen); padding: clamp(20px, 2.6vw, 34px); display: flex; flex-direction: column; justify-content: space-between; transform: rotate(-4deg); transition: transform .6s var(--nay); border-radius: 20px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), var(--bong-2); }
-.tk2-lk a { color: var(--nen); font-weight: 700; border-bottom: 2px solid var(--do); position: relative; }
-.tk2-lk a::before { content: ""; position: absolute; inset: -10px -6px; }
-.tk2-sau { position: absolute; inset: 0; background: var(--nen-3); border: 1px solid var(--vien); border-radius: 20px; transform: rotate(4deg); }
-.tk2-o { position: relative; justify-self: center; aspect-ratio: 1.7 / 1; width: min(480px, calc(100% - 28px)); }
-@media (max-width: 900px) {
-  .tk2-o { margin-top: 24px; }
-}
+/* ===== THẺ CHÂN DUNG (tdd): mặt trước khung máy quay, rê chuột thì nghiêng 3D, bấm thì lật ra mặt sau thẻ hậu trường ===== */
+.lh2-lk { display: flex; gap: 18px; margin-top: 18px; font-size: 14px; }
+.lh2-lk a { color: var(--chu-2); border-bottom: 1px solid rgba(var(--do-rgb), .5); padding-top: 12px; }
+.lh2-lk a:hover { color: var(--chu); border-color: var(--do); }
+.tdd { justify-self: center; width: 100%; max-width: 430px; perspective: 1300px; }
+.tdd-nghieng { position: relative; transform-style: preserve-3d; will-change: transform; }
+.tdd-lat { position: relative; transform-style: preserve-3d; transition: transform .68s cubic-bezier(.22, 1, .36, 1); }
+.tdd.lat .tdd-lat { transform: rotateY(180deg); }
+.tdd-mat { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.tdd-truoc { position: relative; transform: rotateY(0) translateZ(1px); transform-style: preserve-3d; background: #121215; border: 1px solid rgba(var(--chu-rgb), .24); box-shadow: 0 32px 80px rgba(0, 0, 0, .72); transition: border-color .3s, box-shadow .3s, visibility 0s .34s; }
+.tdd.re .tdd-truoc { border-color: rgba(var(--do-rgb), .6); box-shadow: 0 38px 90px rgba(0, 0, 0, .85), 0 0 40px rgba(var(--do-rgb), .18); }
+.tdd-sau { position: absolute; inset: 0; transform: rotateY(180deg) translateZ(1px); display: flex; flex-direction: column; justify-content: space-between; padding: 20px; background: var(--chu); color: var(--nen); border: 1px solid rgba(17, 17, 19, .28); }
+.tdd { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.tdd:focus-visible { outline: 2px solid var(--do); outline-offset: 6px; }
+/* mặt đang úp thì ẩn hẳn (đổi ở giữa lúc lật) để trình đọc màn hình và phím Tab không chạm vào */
+.tdd-sau, .tdd.lat .tdd-truoc { visibility: hidden; transition: visibility 0s .34s; }
+.tdd.lat .tdd-sau { visibility: visible; }
+.tdd-mono { font: 500 12px/1.2 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
+/* viền sáng chạy quanh mặt trước */
+@property --tdd-goc { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.tdd-truoc::after { content: ""; position: absolute; inset: -1px; z-index: 20; padding: 1px; pointer-events: none;
+  background: conic-gradient(from var(--tdd-goc), transparent 0deg 290deg, rgba(var(--do-rgb), .78) 330deg, rgba(var(--do-rgb), .95) 348deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: tdd-vien 7s linear infinite; }
+@keyframes tdd-vien { to { --tdd-goc: 360deg; } }
+/* thanh trên / dưới */
+.tdd-thanh { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; background: #151518; color: rgba(242, 238, 229, .62); }
+.tdd-thanh.tren-the { border-bottom: 1px solid rgba(var(--chu-rgb), .1); }
+.tdd-thanh.duoi-the { border-top: 1px solid rgba(var(--chu-rgb), .1); }
+.tdd-rec { display: inline-flex; align-items: center; gap: 8px; color: #F2EEE5; }
+.tdd-rec i { width: 8px; height: 8px; border-radius: 50%; background: var(--do); box-shadow: 0 0 8px var(--do); animation: tdd-nhay 1.3s steps(1) infinite; }
+@keyframes tdd-nhay { 50% { opacity: 0; } }
+.tdd-ma-tg { color: var(--do); font-variant-numeric: tabular-nums; }
+.tdd-ten-truoc { display: flex; align-items: baseline; gap: 8px; min-width: 0; color: #F2EEE5; font-weight: 600; font-size: 15px; }
+.tdd-ten-truoc small { color: rgba(242, 238, 229, .62); font-size: 12px; font-weight: 400; }
+.tdd-noi { color: var(--do); letter-spacing: .08em; }
+/* khung ngắm: 3 lớp lệch nhau theo chuột (nền, người, khung ngắm) */
+.tdd-khung { position: relative; height: 355px; padding: 14px 12px 12px; transform-style: preserve-3d; pointer-events: none; }
+@media (min-width: 640px) { .tdd-khung { height: 395px; } }
+.tdd-lop { transition: translate .3s cubic-bezier(.2, .8, .2, 1); }
+.tdd-nen { position: relative; height: 100%; overflow: hidden; border: 1px solid rgba(255, 255, 255, .15); background: #0c0c0f; }
+.tdd-nen > .tdd-lop { position: absolute; inset: 0; }
+.tdd-nen .tdd-lop > * { position: absolute; }
+.tdd-sang, .tdd-luoi { inset: 0; }
+.tdd-sang { background: radial-gradient(65% 65% at 50% 42%, rgba(var(--do-rgb), .38) 0%, rgba(242, 238, 229, .11) 42%, rgba(12, 12, 15, .96) 100%); opacity: .78; transition: opacity .3s; }
+.tdd.re .tdd-sang { opacity: 1; }
+.tdd-luoi { opacity: .2; background-image: linear-gradient(to right, rgba(255, 255, 255, .12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, .12) 1px, transparent 1px); background-size: 33.333% 33.333%; }
+.tdd-chu-nen { top: 20px; left: 0; right: 0; text-align: center; line-height: .88; user-select: none; }
+.tdd-chu-nen b::before { content: attr(data-chu); }   /* chữ in chìm trang trí, không phải nội dung */
+.tdd-chu-nen b { display: block; font: italic 600 clamp(2.6rem, 7vw, 3.35rem)/1 Georgia, 'Times New Roman', serif; letter-spacing: -.01em; color: rgba(255, 255, 255, .11); transition: color .3s; }
+.tdd.re .tdd-chu-nen b { color: rgba(255, 255, 255, .18); }
+.tdd-chu-nen span { display: block; margin-top: 6px; color: rgba(var(--do-rgb), .85); letter-spacing: .22em; }
+.tdd-vu { right: 10px; top: 50%; translate: 0 -50%; display: flex; flex-direction: column; align-items: center; gap: 4px; opacity: .8; }
+.tdd-vu small { font-size: 12px; color: rgba(242, 238, 229, .62); }
+.tdd-vu div { display: flex; align-items: flex-end; gap: 3px; height: 80px; }
+.tdd-vu i { width: 2.5px; transform-origin: bottom; animation: tdd-vu 1.15s ease-in-out infinite; }
+.tdd-vu i:nth-child(1) { height: 56px; background: #6FCF97; }
+.tdd-vu i:nth-child(2) { height: 64px; background: #E8C468; animation-delay: -.3s; }
+.tdd-vu i:nth-child(3) { height: 40px; background: var(--do); animation-delay: -.65s; }
+@keyframes tdd-vu { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+.tdd-ong { bottom: 16px; left: 12px; display: flex; flex-direction: column; gap: 4px; color: rgba(242, 238, 229, .62); }
+.tdd-ong span:first-child { color: var(--do); }
+.tdd-nguoi { position: absolute; inset: -10px 0 12px; z-index: 20; transform: translateZ(44px); transform-style: preserve-3d; }
+.tdd-nguoi > .tdd-lop { position: relative; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.tdd-nguoi img { position: absolute; bottom: 0; height: 98%; width: auto; max-width: 100%; object-fit: contain; object-position: bottom; }
+.tdd-anh { z-index: 1; filter: contrast(1.08) saturate(1.05) drop-shadow(0 20px 30px rgba(0, 0, 0, .85)); -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 13%); mask-image: linear-gradient(to top, transparent 0%, #000 13%); }
+.tdd-vien-anh { opacity: .72; transition: opacity .3s, translate .2s cubic-bezier(.2, .8, .2, 1); filter: brightness(0) drop-shadow(0 0 2px rgb(var(--do-rgb))) drop-shadow(0 0 5px rgba(var(--do-rgb), .8));
+  -webkit-mask-image: linear-gradient(to top, transparent 14%, #000 28%); mask-image: linear-gradient(to top, transparent 14%, #000 28%); }
+.tdd.re .tdd-vien-anh { opacity: .96; }
+.tdd-ngam { position: absolute; inset: 12px; z-index: 30; transform: translateZ(72px); }
+.tdd-ngam > .tdd-lop { position: relative; height: 100%; }
+.tdd-goc { position: absolute; width: 14px; height: 14px; border: 0 solid var(--do); }
+.tdd-goc.g1 { top: 4px; left: 4px; border-width: 2px 0 0 2px; }
+.tdd-goc.g2 { top: 4px; right: 4px; border-width: 2px 2px 0 0; }
+.tdd-goc.g3 { bottom: 8px; left: 4px; border-width: 0 0 2px 2px; border-color: rgba(255, 255, 255, .5); }
+.tdd-goc.g4 { bottom: 8px; right: 4px; border-width: 0 2px 2px 0; border-color: rgba(255, 255, 255, .5); }
+.tdd-af { position: absolute; top: 12px; right: 12px; padding: 2px 6px; border: 1px solid rgba(var(--do-rgb), .5); border-radius: 4px; background: rgba(18, 18, 21, .85); color: var(--do); opacity: 0; transition: opacity .2s; }
+.tdd.re .tdd-af { opacity: 1; }
+.tdd-loa { position: absolute; inset: 0; opacity: 0; transition: opacity .2s; background: radial-gradient(290px circle at var(--gx, 50%) var(--gy, 35%), rgba(var(--do-rgb), .34), rgba(242, 238, 229, .14) 38%, transparent 72%); }
+.tdd.re:not(.lat) .tdd-loa { opacity: 1; }
+/* mặt sau: thẻ hậu trường giấy sáng */
+.tdd-sau-dau { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid rgba(17, 17, 19, .14); }
+.tdd-sau-dau b { font-weight: 700; letter-spacing: .12em; color: var(--do-dam); }
+.tdd-sau-dau span { color: #4b4942; }
+.tdd-sau h3 { margin-top: 16px; font: 600 clamp(22px, 2.2vw, 28px)/1.15 var(--f-chu); letter-spacing: -.01em; color: var(--nen); }
+.tdd-sau p { margin-top: 2px; font-size: 13px; font-weight: 500; color: #4b4942; }
+.tdd-sau dl { margin: 16px 0 0; padding: 14px 0; display: grid; gap: 10px; border-block: 1px solid rgba(17, 17, 19, .14); font-size: 13px; }
+.tdd-sau dl div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.tdd-sau dt { flex: none; color: #4b4942; }
+.tdd-sau dd { margin: 0; text-align: right; font-weight: 600; }
+.tdd-sau dd.nhan { color: var(--do-dam); }
+.tdd-sau-cuoi { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 12px; border-top: 1px solid rgba(17, 17, 19, .14); }
+.tdd-vach { display: flex; align-items: stretch; gap: 2px; height: 28px; }
+.tdd-vach i { background: var(--nen); }
+.tdd-vach i.n { background: var(--do-dam); }
+.tdd-vach i.k { background: transparent; }
+.tdd-sau-cuoi small { display: block; margin-top: 4px; letter-spacing: .1em; color: #4b4942; }
+.tdd-ky { font: 600 34px/1 var(--f-tay); color: var(--do-dam); }
+@media (max-width: 900px) { .tdd { margin-top: 24px; } }
+@media (prefers-reduced-motion: reduce) { .tdd-lat, .tdd-lop, .tdd-vien-anh { transition: none !important; } .tdd-truoc::after, .tdd-rec i, .tdd-vu i { animation: none !important; } }
 </style>
 <script>/* mỗi lần mở trang: sang bộ màu kế tiếp, không trùng lần trước */
 (function () { var DS = ['dem-xanh', 'reu-suong', 'dat-tram'], i;
@@ -947,12 +1026,48 @@ document.documentElement.lang = 'vi'; try { if (sessionStorage.getItem('da-xem-i
         <div class="lh2-mail" id="email" aria-label="buituankhanh1901@gmail.com"><span class="lh2-dong" id="lh2-d1">buituankhanh1901</span><span class="lh2-dong" id="lh2-d2"><em>@</em>gmail.com</span></div>
         <div class="mg2 thu-bay" aria-hidden="true"><svg viewBox="0 0 120 80"><rect class="tb-la" x="34" y="6" width="52" height="40" rx="3" style="fill:var(--chu)"/><path class="tb-la" d="M42 18h36M42 26h28" stroke-width="3" style="stroke:var(--mo)"/><rect x="20" y="30" width="80" height="46" rx="4" style="fill:var(--do)"/><path class="tb-nap" d="M20 32 L60 58 L100 32" stroke-width="2" stroke-linejoin="round" style="fill:var(--do-dam);stroke:var(--do-dam)"/></svg></div>
 <div class="lh2-nut"><button type="button" class="nut-do" id="chep">Chép email</button><a class="nut-vien" href="mailto:buituankhanh1901@gmail.com">Mở ứng dụng thư</a></div>
+<div class="lh2-lk"><a href="https://zaloapp.com/qr/p/c2zq8n5qpjs7" target="_blank" rel="noopener">Zalo</a><a href="https://www.facebook.com/profile.php?id=61594782612444" target="_blank" rel="noopener">Facebook</a></div>
       </div>
-      <div class="tk2-o"><div class="tk2-sau"></div>
-        <div class="tk2"><div class="tk2-logo">TK<i>.</i></div>
-          <div><div class="tk2-ten">Bùi Tuấn Khanh</div><div class="tk2-vai">Marketing &amp; AI Maker</div></div>
-          <div class="tk2-dong"><span>TP. Hồ Chí Minh</span><span class="tk2-lk"><a href="https://zaloapp.com/qr/p/c2zq8n5qpjs7" target="_blank" rel="noopener">Zalo</a><a href="https://www.facebook.com/profile.php?id=61594782612444" target="_blank" rel="noopener">Facebook</a></span></div>
-        </div>
+      <div class="tdd" id="tdd" role="button" tabindex="0" aria-pressed="false" aria-label="Lật thẻ để xem thông tin hồ sơ mặt sau">
+        <div class="tdd-nghieng"><div class="tdd-lat">
+          <div class="tdd-mat tdd-truoc">
+            <div class="tdd-thanh tren-the tdd-mono" aria-hidden="true"><span class="tdd-rec"><i></i>REC · 4K 24FPS</span><span class="tdd-ma-tg" id="tdd-tg">00:01:26:04</span></div>
+            <div class="tdd-khung">
+              <div class="tdd-nen"><div class="tdd-lop" data-lech="-14,-9">
+                <div class="tdd-sang"></div><div class="tdd-luoi"></div>
+                <div class="tdd-chu-nen" aria-hidden="true"><b data-chu="DIRECTOR"></b><span class="tdd-mono">QUAY DỰNG &amp; VIBE CODE</span></div>
+                <div class="tdd-vu tdd-mono" aria-hidden="true"><small>CH1</small><div><i></i><i></i><i></i></div></div>
+                <div class="tdd-ong tdd-mono" aria-hidden="true"><span>50MM F/1.4</span><span>SHUTTER 1/48</span><span>ISO 400</span></div>
+              </div></div>
+              <div class="tdd-nguoi"><div class="tdd-lop" data-lech="14,8">
+                <img class="tdd-vien-anh" data-lech="-14,-8" alt="" aria-hidden="true" width="675" height="729" decoding="async">
+                <img class="tdd-anh" alt="Chân dung Bùi Tuấn Khanh" width="675" height="729" decoding="async">
+              </div></div>
+              <div class="tdd-ngam" aria-hidden="true"><div class="tdd-lop" data-lech="22,13">
+                <span class="tdd-goc g1"></span><span class="tdd-goc g2"></span><span class="tdd-goc g3"></span><span class="tdd-goc g4"></span>
+                <span class="tdd-af tdd-mono">AF · LOCK</span><div class="tdd-loa"></div>
+              </div></div>
+            </div>
+            <div class="tdd-thanh duoi-the"><span class="tdd-ten-truoc">Bùi Tuấn Khanh <small>· Quay dựng</small></span><span class="tdd-noi tdd-mono">ARENA · HCM</span></div>
+          </div>
+          <div class="tdd-mat tdd-sau" aria-hidden="true">
+            <div>
+              <div class="tdd-sau-dau tdd-mono"><b>BACKSTAGE CREDENTIAL · #026</b><span>TK</span></div>
+              <h3>Bùi Tuấn Khanh</h3>
+              <p>Chuyên môn chính: Quay dựng · và biết sử dụng Claude</p>
+              <dl>
+                <div><dt>Học tập</dt><dd>Arena Multimedia (Quay dựng)</dd></div>
+                <div><dt>Dựng &amp; Hậu kỳ</dt><dd>CapCut</dd></div>
+                <div><dt>Vibe Code AI</dt><dd class="nhan">Claude · Gemini · ChatGPT</dd></div>
+                <div><dt>Địa điểm</dt><dd>Đang sinh sống và làm việc tại TP. Hồ Chí Minh</dd></div>
+              </dl>
+            </div>
+            <div class="tdd-sau-cuoi">
+              <div><div class="tdd-vach" aria-hidden="true"><i style="width:2px"></i><i style="width:1px"></i><i style="width:3px"></i><i class="k" style="width:1px"></i><i style="width:2px"></i><i style="width:4px"></i><i class="k" style="width:1px"></i><i class="n" style="width:2px"></i><i style="width:3px"></i><i style="width:1px"></i><i class="k" style="width:2px"></i><i style="width:4px"></i><i style="width:1px"></i><i class="n" style="width:2px"></i></div><small class="tdd-mono">BTK-2026-ARENA-AI</small></div>
+              <span class="tdd-ky">KHANH</span>
+            </div>
+          </div>
+        </div></div>
       </div>
     </div>
   </section>
@@ -5239,7 +5354,7 @@ window.DL = (() => {
       if (Math.abs(tx - rx) + Math.abs(ty - ry) > 0.3) requestAnimationFrame(vong); else dangVe = false;
     };
     addEventListener('pointermove', (e) => { tx = e.clientX; ty = e.clientY; document.documentElement.classList.add('co-tro'); if (!dangVe) { dangVe = true; requestAnimationFrame(vong); } }, { passive: true });
-    document.addEventListener('pointerover', (e) => { tro.classList.toggle('to-ra', !!e.target.closest('a, button')); });
+    document.addEventListener('pointerover', (e) => { tro.classList.toggle('to-ra', !!e.target.closest('a, button') && !e.target.closest('.tdd')); });   // trên thẻ chân dung giữ con trỏ nhỏ để không che ảnh
     document.querySelectorAll('.hut').forEach((n) => {
       n.addEventListener('pointermove', (e) => { const r = n.getBoundingClientRect(); n.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.25}px, ${(e.clientY - r.top - r.height / 2) * 0.35}px)`; });
       n.addEventListener('pointerleave', () => { n.style.transition = 'transform .6s cubic-bezier(.22,1.25,.36,1)'; n.style.transform = ''; setTimeout(() => { n.style.transition = ''; }, 600); });
@@ -5272,7 +5387,7 @@ window.DL = (() => {
   document.querySelectorAll('.mg2').forEach((m) => ioMg.observe(m));
   // ---------- Chuyển động lặp: chạy khoảng 5 giây khi vừa hiện ra rồi đứng yên; rê chuột / chạm thì chạy lại (chuẩn trợ năng) ----------
   {
-    const LAP = '.mg, .mg2, .tt, .cuon-xuong, .nh-cho, .gm2-trang';
+    const LAP = '.mg, .mg2, .tt, .cuon-xuong, .nh-cho, .gm2-trang, .tdd';
     const hen = new WeakMap();
     const chay = (n) => { n.classList.add('lap-chay'); clearTimeout(hen.get(n)); hen.set(n, setTimeout(() => n.classList.remove('lap-chay'), 4800)); };
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) chay(e.target); else { clearTimeout(hen.get(e.target)); e.target.classList.remove('lap-chay'); } }), { threshold: 0.3 });
@@ -6032,6 +6147,49 @@ window.DL = (() => {
     };
   }
   khiSan(lienHe);
+  // ---- thẻ chân dung: rê chuột thì nghiêng 3D + các lớp lệch nhau + vệt sáng; bấm thì lật ----
+  {
+    const the = $('#tdd'), nghieng = the.querySelector('.tdd-nghieng'), tg = $('#tdd-tg');
+    const matSau = the.querySelector('.tdd-sau'), matTruoc = the.querySelector('.tdd-truoc');
+    const anhGoc = $('#anh');
+    the.querySelectorAll('img').forEach((im) => { im.src = anhGoc.currentSrc || anhGoc.src; });   // dùng chung ảnh của màn đầu, không nhúng thêm lần nữa
+    const lop = [...the.querySelectorAll('[data-lech]')].map((e) => [e, e.dataset.lech.split(',').map(Number)]);
+    const GIAM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let rx = 0, ry = 0, sc = 1, dx = 0, dy = 0, ds = 1, vx = 0, vy = 0, vs = 0, dangVe = false, khung = 4, henTg = 0;
+    const ve = () => {   // lò xo: độ nghiêng đuổi theo đích, có quán tính nhẹ; tới nơi thì thôi vẽ
+      vx = (vx + (dx - rx) * 0.12) * 0.72; vy = (vy + (dy - ry) * 0.12) * 0.72; vs = (vs + (ds - sc) * 0.14) * 0.7;
+      rx += vx; ry += vy; sc += vs;
+      nghieng.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
+      if (Math.abs(dx - rx) + Math.abs(dy - ry) + Math.abs(vx) + Math.abs(vy) + Math.abs(ds - sc) * 50 > 0.02) requestAnimationFrame(ve); else dangVe = false;
+    };
+    const dat = (x, y, s) => { dx = x; dy = y; ds = s; if (!dangVe) { dangVe = true; requestAnimationFrame(ve); } };
+    const lech = (nx, ny) => lop.forEach(([e, [kx, ky]]) => { e.style.translate = `${(nx * kx).toFixed(1)}px ${(ny * ky).toFixed(1)}px`; });
+    const veGoc = () => { dat(0, 0, 1); lech(0, 0); the.style.removeProperty('--gx'); the.style.removeProperty('--gy'); };
+    nghieng.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'touch') return;
+      the.classList.add('re');
+      if (the.classList.contains('lat') || GIAM) return;
+      dat(dx, dy, 1.022); clearInterval(henTg);
+      henTg = setInterval(() => { khung = (khung + 1) % 24; tg.textContent = '00:01:26:' + String(khung).padStart(2, '0'); }, 140);   // mã thời gian chạy 24 hình/giây khi rê chuột
+    });
+    nghieng.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch' || GIAM || the.classList.contains('lat')) return;
+      const r = nghieng.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      const nx = Math.max(-0.5, Math.min(0.5, px - 0.5)), ny = Math.max(-0.5, Math.min(0.5, py - 0.5));
+      dat(ny * -15, nx * 18, 1.022); lech(nx, ny);
+      the.style.setProperty('--gx', (px * 100).toFixed(1) + '%'); the.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+    });
+    nghieng.addEventListener('pointerleave', () => { the.classList.remove('re'); clearInterval(henTg); veGoc(); });
+    const lat = (mo) => {
+      veGoc(); clearInterval(henTg); the.classList.toggle('lat', mo);
+      matSau.setAttribute('aria-hidden', String(!mo)); matTruoc.setAttribute('aria-hidden', String(mo));
+      the.setAttribute('aria-pressed', String(mo)); the.setAttribute('aria-label', mo ? 'Quay lại mặt trước chân dung' : 'Lật thẻ để xem thông tin hồ sơ mặt sau');
+      ghi('thẻ', mo ? 'lật ra mặt sau' : 'về mặt trước');
+    };
+    the.addEventListener('click', () => lat(!the.classList.contains('lat')));
+    the.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); lat(!the.classList.contains('lat')); } });
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && the.classList.contains('lat')) lat(false); });
+  }
 })();
 </script>
 

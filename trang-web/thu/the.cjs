@@ -1,0 +1,36 @@
+// Thử thẻ chân dung (phần Liên hệ): rê chuột thì nghiêng, bấm thì lật, Esc / bấm lại thì về; điện thoại chạm là lật; mặt sau đúng chữ đã duyệt.
+const { chromium, devices } = require('playwright'); const path = require('path');
+const TRANG = 'file://' + path.resolve(process.env.TRANG || path.join(__dirname, '../ban-moi-nhat/xem.html'));
+let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + m); if (!c) hong++; };
+(async () => { const b = await chromium.launch(); const loi = [];
+  const mo = async (tc) => { const ctx = await b.newContext(tc); await ctx.addInitScript(() => { try { sessionStorage.setItem('da-xem-intro', '1'); } catch (e) {} });
+    const p = await ctx.newPage(); p.on('pageerror', (e) => loi.push(e.message)); await p.route(/soundcloud|script\.google/, (r) => r.abort());
+    await p.goto(TRANG); await p.waitForTimeout(2500); await p.evaluate(() => { const t = document.getElementById('tdd'); scrollTo(0, t.getBoundingClientRect().top + scrollY - 120); }); await p.waitForTimeout(1200); return p; };
+  let p = await mo({ viewport: { width: 1440, height: 900 } });
+  const box = await p.locator('#tdd').boundingBox();
+  await p.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await p.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.2, { steps: 5 }); await p.waitForTimeout(800);
+  const tf = await p.evaluate(() => document.querySelector('.tdd-nghieng').style.transform);
+  ok(/rotateX\(-?\d/.test(tf) && !/rotateX\(0\.00deg\) rotateY\(0\.00deg\)/.test(tf), '[mt] rê chuột: thẻ nghiêng theo chuột (' + tf + ')');
+  ok(await p.evaluate(() => document.getElementById('tdd').classList.contains('re') && getComputedStyle(document.querySelector('.tdd-af')).opacity === '1'), '[mt] rê chuột: hiện AF · LOCK');
+  const tg0 = await p.textContent('#tdd-tg'); await p.waitForTimeout(500); ok((await p.textContent('#tdd-tg')) !== tg0, '[mt] rê chuột: mã thời gian chạy');
+  await p.click('#tdd'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => document.getElementById('tdd').classList.contains('lat') && document.querySelector('.tdd-sau').getAttribute('aria-hidden') === 'false' && document.getElementById('tdd').getAttribute('aria-pressed') === 'true'), '[mt] bấm: lật ra mặt sau, báo trạng thái cho trình đọc màn hình');
+  const chu = await p.evaluate(() => document.querySelector('.tdd-sau').innerText.replace(/\s+/g, ' '));
+  for (const c of ['BACKSTAGE CREDENTIAL · #026', 'TK', 'Chuyên môn chính: Quay dựng · và biết sử dụng Claude', 'Arena Multimedia (Quay dựng)', 'CapCut', 'Claude · Gemini · ChatGPT', 'Đang sinh sống và làm việc tại TP. Hồ Chí Minh', 'BTK-2026-ARENA-AI', 'KHANH'])
+    ok(chu.includes(c), '[mt] mặt sau có: ' + c);
+  ok(!/Đang build|Premiere|Sprint/.test(chu), '[mt] mặt sau không còn dòng đã bỏ / đã thay');
+  ok(await p.evaluate(() => getComputedStyle(document.querySelector('.tdd-ky')).fontFamily.includes('Dancing Script')), '[mt] chữ KHANH dùng phông chữ ký');
+  await p.keyboard.press('Escape'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => !document.getElementById('tdd').classList.contains('lat') ), '[mt] Esc: về mặt trước');
+  await p.focus('#tdd'); await p.keyboard.press('Enter'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => document.getElementById('tdd').classList.contains('lat')), '[mt] phím Enter trên thẻ: lật'); await p.keyboard.press('Enter'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => document.querySelector('.tdd-anh').src.startsWith('data:image/webp') && document.querySelector('.tdd-anh').src === document.getElementById('anh').src), '[mt] ảnh dùng chung với màn đầu (không nhúng lại)');
+  ok(await p.evaluate(() => [...document.querySelectorAll('.lh2-lk a')].map((a) => a.textContent).join() === 'Zalo,Facebook'), '[mt] vẫn còn link Zalo, Facebook');
+  const dt = { ...devices['Pixel 7'] }; delete dt.defaultBrowserType; p = await mo(dt);
+  await p.tap('#tdd'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => document.getElementById('tdd').classList.contains('lat')), '[dt] chạm: lật ra mặt sau');
+  await p.tap('#tdd'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => !document.getElementById('tdd').classList.contains('lat')), '[dt] chạm lần nữa: về mặt trước');
+  ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), '[dt] không tràn ngang');
+  ok(!loi.length, 'không lỗi ' + loi.join(' | '));
+  await b.close(); console.log(hong ? hong + ' HỎNG' : 'Tất cả ĐẠT'); })();
