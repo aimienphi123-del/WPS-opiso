@@ -14,7 +14,7 @@
 @keyframes kqr-vet { from { background-position: -40% 0; } to { background-position: 140% 0; } }
 @keyframes kqr-loe { 0% { box-shadow: 0 0 0 rgba(var(--do-rgb), 0); filter: brightness(1); } 35% { box-shadow: 0 0 10px rgba(var(--do-rgb), .8); filter: brightness(1.35); } 100% { box-shadow: 0 0 0 rgba(var(--do-rgb), 0); filter: brightness(1); } }
 @media (prefers-reduced-motion: reduce) { #khoi-qr .kqr-td b { transition: none; } #khoi-qr .kqr-td.dang-lam b::after, #khoi-qr .kqr-td.xong b { animation: none; } }
-#khoi-qr .kqr-an { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#khoi-qr .kqr-an { left: -9999px; top: 0; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 /* ===== KHỐI QR: khung tối theo trang, giữ chút chất cổ (thanh tiêu đề KHOI_QR.EXE, nút nổi khối, chữ máy) =====
    Mọi kiểu đều nằm trong #khoi-qr để không đụng tên lớp của phần khác. Sân khối luôn là giấy trắng để máy quét đọc được. */
 #khoi-qr { --kq-giay: #F2F0EB; --kq-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; --kq-o: #0d1116; }
