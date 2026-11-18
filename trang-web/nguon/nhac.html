@@ -1,0 +1,212 @@
+<!-- ===== PHẦN: Mình đang nghe: trình phát SoundCloud, sóng nhạc ===== -->
+<style>
+.nh { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 520px); gap: clamp(28px, 5vw, 72px); align-items: start; }
+@media (max-width: 860px) {
+  .nh { grid-template-columns: 1fr; gap: 24px; }
+}
+.nh-chu { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.nh-to { font: 400 clamp(56px, 8vw, 120px)/1.05 var(--f-to); color: var(--chu); text-transform: uppercase; }
+.nh-to em { font-style: normal; color: var(--do); }
+.nh-ds { display: flex; flex-direction: column; gap: 4px; padding-top: 18px; border-top: 1px solid var(--vien); }
+.nh-ds-nhan { color: var(--mo); }
+.nh-ds-ten { font: 400 clamp(28px, 3.4vw, 44px)/1.1 var(--f-to); color: var(--do); text-transform: uppercase; }
+.nh-cua { color: var(--chu-2); }
+.nh-mo { width: max-content; margin-top: 10px; }
+.nh-mo svg { width: 16px; height: 16px; }
+.vach-nhac { display: inline-flex; align-items: flex-end; gap: 3px; height: 18px; }
+.vach-nhac i { width: 3px; height: 30%; background: var(--do); transform-origin: bottom; }
+.dang-phat .vach-nhac i { animation: nhun .9s ease-in-out infinite; }
+.dang-phat .vach-nhac i:nth-child(2) { animation-delay: -.3s; }
+.dang-phat .vach-nhac i:nth-child(3) { animation-delay: -.6s; }
+.dang-phat .vach-nhac i:nth-child(4) { animation-delay: -.15s; }
+@keyframes nhun {0%, 100% { height: 25%; } 50% { height: 100%; }}
+.nh-trang { display: flex; align-items: center; gap: 10px; color: var(--chu-2); min-height: 22px; }
+.nh-song-khoi { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px 16px; margin-top: 14px; }
+.nh-phat { position: relative; overflow: hidden; width: 60px; height: 60px; grid-row: span 2; border-radius: 50%; display: grid; place-items: center; background: var(--do); border: 0; color: var(--nen); transition: transform .35s var(--nay); }
+.nh-phat:hover { transform: scale(1.06); }
+.nh-phat:active { transform: scale(.94); }
+.nh-phat svg { position: relative; z-index: 1; width: 20px; height: 20px; }
+.nh-phat .ic-dung, .dang-phat .nh-phat .ic-phat { display: none; }
+.dang-phat .nh-phat .ic-dung { display: block; }
+.nh-phat:disabled { opacity: .45; cursor: not-allowed; }
+.nh-bai-dong { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; min-width: 0; }
+.nh-bai-dong b { min-width: 0; font-weight: 600; color: var(--chu); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nh-gio { flex: none; color: var(--mo); font-size: 13px; font-variant-numeric: tabular-nums; }
+.nh-song { grid-column: 1 / -1; display: block; width: 100%; height: 120px; cursor: crosshair; touch-action: pan-y; }
+.nh-tien { grid-column: 1 / -1; position: relative; height: 24px; cursor: pointer; touch-action: none; }
+.nh-tien::before { content: ""; position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: rgba(185, 182, 174, .3); }
+.nh-tien i { position: absolute; left: 0; top: 11px; height: 2px; width: 0; background: var(--do); }
+.nh-tien b { position: absolute; top: 6px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--do); left: 0; }
+.nh-tien:focus-visible { outline: 2px solid var(--do); outline-offset: 4px; }
+@media (max-width: 860px) {
+  .nh-song { height: 96px; }
+  .nh-phat { width: 52px; height: 52px; }
+}
+.nh-khung iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.nh-cho { position: absolute; inset: 0; z-index: 1; background: var(--nen-2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 20px; text-align: center; color: var(--chu-2); }
+.nh-cho i { width: 10px; height: 10px; border-radius: 50%; background: var(--do); animation: nh-tho 1.2s ease-in-out infinite; }
+@keyframes nh-tho {50% { opacity: .25; transform: scale(.7); }}
+.nh-mini { position: fixed; z-index: 44; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); display: flex; align-items: center; gap: 10px; max-width: min(360px, calc(100vw - 32px)); height: 52px; padding: 0 6px 0 14px; background: var(--nen-2); border: 1px solid var(--vien); box-shadow: 0 12px 30px -12px rgba(0, 0, 0, .8); transform: translateY(calc(100% + 24px)); transition: transform .45s var(--nay); }
+.nh-mini.hien { transform: none; }
+.nh-mini-ve { display: flex; align-items: center; gap: 10px; min-width: 0; height: 100%; padding: 0; background: none; border: 0; color: var(--chu); text-align: left; }
+.nh-mini-ve span { min-width: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nh-mini-dung { flex: none; width: 40px; height: 40px; display: grid; place-items: center; background: var(--do); border: 0; color: var(--nen); }
+.nh-mini-dung svg { width: 14px; height: 14px; }
+.nh-mini-dung:active { transform: scale(.94); }
+@media (prefers-reduced-motion: reduce) {
+  .dang-phat .vach-nhac i { animation: none; height: 70%; }
+  .nh-mini { transition: none; }
+}
+.nh-khung { position: relative; height: 420px; background: var(--nen-2); border: 1px solid var(--vien); border-radius: var(--bo-l); overflow: hidden; box-shadow: var(--vien-sang), var(--bong-2); }
+</style>
+<!-- @khung -->
+<section class="phan khung" id="nhac" aria-labelledby="h-nhac">
+  <div class="nh">
+    <div class="nh-chu">
+      <h2 class="nh-to" id="h-nhac" data-tach="chu" data-vao>Mình đang nghe</h2>
+      <div class="nh-ds">
+        <p class="nh-ds-nhan">Danh sách nhạc</p>
+        <p class="nh-ds-ten" id="nh-ten">xa vang remix</p>
+        <p class="nh-cua">của fram jun trên SoundCloud</p>
+        <div class="nh-song-khoi">
+          <button type="button" class="nh-phat" id="nh-phat" aria-label="Phát nhạc" disabled><svg class="ic-phat" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.5v11l8.5-5.5z" fill="currentColor"/></svg><svg class="ic-dung" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg></button>
+          <p class="nh-bai-dong"><b id="nh-bai">Đang tải bài hát…</b><span class="nh-gio" id="nh-gio"></span></p>
+          <p class="nh-trang" id="nh-trang"><span class="vach-nhac" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="nh-tt">Bấm nút đỏ hoặc chọn bài trong khung để nghe</span></p>
+          <canvas class="nh-song" id="nh-song" aria-hidden="true"></canvas>
+          <div class="nh-tien" id="nh-tien" role="slider" tabindex="0" aria-label="Tiến độ bài hát, bấm để tua" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i><b></b></div>
+        </div>
+        <a class="nut-vien nh-mo hut" id="nh-mo" href="https://soundcloud.com/fram-jun/sets/xa-vang-remix" target="_blank" rel="noopener">Mở trên SoundCloud <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      </div>
+    </div>
+    <div class="nh-khung" id="nh-khung"><div class="nh-cho" id="nh-cho"><i></i><p>Đang tải danh sách nhạc…</p></div></div>
+  </div>
+</section>
+<script>
+// Mình đang nghe: nhúng trình phát SoundCloud khi cuộn tới gần, theo dõi bài đang phát, sóng nhạc.
+(() => {
+  // danh sách nhạc: đổi link ở đây (link trang danh sách trên SoundCloud)
+  const DANH_SACH = 'https://soundcloud.com/fram-jun/sets/xa-vang-remix';
+  const CHO_TAI = 15; // giây chờ trình phát sẵn sàng, quá thì báo lỗi
+  const T = TK, { $, ghi } = TK;
+  const sec = $('#nhac'), khung = $('#nh-khung'), cho = $('#nh-cho'), bai = $('#nh-bai'), trangThai = $('#nh-trang');
+  let w = null, dangPhat = false, tenBai = '', daNap = false;
+
+  // ô nhỏ góc dưới
+  const mini = document.createElement('div'); mini.className = 'nh-mini'; mini.setAttribute('aria-live', 'polite');
+  mini.innerHTML = '<button type="button" class="nh-mini-ve" aria-label="Về phần nhạc"><span class="vach-nhac" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span></span></button><button type="button" class="nh-mini-dung" aria-label="Dừng nhạc"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg></button>';
+  document.body.append(mini);
+  mini.querySelector('.nh-mini-ve').onclick = () => { ghi('nhạc', 'bấm ô nhỏ: về phần nhạc'); T.cuonToi ? T.cuonToi('#nhac') : sec.scrollIntoView({ behavior: 'smooth' }); };
+  mini.querySelector('.nh-mini-dung').onclick = () => { ghi('nhạc', 'dừng từ ô nhỏ'); w && w.pause(); };
+  let thayMuc = true;
+  const capNhatMini = () => { mini.classList.toggle('hien', dangPhat && !thayMuc); mini.querySelector('.nh-mini-ve span:last-child').textContent = tenBai || 'Đang phát'; };
+  const tt = $('#nh-tt'), nutPhat = $('#nh-phat');
+  const capNhat = () => { sec.classList.toggle('dang-phat', dangPhat); mini.classList.toggle('dang-phat', dangPhat);
+    if (tenBai) bai.textContent = tenBai;
+    tt.textContent = dangPhat ? 'Đang phát' : daPhat ? 'Đã dừng' : 'Bấm nút đỏ hoặc chọn bài trong khung để nghe';
+    nutPhat.setAttribute('aria-label', dangPhat ? 'Dừng nhạc' : 'Phát nhạc'); capNhatMini(); };
+  let daPhat = false;
+  // ---- sóng nhạc: độ dâng theo độ to thật của bài tại thời điểm đang phát (dữ liệu độ to của SoundCloud) ----
+  // Trình duyệt không cho nghe âm thanh trong khung SoundCloud, nên hình dạng đường sóng do trang tạo; độ cao theo độ to thật.
+  const cv = $('#nh-song'); const g2 = cv.getContext('2d'); const tien = $('#nh-tien');
+  let mau = [], lonNhat = 1, dai = 0, maBai = null, moc = 0, mocLuc = 0;
+  const gio = (ms) => { const t = Math.max(0, Math.round(ms / 1000)); const h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60, s2 = t % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(s2).padStart(2, '0'); };
+  const giam = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // vị trí đang phát, nội suy giữa hai lần SoundCloud báo (để cột chạy mượt)
+  const viTri = () => (dangPhat && dai ? Math.min(1, moc + (performance.now() - mocLuc) / dai) : moc);
+  // độ to (0..1) tại một vị trí của bài, làm mượt quanh điểm đó
+  function doTo(rel) {
+    if (!mau.length) return 0.55;
+    const x = rel * (mau.length - 1), i = Math.floor(x), f = x - i;
+    const v = (mau[Math.max(0, i - 1)] + 2 * ((mau[i] || 0) * (1 - f) + (mau[i + 1] || mau[i] || 0) * f) + (mau[i + 2] || mau[i] || 0)) / 4;
+    return Math.min(1, v / lonNhat);
+  }
+  // ---- đường sóng uốn lượn: luôn trôi nhẹ; phát nhạc thì dâng theo độ to thật của bài; rê chuột / chạm thì dâng lên quanh chỗ con trỏ ----
+  const CHUOT_RONG = 90;            // độ rộng vùng sóng dâng quanh con trỏ (px)
+  let chuotX = -1, chuotManh = 0, chuotDich = 0, bienDo = 0;
+  const dacSong = [ // 3 đường chồng lên nhau: đường chính đỏ, hai đường phụ mờ lệch pha
+    { k: 1.0, t: 0.0016, pha: 0, day: 2.2, mau: 'do', mo: 1 },
+    { k: 1.7, t: 0.0023, pha: 2.1, day: 1.2, mau: 'do', mo: 0.45 },
+    { k: 0.6, t: 0.0011, pha: 4.3, day: 1.2, mau: 'xam', mo: 0.35 },
+  ];
+  cv.addEventListener('pointermove', (e) => { const r = cv.getBoundingClientRect(); chuotX = e.clientX - r.left; chuotDich = 1; batVe(); });
+  cv.addEventListener('pointerdown', (e) => { const r = cv.getBoundingClientRect(); chuotX = e.clientX - r.left; chuotDich = 1; batVe(); });
+  cv.addEventListener('pointerleave', () => { chuotDich = 0; });
+  cv.addEventListener('pointerup', (e) => { if (e.pointerType !== 'mouse') chuotDich = 0; });
+  cv.addEventListener('pointercancel', () => { chuotDich = 0; });
+  function ve(t) {
+    const dpr = Math.min(2, devicePixelRatio || 1), W = cv.clientWidth, H = cv.clientHeight; if (!W) return;
+    if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+    g2.setTransform(dpr, 0, 0, dpr, 0, 0); g2.clearRect(0, 0, W, H);
+    const giua = H / 2;
+    // biên độ chung: nằm yên 6% chiều cao; phát nhạc thì dâng theo độ to (tới khoảng 38%)
+    const dich = dangPhat ? 0.08 + 0.3 * Math.pow(doTo(viTri()), 0.8) : 0.06;
+    bienDo += (dich - bienDo) * 0.06; chuotManh += (chuotDich - chuotManh) * 0.12;
+    const cs = getComputedStyle(sec), mDo = cs.getPropertyValue('--do').trim() || '#8DB4D6', mXam = cs.getPropertyValue('--chu-2').trim() || '#B9B6AE';
+    for (const d of dacSong) {
+      g2.beginPath();
+      for (let x = 0; x <= W; x += 3) {
+        const u = x / W;
+        const mep = Math.sin(Math.PI * u); // hai đầu thu về 0 cho mềm
+        const gan = chuotX < 0 ? 0 : Math.exp(-Math.pow((x - chuotX) / CHUOT_RONG, 2)) * chuotManh; // gần con trỏ thì dâng lên
+        const a = H * (bienDo * mep + 0.3 * gan);
+        const y = giua + a * (Math.sin(u * Math.PI * 4 * d.k + t * d.t * 6.28 + d.pha) * 0.65 + Math.sin(u * Math.PI * 9 * d.k - t * d.t * 4.1 + d.pha * 1.7) * 0.35 * (0.6 + gan));
+        x === 0 ? g2.moveTo(x, y) : g2.lineTo(x, y);
+      }
+      g2.strokeStyle = d.mau === 'do' ? mDo : mXam; g2.globalAlpha = d.mo; g2.lineWidth = d.day; g2.lineJoin = 'round'; g2.lineCap = 'round'; g2.stroke();
+    }
+    g2.globalAlpha = 1;
+  }
+  let chay = false, thay = true;
+  const vong = (t) => { ve(t); const nghi = !dangPhat && !chuotDich && chuotManh < 0.005 && Math.abs(bienDo - 0.06) < 0.002; if (thay && !nghi) requestAnimationFrame(vong); else chay = false; };
+  const batVe = () => { if (giam) { ve(0); return; } if (!chay && thay) { chay = true; requestAnimationFrame(vong); } };
+  // chỉ chạy khi phần nhạc đang trên màn hình (đỡ tốn pin)
+  if ('IntersectionObserver' in window) new IntersectionObserver((es) => { thay = es[0].isIntersecting; if (thay) batVe(); }, { rootMargin: '100px 0px' }).observe(cv);
+  batVe();
+  if ('ResizeObserver' in window) new ResizeObserver(() => { if (!chay) ve(performance.now()); }).observe(cv);
+  ve(0);
+  async function napSong(s) {
+    if (!s || s.id === maBai) return; maBai = s.id; dai = s.duration || 0; mau = []; lonNhat = 1;
+    let u = String(s.waveform_url || ''); if (!u) return;
+    u = u.replace('wave.sndcdn.com', 'wis.sndcdn.com').replace(/\.png$/, '.json');
+    try { const d = await (await fetch(u)).json(); if (maBai !== s.id) return; mau = Array.isArray(d.samples) ? d.samples : []; lonNhat = Math.max(1, ...mau); ghi('nhạc', 'độ to của bài: ' + mau.length + ' điểm'); }
+    catch (e) { ghi('nhạc', 'không lấy được độ to của bài (cột vẫn nhảy ở mức vừa): ' + e.message); }
+  }
+  function hienGio() { const r = viTri(); $('#nh-gio').textContent = dai ? gio(r * dai) + ' / ' + gio(dai) : ''; tien.querySelector('i').style.width = (r * 100) + '%'; tien.querySelector('b').style.left = (r * 100) + '%'; tien.setAttribute('aria-valuenow', String(Math.round(r * 100))); tien.setAttribute('aria-valuetext', $('#nh-gio').textContent); }
+  function tuaToi(rel) { if (!w || !dai) return; rel = Math.min(1, Math.max(0, rel)); moc = rel; mocLuc = performance.now(); hienGio(); w.seekTo(rel * dai); if (!dangPhat) w.play(); ghi('nhạc', 'tua tới ' + Math.round(rel * 100) + '%'); }
+  let keo = false;
+  const relCua = (e) => { const r = tien.getBoundingClientRect(); return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); };
+  tien.addEventListener('pointerdown', (e) => { keo = true; tien.setPointerCapture(e.pointerId); moc = relCua(e); mocLuc = performance.now(); hienGio(); });
+  tien.addEventListener('pointermove', (e) => { if (!keo) return; moc = relCua(e); mocLuc = performance.now(); hienGio(); });
+  tien.addEventListener('pointerup', (e) => { if (!keo) return; keo = false; tuaToi(relCua(e)); });
+  tien.addEventListener('keydown', (e) => { const d = { ArrowRight: 5000, ArrowLeft: -5000 }[e.key]; if (!d || !dai) return; e.preventDefault(); tuaToi(viTri() + d / dai); });
+  nutPhat.onclick = () => { if (!w) return; ghi('nhạc', dangPhat ? 'bấm dừng' : 'bấm phát'); dangPhat ? w.pause() : w.play(); };
+  if ('IntersectionObserver' in window) new IntersectionObserver((es) => { thayMuc = es[0].isIntersecting; capNhatMini(); }, { threshold: 0.15 }).observe(sec);
+
+  function baoLoi() { cho.hidden = false; cho.innerHTML = ''; const p = document.createElement('p'); p.textContent = 'Chưa tải được trình phát nhạc.'; const a = $('#nh-mo').cloneNode(true); a.id = ''; cho.append(p, a);
+    if (!/github\.io$/.test(location.hostname) && location.protocol !== 'file:') { const g = document.createElement('p'); g.className = 'gm2-ghi'; g.textContent = 'Bản xem thử trong Claude bị chặn nhúng SoundCloud. Trang thật trên GitHub sẽ phát được.'; cho.append(g); } }
+
+  function nap() {
+    if (daNap) return; daNap = true; ghi('nhạc', 'nạp trình phát');
+    const f = document.createElement('iframe');
+    f.title = 'Trình phát SoundCloud: danh sách ' + $('#nh-ten').textContent;
+    f.allow = 'autoplay; encrypted-media';
+    f.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(DANH_SACH) + '&color=%23' + (getComputedStyle(document.documentElement).getPropertyValue('--sc').trim() || 'ff3d2e') + '&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false';
+    khung.append(f);
+    const hen = setTimeout(() => { ghi('LỖI', 'nhạc: trình phát không sẵn sàng sau ' + CHO_TAI + ' giây'); baoLoi(); }, CHO_TAI * 1000);
+    const s = document.createElement('script'); s.src = 'https://w.soundcloud.com/player/api.js';
+    s.onload = () => {
+      w = window.SC.Widget(f); const E = window.SC.Widget.Events;
+      w.bind(E.READY, () => { clearTimeout(hen); cho.hidden = true; nutPhat.disabled = false; ghi('nhạc', 'trình phát sẵn sàng'); w.getCurrentSound((s) => { if (s) { tenBai = s.title || ''; capNhat(); napSong(s); hienGio(); } }); });
+      const layTen = () => w.getCurrentSound((s) => { if (s && s.title) { tenBai = s.title; capNhat(); napSong(s); } });
+      w.bind(E.PLAY_PROGRESS, (e) => { if (keo || !e) return; moc = e.relativePosition || 0; mocLuc = performance.now(); hienGio(); });
+      w.bind(E.PLAY, () => { dangPhat = true; daPhat = true; mocLuc = performance.now(); layTen(); capNhat(); batVe(); ghi('nhạc', 'phát'); });
+      w.bind(E.PAUSE, () => { moc = viTri(); dangPhat = false; capNhat(); batVe(); ghi('nhạc', 'dừng'); });
+      w.bind(E.FINISH, () => { dangPhat = false; capNhat(); batVe(); });
+    };
+    s.onerror = () => { clearTimeout(hen); ghi('LỖI', 'nhạc: không vào được SoundCloud'); baoLoi(); $('.nh-song-khoi').hidden = true; }; // không vào được SoundCloud: báo rõ, kèm link
+    document.body.append(s);
+  }
+  // chỉ nạp khi cuộn tới gần (trang mở nhanh hơn, không tốn mạng nếu người xem không tới đây)
+  if ('IntersectionObserver' in window) { const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { nap(); io.disconnect(); } }, { rootMargin: '600px 0px' }); io.observe(sec); } else nap();
+})();
+</script>

@@ -1,0 +1,56 @@
+<!-- ===== PHẦN: Màn mở đầu: chữ TK. rót đầy theo lúc tải phông rồi bay về logo ===== -->
+<style>
+.intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--nen); }
+.bo-intro .intro, .intro.xong { display: none; }
+.intro.mo-rem { background: transparent; transition: background .55s var(--em); }
+.it-tk { position: relative; font: 400 clamp(120px, 26vw, 360px)/.9 var(--f-to); letter-spacing: .02em; will-change: transform; }
+.it-vien { color: transparent; -webkit-text-stroke: 2px rgba(var(--chu-rgb), .35); }
+.it-dac { position: absolute; inset: 0; color: var(--chu); clip-path: inset(calc(100% - var(--day, 0%)) 0 0 0); }
+.it-vien i { font-style: normal; }
+.it-dac i { font-style: normal; color: var(--do); }
+@media (prefers-reduced-motion: reduce) {
+  .intro { display: none; }
+}
+</style>
+<!-- @khung -->
+<div class="intro" id="intro-tk" aria-hidden="true"><div class="it-tk" id="it-tk"><span class="it-vien">TK<i>.</i></span><span class="it-dac" id="it-dac">TK<i>.</i></span></div></div>
+<script>
+(() => {
+  const { $, ghi, G, GIAM, lenis } = TK;
+  // ===== 1. Màn mở đầu "TK." =====
+  // Trang chính chờ màn này xong mới chạy phần mở đầu (TK.choIntro).
+  const intro = $('#intro-tk');
+  TK.choIntro = new Promise((xongIntro) => {
+    const boQua = document.documentElement.classList.contains('bo-intro') || GIAM || !G || !intro;
+    if (boQua) { if (intro) intro.classList.add('xong'); xongIntro(); return; }
+    try { sessionStorage.setItem('da-xem-intro', '1'); } catch (e) { /* chặn bộ nhớ: lần sau vẫn chạy, không sao */ }
+    lenis && lenis.stop();
+    const tk = $('#it-tk'), dac = $('#it-dac'), logo = $('#tren .logo');
+    let day = 0, xong = false, phongXong = false;
+    const datDay = (v) => { day = v; dac.style.setProperty('--day', v.toFixed(1) + '%'); };
+    // rót tới 85% trong lúc chờ phông chữ; phông xong thì rót nốt tới 100% (đúng việc trang đang tải)
+    const t0 = performance.now();
+    const rot = () => { if (xong) return; const muc = phongXong ? 100 : 85; datDay(day + (muc - day) * (phongXong ? 0.22 : 0.06)); if (day > 99.5) return bayVe(); requestAnimationFrame(rot); };
+    requestAnimationFrame(rot);
+    const choPhong = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]) : Promise.resolve();
+    choPhong.then(() => { const con = Math.max(0, 550 - (performance.now() - t0)); setTimeout(() => { phongXong = true; }, con); }); // tối thiểu ~0,6 giây để kịp thấy
+    function bayVe() {
+      if (xong) return; xong = true; datDay(100);
+      const r1 = tk.getBoundingClientRect(), r2 = logo ? logo.getBoundingClientRect() : null;
+      intro.classList.add('mo-rem');
+      if (r2 && r2.width) {
+        logo.style.opacity = '0';
+        const tl = r2.height / r1.height, dx = (r2.left + r2.width / 2) - (r1.left + r1.width / 2), dy = (r2.top + r2.height / 2) - (r1.top + r1.height / 2);
+        G.fromTo(tk, { x: 0, y: 0, scale: 1 }, { x: dx, y: dy, scale: tl, duration: 0.75, ease: 'truot' }).then(ket);
+      } else setTimeout(ket, 300);
+      lenis && lenis.start();
+      xongIntro(); // phần mở đầu của trang chạy song song lúc chữ bay về logo
+      ghi('intro', 'chữ TK rót đầy theo tải phông, bay về logo');
+    }
+    function ket() { const logo2 = $('#tren .logo'); if (logo2) logo2.style.opacity = ''; intro.classList.add('xong'); }
+    // bấm hoặc gõ phím: bỏ qua ngay
+    const boQuaNgay = () => { if (xong) return; phongXong = true; datDay(100); bayVe(); ghi('intro', 'bỏ qua'); };
+    intro.addEventListener('pointerdown', boQuaNgay); addEventListener('keydown', boQuaNgay, { once: true });
+  });
+})();
+</script>

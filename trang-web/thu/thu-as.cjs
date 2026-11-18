@@ -8,7 +8,10 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   for (const [k, w, h, mobi] of [['mt', 1440, 900, false], ['dt', 390, 844, true]]) {
     const ctx = await b.newContext({ viewport: { width: w, height: h }, hasTouch: mobi, isMobile: mobi });
     const p = await ctx.newPage(); const loi = [];
-    p.on('console', (m) => { if (m.type() === 'error') loi.push(m.text()); }); p.on('pageerror', (e) => loi.push(e.message));
+    p.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) loi.push(m.text()); }); p.on('pageerror', (e) => loi.push(e.message));
+    // lỗi tải tệp: chỉ tính tệp của chính trang; SoundCloud / Google ở ngoài, máy thử có thể không vào được
+    p.on('response', (r) => { if (r.status() >= 400 && !/soundcloud|google/.test(r.url())) loi.push(r.status() + ' ' + r.url()); });
+    p.on('requestfailed', (r) => { if (!/soundcloud|google/.test(r.url())) loi.push('không tải được ' + r.url()); });
     await p.goto(TRANG);
     await p.waitForTimeout(700); await p.screenshot({ path: `as-${k}-0-dang-mo.png` });
     await p.waitForTimeout(2600); await p.screenshot({ path: `as-${k}-1-hero.png` });

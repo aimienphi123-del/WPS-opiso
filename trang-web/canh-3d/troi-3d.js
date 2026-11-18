@@ -1,6 +1,5 @@
 /* BẦU TRỜI SAO (Three.js r160, THREE toàn cục). window.bauTroi(canvas, kieu, mau)
    kieu 'binh-yen': sao lấp lánh, Ngân Hà mờ, trời xoay chậm, sao băng; chòm Bảo Bình sáng nhất, đường nối thở nhẹ.
-   kieu 'van-gogh': trời vẽ bằng nét cọ cuộn xoáy (tích chập theo dòng chảy), sao là quầng sáng đồng tâm, núi Tây Bắc ở chân trời.
    Chòm Bảo Bình theo toạ độ thật (xích kinh giờ, xích vĩ độ). */
 (function () {
   const h = (hh, mm) => hh + mm / 60;
@@ -13,10 +12,21 @@
   // chiếu phẳng: xích kinh tăng sang trái như khi nhìn lên trời; trả về toạ độ trong khung [-1..1] quanh tâm (cx, cy), cỡ k
   const chieu = (cx, cy, k) => BB.map(([ra, de, m]) => [cx - (ra - 22.1) * k * 0.62, cy + (de + 9) * k * 0.034, m]);
 
+  // giải phóng bộ nhớ đồ hoạ khi cảnh không còn dùng (đổi chủ đề lâu)
+  const giaiPhong = (scene, r) => {
+    scene.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      (Array.isArray(o.material) ? o.material : o.material ? [o.material] : []).forEach((m) => {
+        Object.values(m).concat(Object.values(m.uniforms || {}).map((u) => u.value)).forEach((v) => { if (v && v.isTexture) v.dispose(); });
+        m.dispose();
+      });
+    });
+    r.dispose(); try { r.forceContextLoss(); } catch (e) { /* máy không hỗ trợ trả ngữ cảnh: bỏ qua */ }
+  };
   window.bauTroi = function (canvas, kieu, mau) {
     if (!window.THREE) return null;
     const T = THREE;
-    let r; try { r = new T.WebGLRenderer({ canvas, antialias: kieu !== 'van-gogh', alpha: false, powerPreference: 'low-power' }); } catch (e) { return null; }
+    let r; try { r = new T.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'low-power' }); } catch (e) { return null; }
     const giam = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const scene = new T.Scene(), cam = new T.OrthographicCamera(-1, 1, 1, -1, -10, 10);
     let asp = 1, dpr = 1;
@@ -24,7 +34,7 @@
     const cNen = new T.Color(mau.nen), cNhan = new T.Color(mau.nhan), cChu = new T.Color(mau.chu);
     const capNhatKhung = () => {
       const w = canvas.clientWidth || innerWidth, hh = canvas.clientHeight || innerHeight; asp = w / hh;
-      dpr = kieu === 'van-gogh' ? Math.min(devicePixelRatio || 1, 1) * (w > 900 ? 0.62 : 0.8) : Math.min(devicePixelRatio || 1, 1.5);
+      dpr = Math.min(devicePixelRatio || 1, 1.5);
       r.setPixelRatio(dpr); r.setSize(w, hh, false);
       cam.left = -asp; cam.right = asp; cam.updateProjectionMatrix(); uni.uAsp.value = asp; uni.uRes.value.set(w * dpr, hh * dpr);
       if (datBB) datBB();
@@ -83,49 +93,12 @@
         else vsb.opacity = 0;
         vs.uniforms.uDpr.value = dpr; vbb.uniforms.uDpr.value = dpr;
       };
-    } else {
-      // ---- lối vẽ Van Gogh: một shader toàn khung ----
-      const uSao = { value: Array.from({ length: BB.length }, () => new T.Vector3()) };
-      const m = quad(`uniform float uT, uAsp; uniform vec3 uSao[${BB.length}]; uniform vec3 uNen, uNhan; varying vec2 vP; ${NOISE}
-        vec2 xoay(vec2 p, vec2 c, float r, float s){ vec2 d = p-c; float l2 = dot(d,d); return vec2(-d.y,d.x) * s * exp(-l2/(r*r)) / (sqrt(l2)+.05); }
-        vec2 dong(vec2 p){                                             // dòng chảy của nét cọ: gió ngang + hai xoáy lớn + nhiễu nhỏ
-          vec2 v = vec2(1., .35*sin(p.x*1.7 + uT*.05) + .2*sin(p.x*3.4 - p.y*2.6));
-          v += xoay(p, vec2(-.35,.25), .55, 1.5) + xoay(p, vec2(.55,.45), .32, -1.1);
-          float n = fbm(p*1.6 + uT*.02); v += vec2(cos(n*6.28), sin(n*6.28)) * .35;
-          return normalize(v); }
-        float vet(vec2 p){ return vn(p*vec2(46.,46.)); }               // hạt sơn mịn để kéo thành vệt
-        void main(){
-          vec2 p = vP; float acc = 0., w = 0.; vec2 q = p, q2 = p;
-          for(int i=0;i<11;i++){ vec2 d = dong(q)*.012; q += d; q2 -= d; float k = 1.-float(i)/11.; acc += (vet(q - uT*.006) + vet(q2 - uT*.006))*k; w += 2.*k; }
-          float lic = acc / w;                                          // vệt cọ: hạt sơn được kéo dài theo dòng chảy
-          float bang = fbm(p*1.4 + vec2(uT*.01,0.));                     // mảng màu lớn, chuyển mềm
-          vec3 lam = vec3(.06,.12,.33), coban = vec3(.17,.33,.62), nhat = vec3(.52,.7,.86), vang = vec3(.97,.83,.38);
-          vec3 c = mix(lam, coban, smoothstep(.2,.8, bang*.7 + lic*.6 + p.y*.15));
-          c = mix(c, nhat, smoothstep(.62,.9, lic + bang*.25) * .55);
-          // sao: quầng đồng tâm vàng, nét cọ chạy vòng quanh
-          for(int i=0;i<${BB.length};i++){ vec3 s = uSao[i]; float d = length(p - s.xy), R = .011 + s.z*.0075;
-            float vong = .5+.5*sin(d*140. - uT*.8 + lic*3.); float qu = exp(-d*d/(R*R*11.));
-            c = mix(c, mix(nhat, vang, .7), qu * (.45 + .55*vong) * .85); c = mix(c, vec3(1.,.97,.85), smoothstep(R*.55, R*.15, d)); }
-          // trăng khuyết góc trên trái, quầng cam
-          vec2 tp = vec2(uAsp*.82, .78); float dt = length(p-tp); float vt = .5+.5*sin(dt*80. - uT*.5 + lic*3.);
-          c = mix(c, vang, exp(-dt*dt*30.)*(.5+.5*vt)*.8); float khuyet = smoothstep(.085,.08,dt) * smoothstep(.07,.075,length(p-tp-vec2(.035,.02)));
-          c = mix(c, vec3(1.,.86,.42), khuyet);
-          // núi Tây Bắc ở chân trời: nhiều lớp, nét cọ dọc theo sườn
-          float r1 = 1.-abs(fbm(vec2(p.x*.9, 3.))*2.-1.), r2 = 1.-abs(fbm(vec2(p.x*1.5, 9.))*2.-1.);   // sống núi nhọn kiểu Tây Bắc
-          float n1 = -.68 + .3*r1*r1*r1 + .05*fbm(vec2(p.x*5., 1.)), n2 = -.82 + .22*r2*r2*r2 + .04*fbm(vec2(p.x*7., 4.));
-          vec3 nui1 = mix(vec3(.08,.13,.3), vec3(.14,.24,.46), lic), nui2 = mix(vec3(.03,.05,.13), vec3(.07,.1,.24), lic);
-          c = mix(c, nui1, smoothstep(n1+.006, n1-.006, p.y)); c = mix(c, nui2, smoothstep(n2+.006, n2-.006, p.y));
-          c *= .9 + .2*vn(gl_FragCoord.xy*.35);                          // thớ vải toan
-          gl_FragColor = vec4(c,1.);
-        }`, { uSao, uNen: { value: cNen }, uNhan: { value: cNhan } });
-      datBB = () => { const P = asp > 1 ? chieu(asp * 0.42, 0.2, 1.3) : chieu(0.05, -0.2, 0.75); P.forEach(([x, y, mm], i) => uSao.value[i].set(x, y, mm)); };
-      var buoc = () => {};
     }
     capNhatKhung(); addEventListener('resize', capNhatKhung);
     let dang = true; const t0 = performance.now(); let soKhung = 0;
     const ve = (now) => { const t = (now - t0) / 1000; uni.uT.value = giam ? 30 : t; buoc(giam ? 30 : t); r.render(scene, cam); soKhung++; };
     const vong = (now) => { if (!dang) return; ve(now); if (!giam) requestAnimationFrame(vong); };
     requestAnimationFrame(vong);
-    return { dung() { dang = false; }, chay() { if (!dang) { dang = true; requestAnimationFrame(vong); } }, thongTin: () => ({ soKhung, ve: r.info.render.calls }) };
+    return { huy() { dang = false; removeEventListener('resize', capNhatKhung); giaiPhong(scene, r); }, dung() { dang = false; }, chay() { if (!dang) { dang = true; requestAnimationFrame(vong); } }, thongTin: () => ({ soKhung, ve: r.info.render.calls }) };
   };
 })();

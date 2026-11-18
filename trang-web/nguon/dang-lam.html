@@ -1,0 +1,76 @@
+<!-- ===== PHẦN: Dự án đang làm: tên, mô tả, thước các bước ===== -->
+<style>
+.dl2 .nut-do { margin-top: 0; }
+.dl2-ten { font: 400 clamp(84px, 17vw, 260px)/1.12 var(--f-to); text-transform: uppercase; color: var(--chu); margin: .27em 0 .22em; }
+.dl2-mo { color: var(--chu-2); font-size: clamp(16px, 1.4vw, 19px); max-width: 560px; }
+.thuoc { position: relative; margin-top: clamp(48px, 6vw, 80px); padding-top: 56px; }
+.thuoc-vach { position: relative; height: 2px; background: var(--vien); }
+.thuoc-nho { position: absolute; left: 0; right: 0; top: -6px; height: 14px; background: repeating-linear-gradient(90deg, rgba(var(--chu-rgb), .14) 0 1px, transparent 1px 2.5%); }
+.thuoc-day { position: absolute; left: 0; top: 0; height: 2px; background: var(--do); transform-origin: 0 0; }
+.thuoc-moc { position: absolute; top: -9px; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: var(--nen); border: 2px solid var(--vien); }
+.thuoc-moc.xong { border-color: var(--do); background: var(--do); }
+.thuoc-moc.dang { border-color: var(--do); box-shadow: 0 0 0 6px rgba(var(--do-rgb), .18); }
+.thuoc-ten { position: absolute; top: 26px; transform: translateX(-50%); font-size: 13px; color: var(--mo); white-space: nowrap; }
+.thuoc-ten.dang { color: var(--chu); font-weight: 700; }
+.thuoc-ghim { position: absolute; top: 0; translate: -50% 0; display: flex; flex-direction: column; align-items: center; font: 400 22px/1 var(--f-to); text-transform: uppercase; color: var(--do); white-space: nowrap; }
+.thuoc-ghim::after { content: ""; width: 2px; height: 22px; background: var(--do); margin-top: 6px; }
+.dl2-chan { display: flex; gap: 12px; margin-top: 76px; flex-wrap: wrap; }
+.dl2-ten .tw { padding-top: .24em; margin-top: -.24em; padding-bottom: .06em; margin-bottom: -.06em; }
+@media (max-width: 900px) {
+  .thuoc-ten { font-size: 12px; }
+  .thuoc-ghim { font-size: 16px; }
+  .thuoc-ten.an-dt { display: none; }
+}
+.go-code svg { width: 132px; height: 38px; }
+.go-code span { font-size: 13px; color: var(--chu-2); }
+@media (prefers-reduced-motion: no-preference) {
+  .gc { transform-origin: left; animation: gc-go 4s steps(8) infinite; }
+  .gc2 { animation-delay: .5s; }
+  .gc3 { animation-delay: 1s; }
+  .gc4 { animation-delay: 1.5s; }
+  .con-tro { animation: nhay-tro 1s steps(1) infinite; }
+}
+@keyframes gc-go {0% { transform: scaleX(0); } 40%, 90% { transform: scaleX(1); } 100% { transform: scaleX(0); }}
+@keyframes nhay-tro {50% { opacity: 0; }}
+.go-code { display: inline-flex; align-items: center; padding: 10px 16px; border: 1px solid var(--vien); background: var(--nen-2); box-shadow: var(--vien-sang), var(--bong-1); border-radius: 14px; }
+</style>
+<!-- @khung -->
+<section class="phan khung dl2" id="dang-lam" aria-labelledby="dl2-ten">
+    <div class="dau-nho" id="dl2-dau"><span>Đang làm<i class="cham">.</i></span></div>
+    <h2 class="dl2-ten" id="dl2-ten"></h2>
+    <p class="dl2-mo" id="dl2-mo"></p>
+    <div class="thuoc" id="thuoc" role="img"></div>
+    <div class="dl2-chan"><button type="button" class="nut-vien" id="dl2-xem"></button><div class="mg2 go-code" aria-hidden="true"><svg viewBox="0 0 220 64"><rect class="gc gc1" x="10" y="10" width="90" height="7" rx="3" style="fill:var(--do)"/><rect class="gc gc2" x="22" y="24" width="120" height="7" rx="3" style="fill:var(--chu)"/><rect class="gc gc3" x="22" y="38" width="70" height="7" rx="3" style="fill:var(--mo)"/><rect class="gc gc4" x="10" y="52" width="40" height="7" rx="3" style="fill:var(--do)"/><rect class="con-tro" x="54" y="50" width="3" height="11" style="fill:var(--chu)"/></svg></div></div>
+  </section>
+<script>
+(() => {
+  const { $, el, ghi, G, ST, GIAM, CO_DONG, tach, daTach, lenis, cuonToi, dtNho, nhanTT, khiSan } = TK;
+  function veDangLam() {
+    const a = DL.SP.find((x) => x.dangLam); if (!a) { $('#dang-lam').hidden = true; return; }
+    $('#dl2-dau').append(nhanTT(a)); $('#dl2-ten').textContent = a.ten; $('#dl2-mo').textContent = a.moTa;
+    const thuoc = $('#thuoc'), vach = el('div', 'thuoc-vach'); vach.append(el('div', 'thuoc-nho'));
+    thuoc.setAttribute('aria-label', `Quá trình: đang ở bước ${a.buoc} trên ${DL.BUOC.length}, ${DL.BUOC[a.buoc - 1]}`);
+    const vt = (i) => (i / (DL.BUOC.length - 1)) * 100;
+    const day = el('div', 'thuoc-day'); day.style.width = vt(a.buoc - 1) + '%'; vach.append(day);
+    DL.BUOC.forEach((b, i) => {
+      const m = el('i', 'thuoc-moc' + (i + 1 < a.buoc ? ' xong' : i + 1 === a.buoc ? ' dang' : '')); m.style.left = vt(i) + '%'; vach.append(m);
+      const t = el('span', 'thuoc-ten' + (i + 1 === a.buoc ? ' dang' : ' an-dt'), b); t.style.left = vt(i) + '%';
+      if (i === 0) t.style.transform = 'none'; if (i === DL.BUOC.length - 1) { t.style.left = 'auto'; t.style.right = '0'; t.style.transform = 'none'; }
+      vach.append(t);
+    });
+    const ghim = el('div', 'thuoc-ghim', 'Đang ở đây'); ghim.style.left = vt(a.buoc - 1) + '%'; thuoc.append(ghim, vach);
+    $('#dl2-xem').textContent = 'Xem ' + a.ten + ' trong Sản phẩm';
+    $('#dl2-xem').onclick = () => { ghi('bấm', 'xem ' + a.ten + ' trong sản phẩm'); TK.chonApp(DL.SP.indexOf(a), true); cuonToi('#san-pham'); };
+    TK.ganLap($('#dang-lam'));
+    if (CO_DONG) {
+      const moc = [...vach.querySelectorAll('.thuoc-moc')], dich = vt(a.buoc - 1);
+      const thuocChay = (e) => { const x = dich * e; day.style.transform = `scaleX(${e})`; ghim.style.left = x + '%';
+        moc.forEach((m, i) => { m.classList.toggle('xong', i < a.buoc - 1 && vt(i) <= x + 0.01); m.classList.toggle('dang', i === a.buoc - 1 && e >= 1); }); };
+      thuocChay(1);
+      const { ca } = tach($('#dl2-ten')); ca.forEach((c) => { c.style.transform = 'translateY(160%)'; });
+      ST.create({ trigger: '#dang-lam', start: 'top 75%', once: true, onEnter: () => G.fromTo(ca, { y: 0, yPercent: 160 }, { yPercent: 0, duration: 0.9, stagger: 0.045, ease: 'nay' }) });
+    }
+  }
+  khiSan(veDangLam);
+})();
+</script>

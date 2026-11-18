@@ -1,0 +1,151 @@
+<!-- ===== PHẦN: Thanh đầu trang (đảo nổi): logo, mục lục, nút chủ đề, ô giờ; cuộn xuống thì ẩn, cuộn lên thì hiện ===== -->
+<style>
+/* ---- khung đảo nổi: viên thuốc kính mờ giữa mép trên ---- */
+.tren { position: fixed; z-index: 50; top: calc(env(safe-area-inset-top, 0px) + 14px); left: 50%; translate: -50% 0; width: max-content; max-width: calc(100% - 24px);
+  display: flex; align-items: center; gap: 6px; padding: 6px 6px 6px 20px; border-radius: 30px;
+  background: rgba(var(--nen-rgb), .78); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(var(--chu-rgb), .1); box-shadow: inset 0 1px 0 rgba(var(--chu-rgb), .08), 0 12px 32px -12px rgba(0, 0, 0, .6);
+  transition: transform .45s var(--em), background .3s; }
+.tren.dac { background: rgba(var(--nen-rgb), .84); }                              /* đã rời đầu trang: nền đậm hơn */
+.tren.an { transform: translateY(calc(-100% - 24px)); }                          /* cuộn xuống: trượt lên khuất hẳn */
+.tren.an:focus-within { transform: none; }                                       /* đang dùng phím Tab trong thanh thì không ẩn */
+.dang-mo .tren { visibility: hidden; }
+/* khung co / giãn khi mở mục lục điện thoại (mã JS đặt cỡ, ở đây lo chuyển động) */
+.tren.dang-doi { overflow: hidden; transition: width var(--m-slide) var(--m-ease-io), height var(--m-slide) var(--m-ease-io), transform .45s var(--em), background .3s; }
+.tren.dang-doi > * { animation: dao-hien 200ms var(--m-ease) 40ms both; }
+@keyframes dao-hien { from { opacity: 0; } }
+
+/* ---- logo TK tự vẽ nét khi mở trang ---- */
+.logo { display: block; padding: 11px 4px; margin: -11px -4px; color: var(--chu); }
+.logo-ve { display: block; height: 22px; width: auto; overflow: visible; }
+.lv-net { fill: var(--chu); stroke: var(--chu); stroke-width: 1.4; stroke-linejoin: round; }
+.lv-cham { fill: var(--do); transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .bo-intro .lv-net { stroke-dasharray: 1; stroke-dashoffset: 1; fill-opacity: 0; animation: lv-ve 1s cubic-bezier(.65, 0, .35, 1) .15s forwards, lv-to .35s ease-out 1.05s forwards; }
+  .bo-intro .lv-k { animation-delay: .45s, 1.25s; }
+  .bo-intro .lv-cham { scale: 0; animation: lv-nay .45s cubic-bezier(.34, 1.56, .64, 1) 1.5s forwards; }
+}
+.logo-xong .lv-cham { animation: none !important; scale: 1 !important; }        /* đổi chủ đề sau khi vẽ xong: hiện ngay */
+@keyframes lv-ve { to { stroke-dashoffset: 0; } }
+@keyframes lv-to { to { fill-opacity: 1; } }
+@keyframes lv-nay { to { scale: 1; } }
+
+/* ---- mục lục: chữ, rê vào thì vạch 1px vẽ từ trái; mục đang xem có vạch 2px ---- */
+.menu { display: flex; gap: 2px; margin: 0 4px; padding: 0 8px; border-inline: 1px solid rgba(var(--chu-rgb), .12); }
+.menu a { position: relative; padding: 9px 13px; border-radius: 999px; color: var(--chu-2); font-size: 14px; white-space: nowrap; transition: color var(--m-out) var(--m-ease); }
+.menu a::after { content: ""; position: absolute; left: 13px; right: 13px; bottom: 4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform var(--m-out) var(--m-ease); }
+.menu a:is(:hover, :focus-visible) { color: var(--chu); transition-duration: var(--m-in); }
+.menu a:is(:hover, :focus-visible)::after { transform: scaleX(1); transform-origin: left; transition-duration: var(--m-in); }
+.menu a[aria-current="true"] { color: var(--chu); }
+.menu a[aria-current="true"]::after { height: 2px; background: var(--do); transform: scaleX(1); transition: none; }
+@media (max-width: 1100px) { .menu a { font-size: 13px; } }
+
+/* ---- bên phải: nút chủ đề, ô giờ, nút ba gạch (điện thoại) ---- */
+.tren-phai { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.chu-de, .mo-menu, .viec { transition: background-color var(--m-out) var(--m-ease), border-color var(--m-out) var(--m-ease), transform var(--m-press) var(--m-ease); }
+.chu-de { width: 44px; height: 44px; padding: 0; justify-content: center; border: 1px solid var(--vien); border-radius: var(--bo-tron); background: rgba(var(--chu-rgb), .04); color: var(--do); font: 600 13px/1 var(--f-chu); cursor: pointer; white-space: nowrap; }
+.chu-de:hover { border-color: var(--do); }
+.chu-de svg { width: 18px; height: 18px; }
+.chu-de b { display: none; }
+.chu-de span { justify-content: center; width: 100%; align-items: center; gap: 8px; }
+:root[data-mau="dem-xanh"] .chu-de .cd-dem-xanh, :root[data-mau="reu-suong"] .chu-de .cd-reu-suong, :root[data-mau="dat-tram"] .chu-de .cd-dat-tram, :root:not([data-mau]) .chu-de .cd-dem-xanh { display: inline-flex; }
+.viec-o { position: relative; }
+.viec { display: inline-flex; align-items: center; height: 44px; padding: 0 16px; border-radius: 999px; background: rgba(var(--chu-rgb), .06); color: var(--chu-2); font-size: 13px; white-space: nowrap; }
+.viec-gio { font-variant-numeric: tabular-nums; }
+.viec-gio:empty { display: none; }
+.mo-menu { display: none; width: 44px; height: 44px; place-items: center; border: 0; border-radius: 50%; background: rgba(var(--chu-rgb), .08); color: var(--chu); cursor: pointer; }
+.mo-menu svg { width: 18px; height: 18px; }
+@media (hover: hover) and (pointer: fine) {
+  :is(.chu-de, .mo-menu, .viec):hover { transform: translateY(-1px); background: rgba(var(--chu-rgb), .1); transition-duration: var(--m-in), var(--m-in), var(--m-press); }
+}
+.tren :is(.chu-de, .mo-menu, .viec):active { transform: translateY(1px) scale(.985); }
+
+/* ---- điện thoại: đảo rộng gần hết màn, mục lục mở bằng nút ba gạch, không hiện ô giờ ---- */
+@media (max-width: 900px) {
+  .tren { width: calc(100% - 24px); padding-left: 16px; flex-wrap: wrap; border-radius: 26px; }
+  .menu, .viec-o { display: none; }
+  .mo-menu { display: grid; }
+  .tren.mo-ra .menu { display: grid; order: 9; width: 100%; margin: 6px 0 4px; padding: 6px 0 0; border: 0; border-top: 1px solid rgba(var(--chu-rgb), .1);
+    transition: opacity var(--m-panel) var(--m-ease), transform var(--m-panel) var(--m-ease); }
+  @starting-style { .tren.mo-ra .menu { opacity: 0; transform: translateY(-8px); } }
+  .tren.mo-ra .menu a { padding: 13px 12px; font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tren, .menu a::after, .chu-de, .mo-menu, .viec { transition: none !important; }
+  .tren :is(.chu-de, .mo-menu, .viec):active { transform: none; }
+}
+</style>
+<!-- @khung -->
+<header class="tren khung" id="tren">
+  <a class="logo" href="#dau" aria-label="Về đầu trang"><svg class="logo-ve" viewBox="-1.5 -1.5 54 27" aria-hidden="true" focusable="false"><path class="lv-net" pathLength="1" d="M0 0H22V5H14V24H8V5H0Z"/><path class="lv-net lv-k" pathLength="1" d="M24 0H30V9.5L36 0H42.5L35.4 10.6L43 24H36.4L31.6 14.6L30 17V24H24Z"/><path class="lv-cham cd-dem-xanh" d="M50.5 16.5a5 5 0 1 0 1.6 6.6 4 4 0 1 1-1.6-6.6z"/><path class="lv-cham cd-reu-suong" d="M44 24l3.6-7 2 3.4 1.4-2 3 5.6z"/><path class="lv-cham cd-dat-tram" d="M44.5 22a4.5 4.5 0 0 1 9 0zM44 23.2h10v1.3H44z"/></svg></a>
+  <nav class="menu ma" id="menu-chinh" aria-label="Mục lục"><a href="#dang-lam">Đang làm</a><a href="#san-pham">Sản phẩm</a><a href="#game">Game</a><a href="#ve-minh">Về mình</a><a href="#phim">Phim</a><a href="#lien-he">Liên hệ</a></nav>
+  <div class="tren-phai"><button type="button" class="chu-de" id="chu-de" aria-label="Đổi chủ đề màu"><span class="cd-dem-xanh"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor"><path d="M15.5 3.5a8.5 8.5 0 1 0 5 10.9 6.8 6.8 0 1 1-5-10.9z"/></svg><b>Đêm yên</b></span><span class="cd-reu-suong"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor"><path d="M2 20l7-12 4 6.5 2.5-3.5L22 20z"/></svg><b>Rừng sương</b></span><span class="cd-dat-tram"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor"><path d="M4 17a8 8 0 0 1 16 0z"/><path d="M2 19.5h20v1.6H2z"/><path d="M12 4.5v3M5.5 7.5l2 2M18.5 7.5l-2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><b>Chiều đất</b></span></button><div class="viec-o"><a class="viec ma" href="#lien-he" aria-label="Giờ ở TP.HCM, bấm để tới phần liên hệ"><span class="viec-gio" id="viec-gio"></span></a></div><button type="button" class="mo-menu" id="mo-menu" aria-expanded="false" aria-controls="menu-chinh" aria-label="Mở mục lục"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 6h12M3 12h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+</header>
+<script>
+(() => {
+  const { $, ghi, lenis } = TK;
+  const tren = $('#tren'), nav = $('#menu-chinh'), nut = $('#mo-menu'), goc = document.documentElement;
+
+  // ---- cuộn xuống quá 2/3 màn đầu thì thanh ẩn, cuộn lên thì hiện; có nền khi đã rời đầu trang ----
+  let yTruoc = 0;
+  const theoCuon = (y) => {
+    tren.classList.toggle('dac', y > 40);
+    tren.classList.toggle('an', y > yTruoc && y > innerHeight * 0.6 && !tren.classList.contains('mo-ra'));
+    yTruoc = y;
+  };
+
+  // ---- mục lục: gạch chân mục đang xem ----
+  const links = [...nav.querySelectorAll('a')], secs = links.map((a) => $(a.getAttribute('href'))).filter(Boolean);
+  let dang;
+  const danhDau = () => {
+    const y = innerHeight * 0.4; let id = '';
+    for (const s of secs) if (s.getBoundingClientRect().top <= y) id = s.id;
+    if (id === dang) return; dang = id;
+    links.forEach((a) => (a.getAttribute('href') === '#' + id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+  };
+  let hen = 0;
+  const khiCuon = (y) => { theoCuon(y); if (!hen) hen = requestAnimationFrame(() => { hen = 0; danhDau(); }); };
+  lenis ? lenis.on('scroll', (e) => khiCuon(e.scroll)) : addEventListener('scroll', () => khiCuon(scrollY), { passive: true });
+  addEventListener('resize', danhDau); danhDau();
+
+  // ---- điện thoại: nút ba gạch mở / đóng mục lục; khung đảo co giãn mượt tới cỡ mới ----
+  const GIAM = matchMedia('(prefers-reduced-motion: reduce)').matches; let henDoi = 0;
+  const doiDao = (lop, bat) => {
+    if (tren.classList.contains(lop) === bat) return;
+    if (GIAM) { tren.classList.toggle(lop, bat); return; }
+    const r0 = tren.getBoundingClientRect();
+    tren.style.width = ''; tren.style.height = ''; tren.classList.remove('dang-doi');
+    tren.classList.toggle(lop, bat);
+    const r1 = tren.getBoundingClientRect();
+    tren.style.width = r0.width + 'px'; tren.style.height = r0.height + 'px'; void tren.offsetWidth;
+    tren.classList.add('dang-doi'); tren.style.width = r1.width + 'px'; tren.style.height = r1.height + 'px';
+    const ms = parseFloat(getComputedStyle(tren).getPropertyValue('--m-slide')) || 240;
+    clearTimeout(henDoi); henDoi = setTimeout(() => { tren.style.width = ''; tren.style.height = ''; tren.classList.remove('dang-doi'); }, ms + 40);
+  };
+  const datNut = (mo) => { nut.setAttribute('aria-expanded', String(mo)); nut.setAttribute('aria-label', mo ? 'Đóng mục lục' : 'Mở mục lục'); };
+  const dong = () => { doiDao('mo-ra', false); datNut(false); };
+  nut.addEventListener('click', () => { if (tren.classList.contains('mo-ra')) return dong(); doiDao('mo-ra', true); datNut(true); });
+  links.forEach((a) => a.addEventListener('click', dong));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && tren.classList.contains('mo-ra')) { dong(); nut.focus(); } });
+  document.addEventListener('pointerdown', (e) => { if (tren.classList.contains('mo-ra') && !tren.contains(e.target)) dong(); });
+
+  // ---- ô giờ TP.HCM, cập nhật mỗi 30 giây ----
+  const gio = $('#viec-gio');
+  const capNhat = () => {
+    try { gio.textContent = new Intl.DateTimeFormat('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date()) + ' TP.HCM'; }
+    catch (e) { gio.textContent = ''; }
+  };
+  capNhat(); setInterval(capNhat, 30000);
+
+  // ---- nút chủ đề: sang chủ đề kế tiếp ngay, ghi nhớ để lần mở sau tiếp tục vòng ----
+  const CHU_DE = ['dem-xanh', 'reu-suong', 'dat-tram'];
+  setTimeout(() => goc.classList.add('logo-xong'), 2600);
+  $('#chu-de').addEventListener('click', () => {
+    goc.classList.add('logo-xong');
+    const k = CHU_DE[(CHU_DE.indexOf(goc.dataset.mau) + 1) % CHU_DE.length];
+    goc.setAttribute('data-mau', k);
+    try { localStorage.setItem('bo-mau', k); } catch (e) {}
+    ghi('chủ-đề', k);
+  });
+})();
+</script>

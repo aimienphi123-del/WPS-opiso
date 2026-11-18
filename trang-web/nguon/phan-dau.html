@@ -1,0 +1,167 @@
+<!-- ===== PHẦN: Màn đầu (ảnh, tên, chữ nền KHANH) và dải chữ chạy ===== -->
+<style>
+.hero { position: relative; height: 100svh; min-height: 620px; max-height: 1100px; overflow: hidden; isolation: isolate; }
+.to { position: absolute; z-index: 1; left: 50%; top: 12vh; translate: -50% 0; font: 400 31vw/.8 var(--f-to); color: var(--do); white-space: nowrap; letter-spacing: -.005em; }
+.anh { position: absolute; z-index: 2; left: 50%; bottom: 0; translate: -50% 0; height: min(80vh, 880px); width: auto; max-width: none; filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .55)); pointer-events: none; user-select: none; }
+.cong { position: absolute; z-index: 3; width: 14px; height: 14px; color: #55524d; }
+.cong::before { content: ""; position: absolute; background: currentColor; left: 6px; top: 0; width: 2px; height: 14px; }
+.cong::after { content: ""; position: absolute; background: currentColor; top: 6px; left: 0; height: 2px; width: 14px; }
+.cong.c1 { left: max(var(--le), env(safe-area-inset-left, 0px)); top: 104px; color: var(--do); }
+.cong.c2 { right: max(var(--le), env(safe-area-inset-right, 0px)); top: 104px; }
+.nhan-ben { position: absolute; z-index: 3; top: 34vh; color: var(--mo); }
+.nhan-ben.trai { left: max(var(--le), env(safe-area-inset-left, 0px)); }
+.nhan-ben.phai { right: max(var(--le), env(safe-area-inset-right, 0px)); text-align: right; }
+.hero-trai { position: absolute; z-index: 4; left: max(var(--le), env(safe-area-inset-left, 0px)); bottom: 7vh; max-width: 420px; }
+.chao { font: 600 40px/1 var(--f-tay); color: var(--chu); margin-bottom: 14px; transform: rotate(-4deg); transform-origin: left; display: inline-block; }
+.ten { font: 400 92px/1.02 var(--f-to); color: var(--chu); text-transform: uppercase; letter-spacing: .005em; }
+.ten .dong { display: block; }
+.ten em { font-style: normal; color: var(--do); display: inline-block; }
+.vai { font: 400 24px/1.2 var(--f-to); color: var(--do); text-transform: uppercase; letter-spacing: .03em; margin: 16px 0 12px; }
+.mo-ta { font-size: 15px; max-width: 22em; }
+.hero-phai { position: absolute; z-index: 4; right: max(var(--le), env(safe-area-inset-right, 0px)); bottom: 7vh; display: flex; flex-direction: column; align-items: flex-end; gap: 22px; text-align: right; }
+.so-lon { font: 400 56px/1 var(--f-to); color: var(--chu); font-variant-numeric: tabular-nums; }
+.so-lon small { display: block; margin-top: 6px; font: 500 13px var(--f-ma); color: var(--mo); }
+.vach { width: 180px; height: 2px; background: var(--nen-3); position: relative; overflow: hidden; }
+.vach i { position: absolute; inset: 0; background: var(--do); transform-origin: left; transform: scaleX(.45); }
+.cuon-xuong { position: absolute; z-index: 4; left: 50%; bottom: 18px; translate: -50% 0; display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--mo); }
+.cuon-xuong i { width: 1px; height: 36px; background: linear-gradient(var(--do), transparent); animation: rot 1.8s var(--em) infinite; transform-origin: top; }
+@keyframes rot {0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; }}
+@media (max-width: 1000px) {
+  .hero { --anh-tren: calc(env(safe-area-inset-top, 0px) + 92px + 13vw); --anh-cao: min(50svh, 108vw); height: auto; max-height: none; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-top: calc(var(--anh-tren) + var(--anh-cao) * .62); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5svh); }
+  .to { font-size: 37vw; top: calc(env(safe-area-inset-top, 0px) + 92px); }
+  .anh { top: var(--anh-tren); bottom: auto; height: var(--anh-cao); left: 50%; }
+  .nhan-ben, .hero-phai, .cuon-xuong, .cong.c2 { display: none; }
+  .hero-trai { position: relative; left: auto; bottom: auto; max-width: 560px; padding-left: max(var(--le), env(safe-area-inset-left, 0px)); padding-right: max(var(--le), env(safe-area-inset-right, 0px)); }
+  .chao { font-size: clamp(28px, 7.5vw, 40px); margin-bottom: 8px; }
+  .ten { font-size: clamp(52px, 14.5vw, 96px); line-height: 1; }
+  .vai { font-size: clamp(17px, 4.6vw, 24px); margin: 12px 0 4px; }
+}
+@media (max-width: 760px) {
+  .mo-ta { display: none; }
+}
+@media (max-width: 1000px) and (max-height: 700px) {
+  .hero { padding-top: calc(var(--anh-tren) + var(--anh-cao) * .86); }
+}
+@media (min-width: 1001px) and (max-height: 820px) {
+  .nhan-ben { display: none; }
+  .chao { font-size: min(40px, 5vh); margin-bottom: 8px; }
+  .ten { font-size: min(92px, 11.5vh); }
+  .vai { margin: 10px 0 8px; }
+  .hero-phai { bottom: calc(7vh + 44px); gap: 16px; }
+}
+.dai { background: var(--do); color: var(--nen); overflow: hidden; padding: 14px 0; position: relative; z-index: 5; }
+.dai-chay { display: flex; width: max-content; will-change: transform; }
+.dai-chay span { font: 400 clamp(36px, 6vw, 72px)/1 var(--f-to); text-transform: uppercase; padding-right: .5em; white-space: nowrap; }
+.dang-mo .to, .dang-mo #anh, .dang-mo .hero-trai, .dang-mo .hero-phai, .dang-mo .nhan-ben, .dang-mo .cong, .dang-mo .cuon-xuong { visibility: hidden; }
+.xx { display: inline-block; width: 18px; height: 18px; vertical-align: -3px; margin-right: 8px; color: var(--chu); }
+.xx svg { width: 100%; height: 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  .xx svg { animation: xx-lan 3.6s cubic-bezier(.5, -.4, .3, 1.4) infinite; }
+}
+@keyframes xx-lan {0%, 60% { transform: rotate(0); } 80%, 100% { transform: rotate(360deg); }}
+.hero-nen { position: absolute; inset: 0; z-index: -1; background: radial-gradient(55% 45% at 50% 72%, rgba(var(--do-rgb), .2), transparent 70%); overflow: hidden; }
+.canh { position: absolute; inset: 0; width: 100%; height: 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  .trang { animation: troi-nhe 14s ease-in-out infinite alternate; }
+  .mat-troi { transform-box: fill-box; transform-origin: center; animation: tho 10s ease-in-out infinite alternate; }
+}
+@media (max-width: 700px) {
+  .cd-dat-tram.canh { opacity: .55; }
+  .cd-reu-suong.canh { opacity: .7; }
+}
+@keyframes troi-nhe {to { transform: translateY(14px); }}
+@keyframes tho {to { transform: scale(1.05); opacity: .2; }}
+.dai-chay b { font-weight: 400; -webkit-text-stroke: 1.5px var(--nen); color: var(--nen); }
+@media (prefers-reduced-motion: no-preference) {
+  .dan-chim .canh { animation: vo-canh .7s ease-in-out var(--tre) infinite alternate; }
+}
+@keyframes vo-canh {to { transform: scaleY(-.5); }}
+.dan-chim .canh { fill: none; stroke: rgba(var(--chu-rgb), .55); stroke-width: 1.6; stroke-linecap: round; transform-box: fill-box; transform-origin: 50% 100%; }
+:root.co-bien .hero-nen .canh.cd-dat-tram { display: none; }
+.to .tw { padding: 0 .02em .06em; margin: 0 -.02em -.06em; overflow: clip !important; }
+</style>
+<!-- @khung -->
+<section class="hero" id="dau" aria-labelledby="ten">
+    <div class="hero-nen"><svg class="canh cd-dem-xanh" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g style="fill:var(--chu)"></g><g class="trang"><circle cx="1130" cy="190" r="78" style="fill:var(--do)"/><circle cx="1162" cy="170" r="70" style="fill:var(--nen)"/></g></svg><svg class="canh cd-dat-tram" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle class="mat-troi" cx="720" cy="720" r="300" style="fill:var(--do)" opacity=".16"/><rect x="0" y="640" width="1440" height="6" style="fill:var(--nen)"/><rect x="0" y="680" width="1440" height="9" style="fill:var(--nen)"/><rect x="0" y="720" width="1440" height="12" style="fill:var(--nen)"/><rect x="0" y="765" width="1440" height="16" style="fill:var(--nen)"/><rect x="0" y="815" width="1440" height="20" style="fill:var(--nen)"/><rect x="0" y="840" width="1440" height="60" style="fill:var(--nen)"/></svg></div>
+    <div class="to" aria-hidden="true"><span data-tach="chu">KHANH</span></div>
+    <img class="anh" id="anh" alt="Ảnh Bùi Tuấn Khanh" fetchpriority="high" decoding="async" src="@anh:anh-1-e9499e.webp@" width="675" height="729">
+    <span class="cong c1"></span><span class="cong c2"></span>
+    <p class="nhan-ben trai ma">Marketing<br>× AI</p>
+    <p class="nhan-ben phai ma"><span class="mg2 xx" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="8" r="2" style="fill:var(--do)"/><circle cx="16" cy="16" r="2" style="fill:var(--do)"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg></span>Mỗi ngày<br>một game mới</p>
+    <div class="hero-trai">
+      <p class="chao" id="chao">Xin chào, mình là</p>
+      <h1 class="ten" id="ten" aria-label="Tuấn Khanh"><span class="dong" data-tach="chu">TUẤN</span><span class="dong"><span data-tach="chu">KHANH</span><em>.</em></span></h1>
+      <p class="vai">Marketing &amp; AI Maker</p>
+      <p class="mo-ta">Học Digital Marketing tại Arena Multimedia. Tự làm app, game và công cụ nhỏ cùng AI.</p>
+      <a class="nut-do hut" href="#san-pham" data-to><span>Xem sản phẩm</span></a>
+    </div>
+    <div class="hero-phai">
+      <div class="so-lon"><span data-dem="5">05</span><small>Sản phẩm</small></div>
+      <div class="so-lon"><span data-dem="2">02</span><small>Bộ game AI</small></div>
+      <div class="vach"><i id="vach"></i></div>
+      <p class="ma" style="color: var(--mo)">TP. Hồ Chí Minh · VN</p>
+    </div>
+  </section>
+<div class="dai" aria-hidden="true"><div class="dai-chay" id="dai">
+    <span>Marketing <b>×</b> AI / App / Game / Công cụ / Làm cùng AI /</span>
+    <span>Marketing <b>×</b> AI / App / Game / Công cụ / Làm cùng AI /</span>
+  </div></div>
+<script>
+(() => {
+  const { $, el, ghi, G, ST, GIAM, CO_DONG, tach, daTach, lenis, cuonToi, dtNho, nhanTT, khiSan } = TK;
+  function moTrang() {
+    const mo = () => document.documentElement.classList.remove('dang-mo');
+    if (!CO_DONG) return mo();
+    const to = daTach.get($('.to [data-tach]')).ca;
+    const ten0 = [...document.querySelectorAll('#ten [data-tach]')].flatMap((n) => daTach.get(n).ca);
+    to.forEach((c) => { c.style.transform = 'translateY(110%)'; }); ten0.forEach((c) => { c.style.transform = 'translateY(160%)'; });
+    document.querySelectorAll('#anh, .vai, .mo-ta, .hero-trai .nut-do, .tren, .nhan-ben, .cong, .cuon-xuong, .hero-phai > *').forEach((n) => { n.style.opacity = '0'; });
+    $('#chao').style.clipPath = 'inset(0 100% 0 0)'; $('#ten em').style.transform = 'scale(0)';
+    mo();
+    G.fromTo(to, { y: 0, yPercent: 105 }, { yPercent: 0, duration: 1.1, stagger: 0.07, ease: 'nay' });
+    G.fromTo('#anh', { y: 90, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 1.3, delay: 0.35, ease: 'ra' });
+    G.fromTo('#chao', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1, delay: 0.8, ease: 'ra' });
+    G.fromTo(ten0, { y: 0, yPercent: 160 }, { yPercent: 0, duration: 0.9, stagger: 0.035, delay: 0.9, ease: 'nay' });
+    G.set('#ten em', { scale: 0 }); G.to('#ten em', { keyframes: { scale: [1.4, 1] }, duration: 0.6, delay: 1.35, ease: 'nay' });
+    G.fromTo('.vai, .mo-ta, .hero-trai .nut-do', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08, delay: 1.15, ease: 'ra' });
+    G.fromTo('.tren', { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.2, ease: 'ra', clearProps: 'transform' });
+    G.fromTo('.nhan-ben, .cong, .cuon-xuong', { opacity: 0 }, { opacity: 1, duration: 1, delay: 1.4, ease: 'power1.out' });
+    G.fromTo('.hero-phai > *', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, delay: 1.3, ease: 'ra' });
+    G.fromTo('#vach', { scaleX: 0 }, { scaleX: 0.45, duration: 1.4, delay: 1.6, ease: 'ra' });
+    document.querySelectorAll('[data-dem]').forEach((s, i) => {
+      const n = +s.dataset.dem;
+      const dem = { v: 0 }; G.to(dem, { v: n, duration: 1.2, delay: 1.4 + i * 0.1, ease: 'ra', onUpdate: () => { s.textContent = String(Math.round(dem.v)).padStart(2, '0'); } });
+    });
+    // cuộn xuống: chữ nền trôi chậm và to dần, ảnh trôi chậm hơn chữ, khối chữ mờ đi
+    const hero = $('#dau');
+    G.fromTo('.to', { y: 0, scale: 1 }, { y: -160, scale: 1.12, ease: 'none', immediateRender: false, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    G.fromTo('#anh', { y: 0 }, { y: -60, ease: 'none', immediateRender: false, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    G.fromTo('.hero-trai, .hero-phai', { y: 0, opacity: 1 }, { y: -120, opacity: 0, ease: 'none', immediateRender: false, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    // máy tính: chữ nền và ảnh lệch nhẹ theo con trỏ (tạo chiều sâu); con trỏ đứng yên thì thôi vẽ
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const to = $('.to'), anh = $('#anh'); let mx = 0, my = 0, cx = 0, cy = 0, dangVe = false;
+      const lech = () => {
+        cx += (mx - cx) * 0.06; cy += (my - cy) * 0.06;
+        to.style.translate = `calc(-50% + ${cx * -26}px) ${cy * -14}px`; anh.style.translate = `calc(-50% + ${cx * 14}px) ${cy * 6}px`;
+        if (Math.abs(mx - cx) + Math.abs(my - cy) > 0.0005) requestAnimationFrame(lech); else dangVe = false;
+      };
+      hero.addEventListener('pointermove', (e) => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; if (!dangVe) { dangVe = true; requestAnimationFrame(lech); } });
+    }
+  }
+  khiSan(function moDau() { (TK.choIntro || Promise.resolve()).then(moTrang); });
+
+  // dải chữ chạy: chỉ chạy khi đang cuộn (cuộn càng nhanh chạy càng nhanh, đổi chiều theo hướng cuộn); dừng hẳn khi đứng yên
+  if (!GIAM) {
+    const dai = $('#dai'); let x = 0, huong = 1, tocDo = 0, dangChay = false, yTruoc = scrollY;
+    const chay = () => {
+      x -= Math.min(Math.abs(tocDo), 40) * 0.45 * huong; tocDo *= 0.9;
+      const w = dai.scrollWidth / 2; if (x <= -w) x += w; if (x > 0) x -= w;
+      dai.style.transform = `translate3d(${x}px,0,0)`;
+      if (Math.abs(tocDo) > 0.05) requestAnimationFrame(chay); else dangChay = false;
+    };
+    const day = (v, h) => { tocDo = v; if (h) huong = h; if (!dangChay) { dangChay = true; requestAnimationFrame(chay); } };
+    if (lenis) lenis.on('scroll', (e) => day(e.velocity, e.direction));
+    else addEventListener('scroll', () => { const v = (scrollY - yTruoc) * 0.6; yTruoc = scrollY; day(v, v < 0 ? -1 : 1); }, { passive: true });
+  }
+})();
+</script>

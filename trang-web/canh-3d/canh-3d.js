@@ -1,8 +1,19 @@
 /* CẢNH NÚI TÂY BẮC 3D (Three.js r160, dùng THREE toàn cục).
    Địa hình sinh bằng nhiễu nhiều tầng có sống sắc (ridged), sương mù tạo chiều sâu, biển mây bằng shader,
    ruộng bậc thang trên đồi gần, nắng xiên sau núi, đàn chim. Máy quay trôi chậm và bay vào thung lũng theo cuộn trang.
-   window.canhNui(canvas, mau) trả về { dung, chay }. mau = { nen, may, nui, nhan } dạng '#rrggbb'. */
+  window.canhNui(canvas, mau) trả về { dung, chay }. mau = { nen, may, nui, nhan } dạng '#rrggbb'. */
 (function () {
+  // giải phóng bộ nhớ đồ hoạ khi cảnh không còn dùng (đổi chủ đề lâu)
+  const giaiPhong = (scene, r) => {
+    scene.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      (Array.isArray(o.material) ? o.material : o.material ? [o.material] : []).forEach((m) => {
+        Object.values(m).concat(Object.values(m.uniforms || {}).map((u) => u.value)).forEach((v) => { if (v && v.isTexture) v.dispose(); });
+        m.dispose();
+      });
+    });
+    r.dispose(); try { r.forceContextLoss(); } catch (e) { /* máy không hỗ trợ trả ngữ cảnh: bỏ qua */ }
+  };
   // ---------- nhiễu simplex 2D (chuẩn Stefan Gustavson, có hạt giống) ----------
   function taoNhieu(hat) {
     const p = new Uint8Array(512), g = [[1, 1], [-1, 1], [1, -1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -148,6 +159,7 @@
     return {
       cuon(p) { tienDich = p; if (giam) requestAnimationFrame(ve); },      // p: 0..1 tiến độ cuộn trang
       chuot(x, y) { chx = x; chy = y; },
+      huy() { dang = false; removeEventListener('resize', datKhung); giaiPhong(scene, renderer); },
       dung() { dang = false; }, chay() { if (!dang) { dang = true; requestAnimationFrame(vong); } },
       thongTin: () => ({ khung, ve: renderer.info.render.calls, tamGiac: renderer.info.render.triangles }),
     };

@@ -1,0 +1,163 @@
+<!-- ===== PHẦN: Phim ngắn: màn ảnh rộng, kệ phim, khung xem phim (rạp) ===== -->
+<style>
+.ph2 .nut-do, .rap .nut-do { margin-top: 0; }
+.ph2 { background: #000; padding-top: clamp(56px, 7vw, 96px); }
+.ph2-tren { height: clamp(64px, 8vw, 112px); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--le); }
+.ph2-tren .dau-nho { color: var(--chu); }
+.ph2-man { position: relative; width: 100%; aspect-ratio: 2.39 / 1; min-height: 420px; background: #09090A; border-top: 1px dashed rgba(var(--chu-rgb), .16); border-bottom: 1px dashed rgba(var(--chu-rgb), .16); overflow: hidden; }
+.ph2-bia { position: absolute; inset: 0; width: 100%; border: 0; background: none; color: var(--mo); font-size: 13px; cursor: pointer; }
+.ph2-bia .g { position: absolute; right: var(--le); top: 22px; display: flex; align-items: center; gap: 10px; }
+.ph2-bia .g svg { width: 26px; height: 26px; }
+.ph2-chu::before { content: attr(data-chu); color: transparent; -webkit-text-stroke: 1.5px rgba(var(--chu-rgb), .5); }
+.ph2-tt { position: absolute; left: var(--le); right: var(--le); bottom: clamp(24px, 3vw, 44px); display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+.ph2-ten { font: 400 clamp(40px, 4.6vw, 72px)/1.05 var(--f-to); text-transform: uppercase; color: var(--chu); }
+.ph2-tt .m2 { margin-top: 8px; }
+.ph2-duoi { padding: clamp(22px, 2.4vw, 34px) var(--le) clamp(40px, 5vw, 72px); }
+.ph2-ke-dau { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 14px; color: var(--mo); }
+.ph2-ke-dau b { color: var(--chu); font-weight: 600; }
+.ph2-ke { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.the2 { display: block; width: 100%; border: 0; background: none; text-align: left; cursor: pointer; padding: 0; }
+.the2-bia svg { width: 30px; height: 30px; transition: color .25s, transform .35s var(--nay); }
+.the2-bia.chu span { color: var(--do); font-size: 12px; font-weight: 600; }
+.the2-bia.chu b { font: 400 18px/1 var(--f-to); text-transform: uppercase; color: var(--chu); }
+.the2-ten { font: 400 17px/1.15 var(--f-to); text-transform: uppercase; color: var(--chu); margin-top: 9px; }
+.the2 .m2 { font-size: 12px; margin-top: 2px; }
+.the2 .m2 b { color: var(--chu); font-weight: 600; }
+@media (hover: hover) {
+  .the2:hover .the2-bia { border-color: var(--do); }
+  .the2:hover .the2-bia svg { color: var(--do); transform: scale(1.1); }
+}
+.rap { position: fixed; inset: 0; z-index: 75; display: grid; place-items: center; padding: clamp(16px, 5vw, 72px); }
+.rap-nen { position: absolute; inset: 0; background: rgba(var(--sau-rgb), .97); }
+.rap-o { position: relative; width: min(1100px, 100%, (100svh - 220px) * 16 / 9); }
+.rap-man .g { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; }
+.rap-man svg { width: 72px; height: 72px; color: var(--do); }
+.rap-duoi { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-top: 18px; }
+.rap-ten { font: 400 clamp(30px, 4vw, 48px)/1.08 var(--f-to); text-transform: uppercase; color: var(--chu); }
+.rap-chuyen { display: flex; gap: 8px; flex-shrink: 0; }
+.rap-dong { position: absolute; top: clamp(12px, 2vw, 24px); right: clamp(12px, 2vw, 24px); z-index: 2; }
+.ph2-mep { position: absolute; z-index: 1; left: 0; right: 0; height: 0; background: #000; pointer-events: none; }
+.ph2-mep-tren { top: 0; }
+.ph2-mep-duoi { bottom: 0; }
+.ph2-chu { position: absolute; left: 0; right: 0; top: 44%; translate: 0 -50%; text-align: center; font: 400 clamp(110px, 21vw, 320px)/.85 var(--f-to); text-transform: uppercase; color: transparent; pointer-events: none; white-space: nowrap; z-index: 2; }
+#phim { overflow-x: clip; }
+@media (max-width: 900px) {
+  .ph2-man { aspect-ratio: auto; min-height: 0; border: 0; background: none; overflow: visible; }
+  .ph2-chu { font-size: 24vw; top: 50%; }
+  .ph2-tt { position: static; display: block; padding: 20px var(--le) 0; }
+  .ph2-tt .nut-do { margin-top: 18px; }
+  .ph2-ke { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin-right: calc(-1 * var(--le)); padding-right: var(--le); scrollbar-width: none; }
+  .ph2-ke::-webkit-scrollbar { display: none; }
+  .ph2-ke li { flex: 0 0 62%; scroll-snap-align: start; }
+}
+.cuon { display: inline-block; width: .8em; height: .8em; margin-right: .3em; vertical-align: -.05em; color: var(--do); }
+.cuon svg { width: 100%; height: 100%; display: block; }
+@media (prefers-reduced-motion: no-preference) {
+  .cuon svg { animation: quay 3s linear infinite; }
+}
+@keyframes quay {to { transform: rotate(360deg); }}
+.bao2 { position: fixed; left: 16px; right: 16px; bottom: 24px; z-index: 80; width: max-content; margin: 0 auto; background: var(--chu); color: var(--nen); font-size: 14px; font-weight: 600; padding: 12px 18px; max-width: calc(100% - 32px); border-radius: var(--bo-tron); }
+.ph2-khung { position: absolute; inset: 0; border-radius: var(--bo-l); overflow: hidden; box-shadow: var(--vien-sang), var(--bong-2); isolation: isolate; }
+@media (max-width: 900px) {
+  .ph2-khung { position: relative; aspect-ratio: 16 / 9; background: #09090A; border-top: 1px dashed rgba(var(--chu-rgb), .16); border-bottom: 1px dashed rgba(var(--chu-rgb), .16); overflow: hidden; }
+}
+.rap-man { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; display: grid; place-items: center; color: var(--mo); font-size: 14px; text-align: center; transform-origin: 0 0; border-radius: var(--bo-l); overflow: hidden; box-shadow: var(--vien-sang), var(--bong-2); border: 1px solid rgba(var(--chu-rgb), .1); }
+.the2:hover .the2-bia { transform: translateY(-4px); box-shadow: var(--vien-sang), var(--bong-2); }
+.the2-bia.chu { border: 1px solid var(--vien); display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: 10px 12px; background: linear-gradient(160deg, rgba(var(--do-rgb), .22), rgba(var(--do-rgb), .05)), var(--nen-2); }
+@media (prefers-reduced-motion: reduce) {
+  .the2:hover .the2-bia { transform: none; }
+}
+:is(button, .nut-do, .nut-vien, .nut-vuong, .o-vuong, .hd-nut, .chu-de, .gm2-o, .the2-bia) { transition-property: transform, background-color, border-color, color, box-shadow, opacity; transition-duration: .16s; transition-timing-function: var(--ease-out); }
+.the2:active .the2-bia { transform: scale(.98); }
+.the2-bia { aspect-ratio: 16 / 9; display: grid; place-items: center; color: var(--mo); border-radius: 16px; border: 1px solid rgba(var(--chu-rgb), .1); background: linear-gradient(160deg, rgba(var(--chu-rgb), .06), rgba(var(--chu-rgb), .01)), var(--nen-2); box-shadow: var(--vien-sang), var(--bong-1); overflow: hidden; transition: transform .4s var(--em-apple), box-shadow .4s var(--em-apple), border-color .3s; transition-duration: .2s; }
+@media not ((hover: hover) and (pointer: fine)) {
+  .the2:hover .the2-bia { transform: none; }
+}
+</style>
+<!-- @khung -->
+<section class="ph2" id="phim" aria-labelledby="ph2-h">
+    <div class="ph2-tren"><h2 class="dau-nho" id="ph2-h"><span><span class="mg2 cuon" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="20" cy="20" r="3" fill="currentColor"/><circle cx="20" cy="9" r="4" fill="currentColor"/><circle cx="20" cy="31" r="4" fill="currentColor"/><circle cx="9" cy="20" r="4" fill="currentColor"/><circle cx="31" cy="20" r="4" fill="currentColor"/></svg></span>Phim ngắn<i class="cham">.</i></span></h2><span class="m2" id="ph2-dem"></span></div>
+    <div class="ph2-man" id="ph2-man">
+      <div class="ph2-khung" id="ph2-khung"><button type="button" class="ph2-bia" id="ph2-bia"><span class="g"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="24" cy="24" r="22"/><path d="M20 16l12 8-12 8z" fill="currentColor" stroke="none"/></svg><span>Chỗ đặt phim mới nhất</span></span></button><i class="ph2-mep ph2-mep-tren"></i><i class="ph2-mep ph2-mep-duoi"></i><div class="ph2-chu" data-chu="Phim ngắn" aria-hidden="true"></div></div>
+      <div class="ph2-tt"><div><div class="ph2-ten" id="ph2-ten"></div><div class="m2" id="ph2-meta"></div></div><button type="button" class="nut-do" id="ph2-nut"><svg viewBox="0 0 12 14" aria-hidden="true"><path d="M0 0l12 7-12 7z" fill="currentColor"/></svg>Xem phim</button></div>
+    </div>
+    <div class="ph2-duoi"><div class="ph2-ke-dau"><b>Các phim khác</b><span id="ph2-ke-dem"></span></div><ul class="ph2-ke" id="ph2-ke"></ul></div>
+  </section>
+<!-- @cuoi: đặt sau phần main -->
+<div class="rap" id="rap" hidden data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="rap-ten">
+  <div class="rap-nen" id="rap-nen"></div>
+  <button type="button" class="o-vuong rap-dong" id="rap-dong" aria-label="Đóng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <div class="rap-o"><div class="rap-man" id="rap-man"><div class="g"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="24" cy="24" r="22"/><path d="M20 16l12 8-12 8z" fill="currentColor" stroke="none"/></svg><span>Chỗ phát phim<br>Video YouTube sẽ chạy ở đây</span></div></div>
+    <div class="rap-duoi" id="rap-duoi"><div><h3 class="rap-ten" id="rap-ten"></h3><div class="m2" id="rap-meta"></div></div>
+      <div class="rap-chuyen"><button type="button" class="o-vuong" id="rap-truoc" aria-label="Phim trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="o-vuong" id="rap-sau" aria-label="Phim sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5l7 7-7 7"/></svg></button></div></div></div>
+</div>
+<div class="bao2" id="bao2" hidden role="status"></div>
+<script>
+// Phim ngắn: màn ảnh rộng (phim nổi bật), kệ phim, khung xem phim toàn màn hình (rạp). Danh sách phim nằm ở du-lieu.js (DL.PHIM).
+(() => {
+  const PHIM = DL.PHIM;
+  const T = TK, { $, el, ghi, G, ST } = TK, DONG = TK.CO_DONG;
+  const VONG = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="24" cy="24" r="22"/><path d="M20 16l12 8-12 8z" fill="currentColor" stroke="none"/></svg>';
+  if (!PHIM.length) { $('#phim').hidden = true; return; }
+  const chiLink = (p) => !!p.link, meta = (p) => [p.nam, p.phut, p.vaiTro].filter(Boolean).join(' · ');
+  let henBao; const bao = (chu) => { const b = $('#bao2'); b.textContent = chu; b.hidden = false; clearTimeout(henBao); if (DONG) G.fromTo(b, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'ra' }); henBao = setTimeout(() => { b.hidden = true; }, 2200); };
+  const [noi, ...khac] = PHIM;
+  $('#ph2-dem').textContent = PHIM.length + ' phim'; $('#ph2-ke-dem').textContent = khac.length + ' phim';
+  $('#ph2-ten').textContent = noi.ten; $('#ph2-meta').textContent = meta(noi); $('#ph2-bia').setAttribute('aria-label', 'Xem ' + noi.ten);
+  const khungNoi = $('#ph2-khung');
+  $('#ph2-bia').onclick = () => mo(noi, khungNoi); $('#ph2-nut').onclick = () => mo(noi, khungNoi);
+  khac.forEach((p) => {
+    const li = el('li'), b = el('button', 'the2'); b.type = 'button';
+    const bia = el('div', 'the2-bia' + (chiLink(p) ? ' chu' : ''));
+    if (chiLink(p)) bia.append(el('span', '', 'Chỉ có link'), el('b', '', p.ten)); else bia.innerHTML = VONG;
+    const m = el('div', 'm2'); m.append([p.nam, p.phut].join(' · ') + ' · '); m.append(chiLink(p) ? el('b', '', 'Xem trên ' + p.nguon) : p.vaiTro);
+    b.append(bia, el('div', 'the2-ten', p.ten), m);
+    b.onclick = () => { if (!chiLink(p)) return mo(p, bia); ghi('phim-link', p.ten); if (p.link && p.link !== '#') window.open(p.link, '_blank', 'noopener'); else bao('Phim này mở ở ' + p.nguon + ', trong tab mới'); };
+    li.append(b); $('#ph2-ke').append(li);
+  });
+  // rạp: khung phim phóng ra từ đúng ảnh vừa bấm, đóng thì thu về chỗ cũ
+  const rap = $('#rap'), man = $('#rap-man'), coPhim = PHIM.filter((p) => !chiLink(p));
+  let dang = null, tuBia = null, tuNut = null;
+  const dien = (p) => { $('#rap-ten').textContent = p.ten; $('#rap-meta').textContent = meta(p); };
+  const bayTu = (bia) => { const a = bia.getBoundingClientRect(), b = man.getBoundingClientRect(); return { x: a.left - b.left, y: a.top - b.top, s: a.width / b.width }; };
+  function mo(p, bia) {
+    dang = p; tuBia = bia; tuNut = document.activeElement; dien(p); ghi('mở-phim', p.ten);
+    rap.hidden = false; T.lenis && T.lenis.stop(); document.documentElement.style.overflow = 'hidden';
+    if (DONG) { const t = bayTu(bia); G.fromTo('#rap-nen', { opacity: 0 }, { opacity: 1, duration: 0.35, overwrite: 'auto' }); G.fromTo(man, { x: t.x, y: t.y, scale: t.s, opacity: 1 }, { x: 0, y: 0, scale: 1, duration: 0.65, ease: 'ra', overwrite: 'auto' }); G.fromTo([$('#rap-duoi'), $('#rap-dong')], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, delay: 0.3, ease: 'ra', overwrite: 'auto' }); }
+    setTimeout(() => $('#rap-dong').focus({ preventScroll: true }), 30);
+  }
+  function dong() {
+    if (rap.hidden) return; ghi('đóng-phim');
+    const xong = () => { rap.hidden = true; document.documentElement.style.overflow = ''; T.lenis && T.lenis.start(); tuNut && tuNut.focus({ preventScroll: true }); };
+    if (!DONG) return xong();
+    const r = tuBia.getBoundingClientRect(), thay = r.bottom > 0 && r.top < innerHeight;
+    G.to([$('#rap-duoi'), $('#rap-dong')], { opacity: 0, duration: 0.2, overwrite: 'auto' }); G.to('#rap-nen', { opacity: 0, duration: 0.4, delay: 0.1, overwrite: 'auto' });
+    if (thay) { const t = bayTu(tuBia); G.to(man, { x: t.x, y: t.y, scale: t.s, duration: 0.45, ease: 'ra', overwrite: 'auto' }).then(xong); }
+    else G.to(man, { opacity: 0, duration: 0.3, overwrite: 'auto' }).then(() => { G.set(man, { opacity: 1 }); xong(); });
+  }
+  function chuyen(h) {
+    const i = coPhim.indexOf(dang), p = coPhim[(i + h + coPhim.length) % coPhim.length];
+    tuBia = p === noi ? khungNoi : [...document.querySelectorAll('#ph2-ke .the2')][khac.indexOf(p)].querySelector('.the2-bia'); dang = p; ghi('chuyển-phim', p.ten);
+    if (!DONG) return dien(p);
+    G.to(man, { x: -40 * h, opacity: 0, duration: 0.18, ease: 'ra', overwrite: 'auto' }).then(() => { dien(p); G.fromTo(man, { x: 60 * h, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'ra', overwrite: 'auto' }); });
+  }
+  $('#rap-dong').onclick = dong; $('#rap-nen').onclick = dong; $('#rap-truoc').onclick = () => chuyen(-1); $('#rap-sau').onclick = () => chuyen(1);
+  addEventListener('keydown', (e) => {
+    if (rap.hidden) return;
+    if (e.key === 'Escape') dong(); else if (e.key === 'ArrowRight') chuyen(1); else if (e.key === 'ArrowLeft') chuyen(-1);
+    else if (e.key === 'Tab') { const b = [...rap.querySelectorAll('button')], a = b[0], z = b[b.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } }
+  });
+  let x0 = null; man.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+  man.addEventListener('touchend', (e) => { if (x0 == null) return; const d = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(d) > 50) chuyen(d < 0 ? 1 : -1); });
+  if (DONG) {
+    const chu = $('.ph2-chu'), mt = $('.ph2-mep-tren'), md = $('.ph2-mep-duoi');
+    const phimChay = (p) => { const e = Math.min(1, Math.max(0, p)), k = 1 - Math.pow(1 - e, 3);
+      chu.style.transform = `scale(${(1 + 2.8 * (1 - k)).toFixed(3)})`; chu.style.opacity = String(0.25 + 0.75 * k);
+      const h = ((1 - k) * 50).toFixed(2) + '%'; mt.style.height = h; md.style.height = h;
+    };
+    phimChay(1);
+    if (T.tach) { const { ca } = T.tach($('#ph2-ten')); ca.forEach((c) => { c.style.transform = 'translateY(160%)'; });
+      ST.create({ trigger: '#ph2-ten', start: 'top 85%', once: true, onEnter: () => G.fromTo(ca, { y: 0, yPercent: 160 }, { yPercent: 0, duration: 0.8, stagger: 0.03, ease: 'nay' }) }); }
+  }
+})();
+</script>

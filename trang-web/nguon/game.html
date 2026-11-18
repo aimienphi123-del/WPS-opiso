@@ -1,0 +1,306 @@
+<!-- ===== PHẦN: Game mỗi ngày: tải từ cầu nối Google, khung máy, kệ, chơi toàn màn hình ===== -->
+<style>
+.game { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: end; }
+@media (max-width: 860px) {
+  .game { grid-template-columns: 1fr; }
+}
+.game-to { font: 400 clamp(76px, 15vw, 230px)/1.12 var(--f-to); color: var(--do); text-transform: uppercase; }
+.bo { display: flex; gap: 10px; flex-wrap: wrap; }
+.bo span { padding: 8px 14px; border: 1px solid var(--vien); color: var(--chu); }
+.gm2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: clamp(28px, 5vw, 72px); align-items: start; }
+#game .game-to { font-size: clamp(64px, 8vw, 128px); line-height: 1.05; }
+@media (min-width: 861px) {
+  .gm2-chu { padding-top: 8px; }
+}
+@media (max-width: 860px) {
+  .gm2 { grid-template-columns: 1fr; gap: 28px; }
+}
+.gm2-chu { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.gm2-nay { display: flex; flex-direction: column; gap: 6px; padding-top: 22px; border-top: 1px solid var(--vien); }
+.gm2-ngay { color: var(--do); font-weight: 600; }
+.gm2-ten { font: 400 clamp(34px, 4.4vw, 56px)/1.08 var(--f-to); color: var(--chu); text-transform: uppercase; text-wrap: balance; }
+.gm2-nut { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.gm2-nut .nut-do { margin-top: 0; }
+.gm2-nut svg { width: 16px; height: 16px; }
+@media (max-width: 860px) {
+  .gm2-to-man { display: none; }
+}
+.gm2-man { position: absolute; inset: 0; }
+.gm2-if { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: transparent; }
+.gm2-may:not(.dang-choi) .gm2-if { pointer-events: none; }
+.gm2-cham { position: absolute; inset: 0; z-index: 2; display: flex; align-items: flex-end; justify-content: center; padding: 0 0 16px; background: linear-gradient(transparent 78%, rgba(var(--nen-rgb), .5)); border: 0; }
+.gm2-cham span svg { width: 12px; height: 12px; }
+.gm2-cham:hover span { transform: scale(1.08); }
+.gm2-cham:active span { transform: scale(.94); }
+.gm2-may.dang-choi .gm2-cham { display: none; }
+.gm2-trang { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; text-align: center; background: var(--nen-2); color: var(--chu-2); }
+.gm2-trang i { width: 10px; height: 10px; border-radius: 50%; background: var(--do); animation: gm2-tho 1.2s ease-in-out infinite; }
+@keyframes gm2-tho {50% { opacity: .25; transform: scale(.7); }}
+.gm2-ghi { font-size: 13px; color: var(--mo); max-width: 24em; }
+.gm2-trang button { height: 46px; padding: 0 18px; border: 1px solid var(--chu); background: transparent; color: var(--chu); font-weight: 600; }
+.gm2-the { display: flex; gap: 8px; flex-wrap: wrap; }
+.gm2-the button { height: 40px; padding: 0 14px; border: 1px solid var(--vien); background: transparent; color: var(--chu-2); }
+.gm2-the button span { color: var(--mo); margin-left: 6px; font-size: 12px; }
+.gm2-the button[aria-pressed="true"] { background: var(--do); border-color: var(--do); color: var(--nen); }
+.gm2-the button[aria-pressed="true"] span { color: var(--nen); }
+.gm2-ke { margin-top: clamp(40px, 6vw, 72px); }
+.gm2-ke-dau { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+.gm2-ke-dau h3 { font: 400 clamp(26px, 3vw, 36px)/1 var(--f-to); color: var(--chu); text-transform: uppercase; }
+.gm2-ke-dau span { color: var(--mo); }
+.gm2-luoi { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
+@media (max-width: 480px) {
+  .gm2-luoi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}
+.gm2-o[aria-current="true"] { border-color: var(--do); }
+.gm2-dai { display: flex; height: 54px; position: relative; }
+.gm2-dai i { flex: 1; }
+.gm2-dai b { position: absolute; left: 10px; top: 10px; padding: 2px 8px; background: var(--nen); color: var(--chu); font: 600 12px var(--f-chu); }
+.gm2-o-ten { padding: 12px 12px 14px; font: 400 19px/1.15 var(--f-to); color: var(--chu); text-transform: uppercase; }
+.gm2-o[aria-current="true"] .gm2-o-ten::before { content: "Đang chọn"; display: block; margin-bottom: 4px; font: 600 12px var(--f-chu); color: var(--do); text-transform: none; }
+.gm2-xem { margin: 20px auto 0; display: flex; }
+.lop-choi { position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column; background: var(--nen); clip-path: var(--tu, inset(40% round 4px)); transition: clip-path .32s cubic-bezier(.5, 0, .75, 0); }
+.lop-choi.mo { clip-path: inset(0 round 0); transition: clip-path .5s cubic-bezier(.6, -.12, .3, 1.12); }
+.lc-thanh { display: flex; align-items: center; gap: 8px; padding: calc(env(safe-area-inset-top, 0px) + 8px) max(12px, env(safe-area-inset-right, 0px)) 8px max(12px, env(safe-area-inset-left, 0px)); border-bottom: 1px solid var(--vien); background: var(--nen); }
+.lc-thanh .nut-vuong { width: 46px; height: 46px; }
+.lc-thanh .nut-vuong:disabled { opacity: .3; }
+.lc-tt { flex: 1; min-width: 0; text-align: center; }
+.lc-tt p { color: var(--do); font-weight: 600; font-size: 12px; }
+.lc-tt h3 { font: 400 20px/1.1 var(--f-to); color: var(--chu); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lc-vung { flex: 1; position: relative; overflow: hidden; container-type: size; }
+.lc-man { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: 0 auto; width: min(100cqw, 64.3cqh); box-shadow: 0 0 0 1px var(--vien); }
+@media (max-aspect-ratio: 3/4) {
+  .lc-man { width: 100%; box-shadow: none; }
+}
+.tren-game .tro, .tren-game .tro-cham { opacity: 0 !important; }
+@media (prefers-reduced-motion: reduce) {
+  .lop-choi, .lop-choi.mo { transition: none; clip-path: none; }
+  .gm2-trang i { animation: none; }
+}
+.duong-game svg { width: 100%; max-width: 460px; height: auto; display: block; }
+.duong-game text { font: 600 13px var(--f-chu); fill: var(--chu-2); text-anchor: middle; }
+@media (max-width: 700px) {
+  .duong-game text { font-size: 15px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dg-cham { animation: dg-chay 5s cubic-bezier(.6, 0, .4, 1) infinite; }
+  .dg-n { transform-origin: center; animation: dg-sang 5s infinite; }
+  .dg-n2 { animation-delay: 1.25s; }
+  .dg-n3 { animation-delay: 2.5s; }
+  .dg-n4 { animation-delay: 3.75s; }
+}
+@keyframes dg-chay {0% { transform: translateX(0); } 90%, 100% { transform: translateX(320px); }}
+@keyframes dg-sang {0%, 4% { transform: scale(1); } 10% { transform: scale(1.18); } 22%, 100% { transform: scale(1); }}
+.gm2-cham span { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; background: var(--do); color: var(--nen); font-weight: 700; font-size: 14px; transition: transform .35s var(--nay); border-radius: var(--bo-tron); }
+.gm2-may { position: relative; aspect-ratio: 9 / 14; width: 100%; max-height: 74vh; justify-self: end; background: var(--nen-2); border: 1px solid var(--vien); border-radius: var(--bo-l); overflow: hidden; box-shadow: var(--vien-sang), var(--bong-2); }
+@media (max-width: 860px) {
+  .gm2-may { justify-self: stretch; max-height: 64vh; aspect-ratio: auto; height: min(64vh, 150vw); }
+}
+.gm2-o:hover { border-color: var(--chu-2); transform: translateY(-4px); box-shadow: var(--vien-sang), var(--bong-2); }
+@media (prefers-reduced-motion: reduce) {
+  .gm2-o:hover { transform: none; }
+}
+.gm2-o:active { transform: scale(.98); }
+.gm2-o { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 0; text-align: left; background: var(--nen-2); border: 1px solid var(--vien); color: inherit; overflow: hidden; border-radius: var(--bo-m); box-shadow: var(--vien-sang), var(--bong-1); transition: transform .4s var(--em-apple), box-shadow .4s var(--em-apple), border-color .3s; transition-duration: .2s; }
+@media not ((hover: hover) and (pointer: fine)) {
+  .gm2-o:hover { transform: none; }
+}
+</style>
+<!-- @khung -->
+<section class="phan khung" id="game" aria-labelledby="h-game">
+  <div class="gm2">
+    <div class="gm2-chu">
+      <h2 class="game-to" id="h-game" data-tach="chu" data-vao>Game mỗi ngày</h2>
+      <div class="mg2 duong-game" role="img" aria-label="AI làm game, lưu lên Google Drive, tự lên trang, bấm là chơi"><svg viewBox="0 0 400 86"><path d="M40 30 H360" stroke="rgba(var(--chu-rgb),.18)" stroke-width="2" stroke-dasharray="4 6"/><circle class="dg-cham" cx="40" cy="30" r="6" style="fill:var(--do)"/><g class="dg-n dg-n1"><circle cx="40" cy="30" r="18" stroke-width="2" style="fill:var(--nen-3);stroke:var(--chu)"/><path d="M40 20l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" style="fill:var(--chu)"/></g><g class="dg-n dg-n2"><circle cx="146" cy="30" r="18" stroke-width="2" style="fill:var(--nen-3);stroke:var(--chu)"/><path d="M136 25h7l3 3h10v11h-20z" fill="none" stroke-width="2" style="stroke:var(--chu)"/></g><g class="dg-n dg-n3"><circle cx="253" cy="30" r="18" stroke-width="2" style="fill:var(--nen-3);stroke:var(--chu)"/><rect x="243" y="22" width="20" height="16" rx="2" fill="none" stroke-width="2" style="stroke:var(--chu)"/><path d="M243 27h20" stroke-width="2" style="stroke:var(--chu)"/></g><g class="dg-n dg-n4"><circle cx="360" cy="30" r="18" stroke-width="2" style="fill:var(--nen-3);stroke:var(--chu)"/><path d="M355 22l12 8-12 8z" style="fill:var(--chu)"/></g><g class="dg-chu"><text x="40" y="74">AI làm</text><text x="146" y="74">Google Drive</text><text x="253" y="74">Lên trang</text><text x="360" y="74">Chơi</text></g></svg></div>
+      <div class="gm2-the" id="gm2-the" role="toolbar" aria-label="Bộ game" hidden></div>
+      <div class="gm2-nay" id="gm2-nay" hidden>
+        <p class="gm2-ngay" id="gm2-ngay"></p>
+        <h3 class="gm2-ten" id="gm2-ten"></h3>
+        <div class="gm2-nut">
+          <button type="button" class="nut-do" id="gm2-choi"><span>Chơi</span></button>
+          <button type="button" class="nut-vuong gm2-to-man" id="gm2-to" aria-label="Chơi toàn màn hình"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="gm2-may" id="gm2-may">
+      <div class="gm2-man" id="gm2-man"></div>
+      <button type="button" class="gm2-cham" id="gm2-cham" aria-label="Chơi game này" hidden><span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>Bấm để chơi</span></button>
+      <div class="gm2-trang" id="gm2-trang"><i></i><p>Đang tải game…</p></div>
+    </div>
+  </div>
+  <div class="gm2-ke" id="gm2-ke" hidden>
+    <div class="gm2-ke-dau"><h3>Các ngày trước</h3><span id="gm2-so"></span></div>
+    <ul class="gm2-luoi" id="gm2-luoi"></ul>
+    <button type="button" class="nut-vien gm2-xem" id="gm2-xem" hidden></button>
+  </div>
+</section>
+<script>
+// Game mỗi ngày: tải danh sách game từ cầu nối Google (Apps Script), khung máy, kệ game, chơi toàn màn hình.
+(() => {
+  const CAU_NOI = 'https://script.google.com/macros/s/AKfycbw_OMSxIGSlk1V6Q0AF2_p1es_FxdY4iBMy--fdwjlTW_9uCFZODYjf-Qf85Yz4rdMuMA/exec';
+  const CHO_TAI = 25;            // giây chờ cầu nối trả lời (lần đầu trong ngày Google có thể chậm)
+  const HIEN_TRUOC = { dt: 6, mt: 10 }; // số ô ở kệ trước khi bấm "Xem cả"
+  const T = TK, { $, el, ghi, G, CO_DONG } = TK;
+  const may = () => matchMedia('(min-width: 861px)').matches;
+
+  // --- làm sạch dữ liệu cầu nối (giống trang cũ, có bài kiểm tra ở trang cũ) ---
+  const MAU = /^#[0-9a-f]{6}$/, NGAY = /^\d{4}-\d{2}-\d{2}$/, MA = /^[\w-]{10,100}$/;
+  function lamSach(raw) {
+    if (!raw || raw.ok !== true || !Array.isArray(raw.games)) return { ok: false, loi: String((raw && raw.loi) || 'cầu nối trả về dữ liệu lạ'), games: [] };
+    const da = new Set();
+    const games = raw.games.filter((g) => g && typeof g === 'object').map((g) => ({ id: String(g.id || ''), ten: String(g.ten || '').trim().slice(0, 80), ngay: String(g.ngay || ''),
+      nen: MAU.test(String(g.nen || '').toLowerCase()) ? String(g.nen).toLowerCase() : '', mau: (Array.isArray(g.mau) ? g.mau : []).map((c) => String(c).toLowerCase()).filter((c) => MAU.test(c)).slice(0, 6),
+      bo: MA.test(String(g.bo || '')) ? String(g.bo) : '' })).filter((g) => MA.test(g.id) && g.ten && NGAY.test(g.ngay) && !da.has(g.id) && da.add(g.id));
+    games.sort((a, b) => (a.ngay < b.ngay ? 1 : a.ngay > b.ngay ? -1 : 0));
+    const bo = (Array.isArray(raw.bo) ? raw.bo : []).filter((b) => b && MA.test(String(b.ma || '')) && String(b.ten || '').trim()).map((b) => ({ ma: String(b.ma), ten: String(b.ten).trim().slice(0, 40) }));
+    const kq = { ok: true, games, bo, phienBan: String(raw.phienBan || '') };
+    if (typeof raw.htmlMoiNhat === 'string' && raw.htmlMoiNhat.length > 20 && games.length && games[0].id === String(raw.games[0] && raw.games[0].id)) kq.htmlMoiNhat = raw.htmlMoiNhat;
+    return kq;
+  }
+  const ngayNgan = (d) => d.slice(8, 10) + '.' + d.slice(5, 7);
+  function nhanNgay(ngay) { const vn = (t) => new Date(t + 7 * 3600e3).toISOString().slice(0, 10); const now = Date.now();
+    if (ngay === vn(now)) return 'Hôm nay · ' + ngayNgan(ngay); if (ngay === vn(now - 864e5)) return 'Hôm qua · ' + ngayNgan(ngay); return ngayNgan(ngay) + '.' + ngay.slice(0, 4); }
+  // thẻ bộ game: gộp bộ trùng tên, bỏ bộ chưa có game, dưới 2 bộ thì không hiện
+  function cacThe(bo, games) { const nhom = []; bo.forEach((b) => { const k = b.ten.toLowerCase(); let n = nhom.find((x) => x.k === k); if (!n) nhom.push((n = { k, ten: b.ten, ma: [] })); n.ma.push(b.ma); });
+    nhom.forEach((n) => { n.so = games.filter((g) => n.ma.includes(g.bo)).length; }); const co = nhom.filter((n) => n.so > 0);
+    return co.length < 2 ? [] : [{ k: '*', ten: 'Tất cả', ma: [], so: games.length }, ...co]; }
+  // chèn vào game: bộ nhớ tạm (game chạy tách riêng không có bộ nhớ trình duyệt) + báo phím Esc ra ngoài
+  const BO_NHO = '<script>(function(){try{window.localStorage.getItem("_")}catch(e){var m={},s={getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(s,"length",{get:function(){return Object.keys(m).length}});try{Object.defineProperty(window,"localStorage",{value:s,configurable:true});Object.defineProperty(window,"sessionStorage",{value:s,configurable:true})}catch(_){}}})();<\/script>';
+  const BAO_ESC = '<script>addEventListener("keydown",function(e){if(e.key==="Escape"){try{parent.postMessage({gm:"thoat"},"*")}catch(_){}}});<\/script>';
+  const chen = (html) => { const s = String(html || ''), m = s.match(/<head[^>]*>/i); return m ? s.slice(0, m.index + m[0].length) + BO_NHO + BAO_ESC + s.slice(m.index + m[0].length) : BO_NHO + BAO_ESC + s; };
+
+  // --- gọi cầu nối ---
+  async function hoi(q) {
+    const ctl = new AbortController(); const hen = setTimeout(() => ctl.abort(), CHO_TAI * 1000);
+    try { const r = await fetch(CAU_NOI + q, { signal: ctl.signal, redirect: 'follow' }); if (!r.ok) throw new Error('mã ' + r.status); return await r.json(); }
+    catch (e) { throw new Error(e.name === 'AbortError' ? 'quá ' + CHO_TAI + ' giây không trả lời' : e.message); }
+    finally { clearTimeout(hen); }
+  }
+  const S = { tatCa: [], games: [], the: [], k: '*', chon: 0, html: new Map(), moHet: false };
+  function layHtml(g) {
+    if (S.html.has(g.id)) return Promise.resolve(S.html.get(g.id));
+    return hoi('?id=' + encodeURIComponent(g.id)).then((d) => { if (!d || d.ok !== true || typeof d.html !== 'string') throw new Error((d && d.loi) || 'không có nội dung'); S.html.set(g.id, d.html); return d.html; });
+  }
+  function khungGame(g, choiDuoc) {
+    const f = el('iframe', 'gm2-if'); f.title = g.ten;
+    f.setAttribute('sandbox', 'allow-scripts allow-pointer-lock allow-modals allow-forms'); // không allow-same-origin: game không đọc được trang
+    f.setAttribute('allow', 'autoplay; accelerometer; gyroscope');
+    if (!choiDuoc) { f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); }
+    layHtml(g).then((h) => { f.srcdoc = chen(h); }).catch((e) => ghi('LỖI', `game: không tải được "${g.ten}": ${e.message}`));
+    return f;
+  }
+
+  // --- trạng thái khung: đang tải / lỗi ---
+  const trang = $('#gm2-trang'), mayEl = $('#gm2-may'), man = $('#gm2-man'), cham = $('#gm2-cham');
+  function baoTrang(loai, chu) {
+    trang.hidden = !loai; if (!loai) return;
+    trang.textContent = '';
+    if (loai === 'dang') trang.append(el('i'), el('p', '', 'Đang tải game…'));
+    else { trang.append(el('p', '', chu));
+      // bản xem thử trong Claude chặn gọi ra ngoài: nói rõ để khỏi tưởng trang hỏng (trang thật trên GitHub hoặc mở file trên máy thì gọi được)
+      if (!/github\.io$/.test(location.hostname) && location.protocol !== 'file:') trang.append(el('p', 'gm2-ghi', 'Bản xem thử trong Claude bị chặn gọi ra ngoài nên không tải được game. Trang thật trên GitHub sẽ chơi được.'));
+      const b = el('button', '', 'Thử lại'); b.type = 'button'; b.onclick = () => { ghi('game', 'thử lại'); tai(); }; trang.append(b); }
+  }
+
+  // --- khung máy: game đang chọn chạy màn mở đầu ---
+  function veMay(choiLuon) {
+    const g = S.games[S.chon]; if (!g) return;
+    $('#gm2-nay').hidden = false;
+    $('#gm2-ngay').textContent = nhanNgay(g.ngay) + (S.chon === 0 && S.k === '*' ? ' · Game mới nhất' : '');
+    $('#gm2-ten').textContent = g.ten;
+    mayEl.style.background = g.nen || '';
+    mayEl.classList.toggle('dang-choi', !!choiLuon);
+    const cu = man.firstChild, f = khungGame(g, !!choiLuon);
+    man.append(f); cham.hidden = false;
+    if (cu) { if (CO_DONG) G.to(cu, { opacity: 0, duration: 0.25 }).then(() => cu.remove()); else cu.remove(); }
+    if (CO_DONG) G.fromTo(f, { opacity: 0 }, { opacity: 1, duration: 0.35 });
+    if (choiLuon) setTimeout(() => f.focus(), 300);
+    [...$('#gm2-luoi').children].forEach((li, i) => li.firstChild.setAttribute('aria-current', String(i === S.chon)));
+  }
+  function choi() {
+    const g = S.games[S.chon]; if (!g) return;
+    if (may()) { ghi('game', 'chơi trong khung: ' + g.ten); mayEl.classList.add('dang-choi'); const f = man.lastChild; if (f) { f.removeAttribute('aria-hidden'); f.tabIndex = 0; f.focus(); } }
+    else moToanMan(mayEl);
+  }
+
+  // --- kệ các ngày trước ---
+  function veKe() {
+    const ul = $('#gm2-luoi'); ul.textContent = '';
+    const toi = may() ? HIEN_TRUOC.mt : HIEN_TRUOC.dt, ds = S.moHet ? S.games : S.games.slice(0, toi);
+    ds.forEach((g, i) => {
+      const li = el('li'); const b = el('button', 'gm2-o'); b.type = 'button'; b.setAttribute('aria-label', 'Chơi ' + g.ten); b.setAttribute('aria-current', String(i === S.chon));
+      const dai = el('span', 'gm2-dai'); (g.mau.length ? g.mau : [g.nen || '#1c1c1f']).slice(0, 4).forEach((c) => { const x = el('i'); x.style.background = c; dai.append(x); });
+      dai.append(el('b', '', ngayNgan(g.ngay))); b.append(dai, el('span', 'gm2-o-ten', g.ten));
+      b.onclick = () => { ghi('game', 'chọn: ' + g.ten); S.chon = i; if (may()) { veMay(true); G && T.cuonToi && T.cuonToi('#game'); } else { veMay(false); moToanMan(b); } };
+      li.append(b); ul.append(li);
+    });
+    $('#gm2-ke').hidden = S.games.length < 2;
+    $('#gm2-so').textContent = S.games.length + ' game';
+    const xem = $('#gm2-xem'); xem.hidden = S.moHet || S.games.length <= toi; xem.textContent = 'Xem cả ' + S.games.length + ' game';
+    xem.onclick = () => { S.moHet = true; ghi('game', 'xem cả'); veKe(); };
+    if (CO_DONG) G.fromTo([...ul.children], { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, stagger: 0.03, ease: 'ra' });
+  }
+  function veThe() {
+    const w = $('#gm2-the'); w.textContent = ''; w.hidden = !S.the.length;
+    S.the.forEach((t) => { const b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', String(t.k === S.k)); b.append(t.ten, el('span', '', String(t.so)));
+      b.onclick = () => { if (t.k === S.k) return; S.k = t.k; S.games = t.k === '*' ? S.tatCa : S.tatCa.filter((g) => t.ma.includes(g.bo)); S.chon = 0; S.moHet = false; ghi('game', 'bộ: ' + t.ten); veThe(); veMay(false); veKe(); };
+      w.append(b); });
+  }
+
+  // --- màn chơi toàn màn hình ---
+  const khung = (r) => `inset(${Math.max(0, r.top)}px ${Math.max(0, innerWidth - r.right)}px ${Math.max(0, innerHeight - r.bottom)}px ${Math.max(0, r.left)}px round 4px)`;
+  let lop = null;
+  function moToanMan(tu) {
+    if (lop) return; let dang = S.chon; const g0 = S.games[dang]; ghi('game', 'mở toàn màn hình: ' + g0.ten);
+    lop = el('div', 'lop-choi'); lop.setAttribute('role', 'dialog'); lop.setAttribute('aria-modal', 'true'); lop.setAttribute('aria-labelledby', 'lc-ten'); lop.setAttribute('data-lenis-prevent', '');
+    lop.style.setProperty('--tu', khung(tu.getBoundingClientRect()));
+    const nut = (cls, nhan, svg) => { const b = el('button', 'nut-vuong ' + cls); b.type = 'button'; b.setAttribute('aria-label', nhan); b.innerHTML = svg; return b; };
+    const dong = nut('', 'Đóng', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>');
+    const truoc = nut('', 'Game mới hơn', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>');
+    const sau = nut('', 'Game cũ hơn', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>');
+    const tt = el('div', 'lc-tt'), ngay = el('p'), ten = el('h3'); ten.id = 'lc-ten'; tt.append(ngay, ten);
+    const thanh = el('div', 'lc-thanh'); thanh.append(dong, truoc, tt, sau);
+    const vung = el('div', 'lc-vung');
+    const manMoi = (g) => { const m = el('div', 'lc-man'); m.style.background = g.nen || ''; m.append(khungGame(g, true)); return m; };
+    const nenVung = (g) => { vung.style.background = g.nen ? `linear-gradient(rgba(var(--nen-rgb),.78), rgba(var(--nen-rgb),.78)), ${g.nen}` : ''; }; // hai bên: nền tối pha màu game
+    vung.append(manMoi(g0)); nenVung(g0);
+    const tieuDe = () => { const g = S.games[dang]; ngay.textContent = nhanNgay(g.ngay); ten.textContent = g.ten; truoc.disabled = dang === 0; sau.disabled = dang === S.games.length - 1; };
+    tieuDe();
+    const di = (d) => { const k = dang + d; if (k < 0 || k >= S.games.length) return; dang = k; ghi('game', 'chuyển: ' + S.games[k].ten);
+      const cu = vung.lastElementChild, moi = manMoi(S.games[k]); vung.append(moi); nenVung(S.games[k]); tieuDe();
+      if (!CO_DONG) { cu.remove(); return; }
+      G.fromTo(cu, { xPercent: 0 }, { xPercent: -d * 100, duration: 0.36, ease: 'truot' }).then(() => cu.remove());
+      G.set(moi, { xPercent: d * 100 }); G.to(moi, { keyframes: { xPercent: [-d * 2, 0] }, duration: 0.44, ease: 'truot' }); };
+    truoc.onclick = () => di(-1); sau.onclick = () => di(1);
+    const dongLop = () => { if (!lop) return; ghi('game', 'đóng toàn màn hình'); const l = lop; lop = null;
+      const o = may() ? mayEl : document.querySelector(`#gm2-luoi li:nth-child(${dang + 1}) .gm2-o`) || mayEl; const r = o.getBoundingClientRect();
+      l.style.setProperty('--tu', r.bottom > 0 && r.top < innerHeight ? khung(r) : 'inset(42% round 4px)'); l.classList.remove('mo');
+      removeEventListener('message', ngheEsc); removeEventListener('keydown', phim);
+      setTimeout(() => { l.remove(); document.documentElement.classList.remove('khoa-cuon', 'tren-game'); T.lenis && T.lenis.start(); }, 330); };
+    dong.onclick = dongLop;
+    const ngheEsc = (e) => { if (e.data && e.data.gm === 'thoat' && [...vung.querySelectorAll('iframe')].some((f) => f.contentWindow === e.source)) dongLop(); };
+    const phim = (e) => { if (e.key === 'Escape') dongLop(); };
+    addEventListener('message', ngheEsc); addEventListener('keydown', phim);
+    lop.append(thanh, vung); document.body.append(lop); void lop.offsetWidth;
+    document.documentElement.classList.add('khoa-cuon', 'tren-game'); T.lenis && T.lenis.stop();
+    requestAnimationFrame(() => lop.classList.add('mo'));
+    setTimeout(() => { const f = vung.querySelector('iframe'); if (f) f.focus(); }, 520);
+  }
+
+  // --- tải danh sách ---
+  async function tai() {
+    baoTrang('dang'); const t0 = performance.now();
+    try {
+      const d = lamSach(await hoi('?v=2')); if (!d.ok) throw new Error(d.loi);
+      if (!d.games.length) { $('#game').hidden = true; ghi('game', 'chưa có game nào: ẩn mục'); return; }
+      S.tatCa = d.games; S.games = d.games; if (d.htmlMoiNhat) S.html.set(d.games[0].id, d.htmlMoiNhat);
+      S.the = cacThe(d.bo, d.games);
+      ghi('game', `${d.games.length} game, cầu nối ${d.phienBan || '?'} (${((performance.now() - t0) / 1000).toFixed(1)}s)`);
+      baoTrang(null); veThe(); veMay(false); veKe();
+    } catch (e) { ghi('LỖI', 'game: ' + e.message); baoTrang('loi', 'Chưa tải được game. Kiểm tra mạng rồi bấm Thử lại.'); }
+  }
+  const goc = document.documentElement;
+  mayEl.addEventListener('pointerenter', () => goc.classList.add('tren-game')); mayEl.addEventListener('pointerleave', () => { if (!lop) goc.classList.remove('tren-game'); });
+  $('#gm2-choi').onclick = choi; cham.onclick = choi; $('#gm2-to').onclick = () => moToanMan(mayEl);
+  tai();
+})();
+</script>

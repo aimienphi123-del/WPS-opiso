@@ -1,10 +1,7 @@
-# tệp sinh ra khi dựng (chạy dung/chay.py), không cần lưu
-dung/trang-*.html
-!dung/trang-as.html
-dung/xem-*.html
+# tệp sinh ra khi ghép (python3 dung.py) và khi thử; không cần lưu
 ban-moi-nhat/xem.html
 thu/anh/
+*.png
 graphify-out/cache/
 node_modules/
 __pycache__/
-*.png

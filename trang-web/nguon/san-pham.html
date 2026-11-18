@@ -1,0 +1,206 @@
+<!-- ===== PHẦN: Sản phẩm: danh sách app, màn điện thoại, motion graphic từng app ===== -->
+<style>
+.sp2 .nut-do { margin-top: 0; }
+.sp2 { display: grid; grid-template-columns: auto minmax(0, 1fr) 360px; gap: clamp(24px, 4vw, 64px); align-items: start; }
+.sp2-doc { writing-mode: vertical-rl; transform: rotate(180deg); font: 400 clamp(96px, 10vw, 150px)/.88 var(--f-to); text-transform: uppercase; white-space: nowrap; color: var(--chu); position: sticky; top: 80px; }
+.sp2-ds { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--vien); }
+.sp2-dong { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; width: 100%; padding: 18px 0; border: 0; border-bottom: 1px solid var(--vien); background: none; color: var(--mo); text-align: left; cursor: pointer; transition: color .25s; }
+.sp2-so { font: 400 18px var(--f-to); color: var(--do); }
+.sp2-dong b { font: 400 clamp(34px, 3.6vw, 56px)/1.05 var(--f-to); text-transform: uppercase; }
+.sp2-dong small { font-size: 13px; }
+.sp2-dong[aria-pressed="true"], .sp2-dong:hover { color: var(--chu); }
+.sp2-dong[aria-pressed="true"] b::after { content: ""; display: inline-block; width: .16em; height: .16em; background: var(--do); margin-left: .12em; }
+.sp2-mo { display: none; overflow: hidden; }
+.dt2::before { content: ""; position: absolute; z-index: 2; top: 14px; left: 50%; width: 84px; height: 22px; margin-left: -42px; background: #000; border-radius: 12px; }
+.man-app { position: absolute; inset: 0; padding: 64px 24px 24px; display: flex; flex-direction: column; }
+.app-icon img { width: 100%; height: 100%; display: block; }
+.app-ten { font: 400 34px/1.05 var(--f-to); text-transform: uppercase; color: var(--chu); margin-top: 18px; }
+.man-app .m2 { font-size: 12px; }
+.app-mo { color: var(--chu-2); font-size: 14px; margin-top: 10px; }
+.app-y { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+.app-y li { position: relative; padding-left: 16px; font-size: 12.5px; line-height: 1.5; color: var(--chu-2); }
+.app-y li::before { content: ""; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; background: var(--do); }
+.app-tai { margin-top: auto; padding-top: 16px; }
+.app-tai .nut-do { width: 100%; justify-content: center; height: 52px; }
+.app-tai .m2 { font-size: 12px; text-align: center; margin-top: 8px; }
+@media (max-width: 900px) {
+  .sp2 { grid-template-columns: auto minmax(0, 1fr); gap: 16px; }
+  .sp2-doc { font-size: 72px; top: 20px; }
+  .sp2-dong { grid-template-columns: 34px minmax(0, 1fr); padding: 14px 0; }
+  .sp2-dong small { display: none; }
+  .sp2-dong b { font-size: 30px; }
+  .sp2-mo { display: block; }
+  .sp2-mo .man-app { position: static; padding: 4px 0 22px; }
+  .sp2-mo .app-icon { width: 64px; height: 64px; border-radius: 16px; font-size: 24px; }
+}
+.mg svg { position: absolute; inset: 0 52px 0 0; width: calc(100% - 52px); height: 100%; }
+.mg text.bc-mat1 { fill: var(--nen); }
+.mg text.bc-mat2 { fill: var(--do); }
+.mg .tb-giu text.t-nho { fill: var(--nen); }
+.mg .app-icon { position: absolute; z-index: 1; right: 8px; top: 8px; width: 40px; height: 40px; border-radius: 11px; font-size: 15px; }
+.mg + .app-ten { margin-top: 16px; }
+.mg .t-nho { font: 600 14px/1 var(--f-chu); fill: var(--chu); letter-spacing: .04em; }
+.mg .t-to { font: 400 24px/1 var(--f-to); fill: var(--chu); }
+.mg svg * { transform-box: fill-box; }
+@media (prefers-reduced-motion: no-preference) {
+  .kd-quet { animation: kd-quet var(--t) cubic-bezier(.6, 0, .4, 1) infinite; }
+  .kd-dau { transform-origin: center; animation: kd-dau var(--t) cubic-bezier(.2, 1.5, .4, 1) infinite; }
+  .tb-1 { animation: tb-vao var(--t) cubic-bezier(.7, 0, .3, 1) infinite; }
+  .tb-2 { animation: tb-vao var(--t) .25s cubic-bezier(.7, 0, .3, 1) infinite; }
+  .tb-so { transform-origin: center; animation: tb-so var(--t) infinite; }
+  .tb-giu { animation: tb-giu var(--t) infinite; }
+  .bc-the { transform-origin: center; animation: bc-lat var(--t) cubic-bezier(.6, 0, .3, 1) infinite; }
+  .bc-mat1 { animation: bc-m1 var(--t) steps(1) infinite; }
+  .bc-mat2 { animation: bc-m2 var(--t) steps(1) infinite; }
+  .bc-qr { animation: bc-qr 1.2s ease-in-out infinite; }
+  .bk-chuong { transform-origin: 50% 0; animation: bk-rung var(--t) infinite; }
+  .bk-v1 { stroke-dasharray: 20; animation: bk-tich var(--t) infinite; }
+  .bk-v2 { stroke-dasharray: 20; animation: bk-tich var(--t) infinite; animation-delay: .4s; }
+  .bk-lac { transform-origin: left; animation: bk-lac var(--t) cubic-bezier(.5, 0, .5, 1) infinite; }
+  .tm-pin { transform-origin: left; animation: tm-pin var(--t) cubic-bezier(.6, 0, .4, 1) infinite; }
+  .tm-a { transform-origin: left; animation: tm-cot var(--t) cubic-bezier(.2, .9, .3, 1) infinite; }
+  .tm-b { transform-origin: left; animation: tm-cot var(--t) cubic-bezier(.2, .9, .3, 1) infinite; animation-delay: .15s; }
+  .tm-c { transform-origin: left; animation: tm-cot var(--t) cubic-bezier(.2, .9, .3, 1) infinite; animation-delay: .3s; }
+  .tt-tin { animation: tt-ban var(--t) cubic-bezier(.2, .8, .3, 1) infinite; animation-delay: var(--d); opacity: 0; }
+}
+@keyframes kd-quet {0% { transform: translateX(0); opacity: 1; } 35% { transform: translateX(100px); opacity: 1; } 40%, 100% { transform: translateX(100px); opacity: 0; }}
+@keyframes kd-dau {0%, 38% { transform: scale(1.8); opacity: 0; } 46% { transform: scale(1); opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; }}
+@keyframes tb-so {0%, 44% { opacity: 0; transform: scale(.5); } 52% { opacity: 1; transform: scale(1.3); } 60%, 90% { opacity: 1; transform: scale(1); } 100% { opacity: 0; }}
+@keyframes tb-giu {0%, 100% { opacity: 1; }}
+@keyframes bc-lat {0%, 30% { transform: rotateY(0); } 45% { transform: rotateY(90deg); } 60%, 85% { transform: rotateY(0); } 100% { transform: rotateY(0); }}
+@keyframes bc-m1 {0% { opacity: 1; } 45% { opacity: 0; } 100% { opacity: 1; }}
+@keyframes bc-m2 {0% { opacity: 0; } 45% { opacity: 1; } 100% { opacity: 0; }}
+@keyframes bc-qr {50% { opacity: .35; }}
+@keyframes bk-rung {0%, 40%, 100% { transform: rotate(0); } 5%, 15%, 25%, 35% { transform: rotate(14deg); } 10%, 20%, 30% { transform: rotate(-14deg); }}
+@keyframes bk-tich {0%, 45% { stroke-dashoffset: 20; } 55%, 90% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 20; }}
+@keyframes bk-lac {0% { transform: scaleX(0); } 40% { transform: scaleX(1); } 90% { transform: scaleX(1); } 100% { transform: scaleX(0); }}
+@keyframes tm-pin {0% { transform: scaleX(1); } 45%, 90% { transform: scaleX(.3); } 100% { transform: scaleX(1); }}
+@keyframes tm-cot {0%, 40% { transform: scaleX(0); } 60%, 90% { transform: scaleX(1); } 100% { transform: scaleX(0); }}
+@keyframes tt-ban {0% { opacity: 0; transform: translate(0, 0); } 10% { opacity: 1; } 55% { opacity: 1; transform: translate(var(--x), var(--y)); } 75%, 100% { opacity: 0; transform: translate(var(--x), var(--y)); }}
+@media (prefers-reduced-motion: reduce) {
+  .kd-quet, .tb-1, .tb-2 { opacity: 0; }
+  .tt-tin { transform: translate(var(--x), var(--y)); }
+  .tm-pin { transform: scaleX(.3); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tb-la { animation: tb-vao 4.4s cubic-bezier(.6, 0, .3, 1) infinite; }
+  .tb-nap { transform-origin: top; animation: tb-dong 4.4s cubic-bezier(.6, 0, .3, 1) infinite; }
+}
+@keyframes tb-vao {0%, 15% { transform: translateY(-14px); } 45%, 85% { transform: translateY(22px); } 100% { transform: translateY(-14px); }}
+@keyframes tb-dong {0%, 40% { transform: scaleY(-1); } 55%, 85% { transform: scaleY(1); } 100% { transform: scaleY(-1); }}
+.dt2 { position: sticky; top: 80px; width: 340px; height: 680px; border: 10px solid #232326; border-radius: 46px; background: #0E0E10; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(var(--chu-rgb), .08), 0 0 0 1px rgba(0, 0, 0, .6), var(--bong-2); }
+@media (max-width: 900px) {
+  .dt2 { display: none; }
+}
+.mg { position: relative; height: 120px; border-radius: 18px; background: var(--nen-2); border: 1px solid var(--vien); overflow: hidden; box-shadow: var(--vien-sang), var(--bong-1); }
+@media (prefers-reduced-motion: no-preference) {
+  .mg { --t: 4.8s; }
+}
+.app-icon { width: 96px; height: 96px; border-radius: 24px; display: grid; place-items: center; font: 400 34px/1 var(--f-to); background: var(--nen-3); border: 1px solid var(--vien); color: var(--chu); overflow: hidden; box-shadow: var(--vien-sang), var(--bong-1); }
+@media (max-width: 600px) {
+  .sp2-doc { margin-left: 10px; }
+}
+@media (max-width: 360px) {
+  .sp2-doc { font-size: 60px; }
+}
+</style>
+<!-- @khung -->
+<section class="phan khung" id="san-pham" aria-label="Những thứ mình làm">
+    <div class="sp2">
+      <h2 class="sp2-doc" aria-hidden="true">Mình làm<i class="cham">.</i></h2>
+      <ul class="sp2-ds" id="sp2-ds"></ul>
+      <div class="dt2" id="dt2" aria-live="polite"><div class="man-app" id="man-app"></div></div>
+    </div>
+  </section>
+<!-- motion graphic của từng app (id = mg-<mã app>) -->
+<template id="mg-kiem-date"><svg viewBox="0 0 300 120" aria-hidden="true" focusable="false"><g class="kd-ma"><rect x="60" y="22" width="1" height="76" style="fill:var(--chu)"/><rect x="65" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="70" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="75" y="22" width="1" height="76" style="fill:var(--chu)"/><rect x="82" y="22" width="2" height="76" style="fill:var(--chu)"/><rect x="87" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="92" y="22" width="2" height="76" style="fill:var(--chu)"/><rect x="97" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="104" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="109" y="22" width="1" height="76" style="fill:var(--chu)"/><rect x="114" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="119" y="22" width="1" height="76" style="fill:var(--chu)"/><rect x="126" y="22" width="2" height="76" style="fill:var(--chu)"/><rect x="131" y="22" width="2" height="76" style="fill:var(--chu)"/><rect x="136" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="141" y="22" width="1" height="76" style="fill:var(--chu)"/><rect x="148" y="22" width="1" height="76" style="fill:var(--chu)"/><rect x="153" y="22" width="3" height="76" style="fill:var(--chu)"/><rect x="158" y="22" width="2" height="76" style="fill:var(--chu)"/><rect x="163" y="22" width="3" height="76" style="fill:var(--chu)"/></g><rect class="kd-quet" x="58" y="18" width="3" height="84" style="fill:var(--do)"/>
+  <g class="kd-dau"><rect x="176" y="34" width="104" height="52" rx="6" fill="none" stroke-width="3" style="stroke:var(--do)"/><text x="228" y="56" text-anchor="middle" class="t-nho">HẠN DÙNG</text><text x="228" y="78" text-anchor="middle" class="t-to">20/12</text></g></svg></template>
+<template id="mg-thong-bao-gon"><svg viewBox="0 0 300 120" aria-hidden="true" focusable="false"><rect x="196" y="40" width="88" height="64" rx="10" fill="none" stroke-opacity=".5" stroke-width="2" style="stroke:var(--chu)"/><text x="240" y="98" text-anchor="middle" class="t-nho">HỘP TIN</text>
+  <g class="tb-1"><rect x="16" y="14" width="150" height="24" rx="12" fill="#2A2A2E"/><text x="30" y="30" class="t-nho">Khuyến mãi mới</text></g>
+  <g class="tb-2"><rect x="16" y="46" width="150" height="24" rx="12" fill="#2A2A2E"/><text x="30" y="62" class="t-nho">Nhóm chat · 12 tin</text></g>
+  <g class="tb-giu"><rect x="16" y="82" width="150" height="24" rx="12" style="fill:var(--do)"/><text x="30" y="98" class="t-nho" style="fill:var(--nen)">Báo thức 6:00</text></g>
+  <text x="240" y="74" text-anchor="middle" class="t-to tb-so">2</text></svg></template>
+<template id="mg-boc"><svg viewBox="0 0 300 120" aria-hidden="true" focusable="false"><g class="bc-the"><rect x="96" y="12" width="108" height="96" rx="10" style="fill:var(--chu)"/><text x="150" y="68" text-anchor="middle" class="t-to bc-mat1" style="fill:var(--nen)">THẬT</text><text x="150" y="68" text-anchor="middle" class="t-to bc-mat2" style="fill:var(--do)">THÁCH</text></g>
+  <g class="bc-qr" style="fill:var(--chu)"><rect x="20" y="40" width="10" height="10"/><rect x="34" y="40" width="10" height="10"/><rect x="20" y="54" width="10" height="10"/><rect x="48" y="54" width="10" height="10"/><rect x="34" y="68" width="10" height="10"/><rect x="48" y="40" width="10" height="10"/><rect x="20" y="68" width="10" height="10"/></g>
+  <text x="250" y="56" text-anchor="middle" class="t-to">216</text><text x="250" y="76" text-anchor="middle" class="t-nho">LÁ BÀI</text></svg></template>
+<template id="mg-bao-khong-ngu"><svg viewBox="0 0 300 120" aria-hidden="true" focusable="false"><g class="bk-chuong"><path d="M60 30c-16 0-26 12-26 30v18l-8 10h68l-8-10V60c0-18-10-30-26-30z" style="fill:var(--do)"/><circle cx="60" cy="94" r="6" style="fill:var(--do)"/></g>
+  <g class="t-nho"><rect x="140" y="26" width="14" height="14" rx="3" fill="none" stroke-width="2" style="stroke:var(--chu)"/><path class="bk-v1" d="M143 33l4 4 6-8" fill="none" stroke-width="3" style="stroke:var(--do)"/><text x="164" y="38">Uống nước</text>
+  <rect x="140" y="54" width="14" height="14" rx="3" fill="none" stroke-width="2" style="stroke:var(--chu)"/><path class="bk-v2" d="M143 61l4 4 6-8" fill="none" stroke-width="3" style="stroke:var(--do)"/><text x="164" y="66">Nộp bài</text></g>
+  <rect x="140" y="88" width="140" height="8" rx="4" fill="#2A2A2E"/><rect class="bk-lac" x="140" y="88" width="140" height="8" rx="4" style="fill:var(--chu)"/><text x="140" y="112" class="t-nho">Lắc 20 lần để tắt</text></svg></template>
+<template id="mg-theo-doi-may"><svg viewBox="0 0 300 120" aria-hidden="true" focusable="false"><rect x="20" y="34" width="92" height="52" rx="8" fill="none" stroke-width="3" style="stroke:var(--chu)"/><rect x="112" y="50" width="6" height="20" rx="2" style="fill:var(--chu)"/>
+  <rect class="tm-pin" x="26" y="40" width="80" height="40" rx="4" style="fill:var(--do)"/>
+  <g class="t-nho"><text x="146" y="34">App A</text><text x="146" y="64">App B</text><text x="146" y="94">App C</text></g>
+  <rect class="tm-a" x="200" y="24" width="84" height="12" rx="6" style="fill:var(--do)"/><rect class="tm-b" x="200" y="54" width="52" height="12" rx="6" style="fill:var(--chu)"/><rect class="tm-c" x="200" y="84" width="26" height="12" rx="6" style="fill:var(--mo)"/>
+  <text x="66" y="108" text-anchor="middle" class="t-nho">Ước tính</text></svg></template>
+<template id="mg-tao-thong-bao-thu"><svg viewBox="0 0 300 120" aria-hidden="true" focusable="false"><rect x="122" y="70" width="56" height="44" rx="8" fill="#2A2A2E"/><text x="150" y="98" text-anchor="middle" class="t-to" style="font-size:18px">30</text>
+  <rect class="tt-tin" style="fill:var(--mo);--d:0.00s;--x:113px;--y:-39px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--mo);--d:0.12s;--x:-53px;--y:-50px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--chu);--d:0.24s;--x:-53px;--y:-31px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--do);--d:0.36s;--x:-123px;--y:-22px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--do);--d:0.48s;--x:-49px;--y:-27px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--chu);--d:0.60s;--x:24px;--y:-63px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--mo);--d:0.72s;--x:112px;--y:-26px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--chu);--d:0.84s;--x:68px;--y:-37px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--chu);--d:0.96s;--x:97px;--y:-56px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--do);--d:1.08s;--x:-81px;--y:-62px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--chu);--d:1.20s;--x:123px;--y:-51px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--chu);--d:1.32s;--x:93px;--y:-24px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--chu);--d:1.44s;--x:85px;--y:-32px" x="138" y="80" width="24" height="10" rx="5"/><rect class="tt-tin" style="fill:var(--mo);--d:1.56s;--x:49px;--y:-30px" x="138" y="80" width="24" height="10" rx="5"/></svg></template>
+<script>
+(() => {
+  const { $, el, ghi, G, ST, GIAM, CO_DONG, tach, daTach, lenis, cuonToi, dtNho, nhanTT, khiSan } = TK;
+  const ICON = { 'kiem-date': "@anh:anh-2-f9bc6f.png@", 'bao-khong-ngu': "@anh:anh-3-e3665e.png@" }; // biểu tượng thật lấy từ file APK; app khác dùng chữ viết tắt
+  const veManApp = (a, khung) => {
+    khung.textContent = '';
+    const icon = el('div', 'app-icon');
+    if (ICON[a.id]) { const im = el('img'); im.src = ICON[a.id]; im.alt = ''; icon.append(im); } else icon.textContent = a.ten.replace(/[^\p{L}\s]/gu, '').split(/\s+/).map((w) => w[0]).join('').slice(0, 3).toUpperCase();
+    const y = el('ul', 'app-y'); (a.y || []).slice(0, 3).forEach((t) => y.append(el('li', '', t)));
+    const tai = el('div', 'app-tai');
+    if (a.tai) { const n = el('a', 'nut-do', 'Tải về máy Android · ' + String(a.mb).replace('.', ',') + ' MB'); n.href = 'https://drive.google.com/file/d/' + a.tai + '/view'; n.target = '_blank'; n.rel = 'noopener'; n.onclick = () => ghi('tải', a.ten + ' ' + a.ban); tai.append(n, el('div', 'm2', 'Android ' + a.android + ' trở lên · mở trên Google Drive')); }
+    const san = el('div', 'mg mg-' + a.id); const mg = document.getElementById('mg-' + a.id); if (mg) san.append(mg.content.cloneNode(true)); san.append(icon); // đoạn hình chuyển động, biểu tượng app nằm ở góc
+    khung.append(san, el('div', 'app-ten', a.ten), el('div', 'm2', a.loai + (a.ban ? ' · Bản ' + a.ban : '')), el('p', 'app-mo', a.moTa), y, tai);
+  };
+  let appDang = -1, lanDoi = 0;
+  function chonApp(i, epMo) {
+    const ds = $('#sp2-ds'), dongs = [...ds.querySelectorAll('.sp2-dong')], mos = [...ds.querySelectorAll('.sp2-mo')], a = DL.SP[i];
+    if (dtNho()) { // điện thoại: mở ngay dưới dòng, chạm lại thì gập
+      // đóng / mở đều có chuyển động: phần bên dưới trôi theo, không nhảy; dòng vừa chạm đứng yên dưới ngón tay
+      const gap = (m, d) => { d.setAttribute('aria-pressed', 'false'); if (!CO_DONG) { m.hidden = true; return; }
+        const h = m.offsetHeight; G.to(m.firstChild, { y: -6, opacity: 0, duration: 0.15, ease: 'ra', overwrite: 'auto' });
+        G.fromTo(m, { height: h }, { height: 0, duration: 0.3, ease: 'ra', overwrite: 'auto' }).then(() => { if (d.getAttribute('aria-pressed') === 'false') m.hidden = true; m.style.height = ''; m.firstChild.style.opacity = ''; }); };
+      const giuCho = (nut, ms) => { const y0 = nut.getBoundingClientRect().top, t0 = performance.now(); const b = () => { const d = nut.getBoundingClientRect().top - y0; if (Math.abs(d) > 0.5) window.scrollBy(0, d); if (performance.now() - t0 < ms) requestAnimationFrame(b); }; requestAnimationFrame(b); };
+      const dangMo = !mos[i].hidden && dongs[i].getAttribute('aria-pressed') === 'true' && !epMo;
+      if (dangMo) { ghi('gập-app', a.ten); gap(mos[i], dongs[i]); return; }
+      let coTren = false; mos.forEach((m, j) => { if (j !== i && !m.hidden && dongs[j].getAttribute('aria-pressed') === 'true') { if (j < i) coTren = true; gap(m, dongs[j]); } });
+      ghi('chọn-app', a.ten); veManApp(a, mos[i].firstChild); mos[i].hidden = false; dongs[i].setAttribute('aria-pressed', 'true');
+      if (CO_DONG) { if (coTren) giuCho(dongs[i], 520); const h = mos[i].scrollHeight;
+        G.fromTo(mos[i].firstChild, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, delay: 0.05, ease: 'ra', overwrite: 'auto' });
+        G.fromTo(mos[i], { height: 0 }, { height: h, duration: 0.3, ease: 'ra', overwrite: 'auto' }).then(() => { mos[i].style.height = ''; }); }
+      return;
+    }
+    if (i === appDang) return; const huong = i > appDang ? 1 : -1; appDang = i; ghi('chọn-app', a.ten);
+    dongs.forEach((d, j) => d.setAttribute('aria-pressed', String(j === i)));
+    const man = $('#man-app');
+    if (!CO_DONG) return veManApp(a, man);
+    const lan = ++lanDoi;
+    G.to(man, { y: -6 * huong, opacity: 0, filter: 'blur(4px)', duration: 0.12, ease: 'ra', overwrite: 'auto' }).then(() => { if (lan !== lanDoi) return; veManApp(DL.SP[appDang], man); G.fromTo(man, { y: 8 * huong, opacity: 0, filter: 'blur(4px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.25, ease: 'ra', overwrite: 'auto', clearProps: 'filter' }); });
+  }
+  function veSanPham() {
+    const ds = $('#sp2-ds');
+    DL.SP.forEach((a, i) => {
+      const li = el('li'); const b = el('button', 'sp2-dong'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      b.append(el('span', 'sp2-so', String(i + 1).padStart(2, '0')), el('b', '', a.ten), el('small', '', a.loai));
+      const mo = el('div', 'sp2-mo'); mo.hidden = true; mo.append(el('div', 'man-app'));
+      b.onclick = () => chonApp(i); b.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' && !dtNho() && !(lenis && lenis.isScrolling) && i !== appDang) chonApp(i); });
+      li.append(b, mo); ds.append(li);
+    });
+    if (!dtNho()) { appDang = 0; ds.querySelector('.sp2-dong').setAttribute('aria-pressed', 'true'); veManApp(DL.SP[0], $('#man-app')); }
+    if (CO_DONG) {
+      const doc = $('.sp2-doc'); doc.style.opacity = '0'; if (!dtNho()) $('#dt2').style.opacity = '0';
+      const hang = [...ds.querySelectorAll('.sp2-dong')].map((b) => { const { ca } = tach(b.querySelector('b')); const so = b.querySelector('.sp2-so'); so.style.opacity = '0'; ca.forEach((c) => { c.style.transform = 'translateY(160%)'; }); return { ca, so }; });
+      ST.create({ trigger: '#san-pham', start: 'top 80%', once: true, onEnter: () => { G.fromTo(doc, { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'nay' });
+        hang.forEach(({ ca, so }, r) => { G.fromTo(ca, { y: 0, yPercent: 160 }, { yPercent: 0, duration: 0.8, stagger: 0.018, delay: 0.12 + r * 0.07, ease: 'nay' }); G.fromTo(so, { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 0.2 + r * 0.07 }); });
+        if (!dtNho()) G.fromTo('#dt2', { y: 80, rotation: 6, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 1, delay: 0.25, ease: 'nay' }); } });
+      // điện thoại có trọng lượng: cuộn nhanh thì nghiêng theo, dừng thì lắc về thẳng
+      if (false) { const dt = $('#dt2'); let muc = 0, hien = 0, chay = false;
+        const vong = () => { hien += (muc - hien) * 0.12; muc *= 0.9; dt.style.rotate = hien.toFixed(2) + 'deg'; if (Math.abs(hien) > 0.02 || Math.abs(muc) > 0.02) requestAnimationFrame(vong); else { dt.style.rotate = ''; chay = false; } };
+        lenis.on('scroll', (e) => { muc = Math.max(-7, Math.min(7, e.velocity * 0.35)); if (!chay) { chay = true; requestAnimationFrame(vong); } }); }
+    }
+  }
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') hd.hidden = true; });
+  // vạch đỏ mảnh ở mép trên: đang ở đâu trong trang
+  if (CO_DONG) { const td = el('div', 'tien-do'); td.setAttribute('aria-hidden', 'true'); document.body.append(td);
+    const cn = () => { const h = document.documentElement.scrollHeight - innerHeight; td.style.transform = `scaleX(${h > 0 ? Math.min(1, scrollY / h) : 0})`; };
+    lenis ? lenis.on('scroll', cn) : addEventListener('scroll', cn, { passive: true }); cn(); }
+  TK.chonApp = chonApp;   // phần "Đang làm" gọi để mở đúng app
+  khiSan(veSanPham);
+})();
+</script>

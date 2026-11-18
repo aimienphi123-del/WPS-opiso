@@ -11,6 +11,17 @@
     vec3 chanTroi(float l){ return mix(mix(vec3(1.,.62,.32), vec3(.93,.36,.24), smoothstep(0.,.6,l)), vec3(.42,.2,.26), smoothstep(.6,1.,l)); }
     vec3 dinhTroi(float l){ return mix(vec3(.2,.17,.26), vec3(.05,.05,.1), smoothstep(.2,1.,l)); }`;
 
+  // giải phóng bộ nhớ đồ hoạ khi cảnh không còn dùng (đổi chủ đề lâu)
+  const giaiPhong = (scene, r) => {
+    scene.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      (Array.isArray(o.material) ? o.material : o.material ? [o.material] : []).forEach((m) => {
+        Object.values(m).concat(Object.values(m.uniforms || {}).map((u) => u.value)).forEach((v) => { if (v && v.isTexture) v.dispose(); });
+        m.dispose();
+      });
+    });
+    r.dispose(); try { r.forceContextLoss(); } catch (e) { /* máy không hỗ trợ trả ngữ cảnh: bỏ qua */ }
+  };
   window.canhBien = function (canvas, mau) {
     if (!window.THREE) return null;
     const T = THREE;
@@ -111,6 +122,7 @@
     return {
       cuon(p) { tienDich = p; if (giam) requestAnimationFrame((n) => { tien = p; ve(n); }); },
       chuot(x, y) { chx = x; chy = y; },
+      huy() { dang = false; removeEventListener('resize', datKhung); giaiPhong(scene, r); },
       dung() { dang = false; }, chay() { if (!dang) { dang = true; requestAnimationFrame(vong); } },
       thongTin: () => ({ khung, ve: r.info.render.calls }),
     };

@@ -1,0 +1,71 @@
+<!-- ===== PHẦN: Thông tin liên hệ: email, chép email, danh thiếp; chân trang ===== -->
+<style>
+:root .tk2 .tk2-logo i { color: var(--do-dam); }
+.chan { padding-block: 28px calc(env(safe-area-inset-bottom, 0px) + 28px); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--mo); border-top: 1px solid var(--vien); }
+.chep:active { transform: scale(.96); transition: transform .08s; }
+.lh2 .nut-do { margin-top: 0; }
+.lh2 { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); align-items: center; }
+.lh2-mail { font: 400 clamp(46px, 6.4vw, 100px)/1 var(--f-to); color: var(--chu); margin: 20px 0 30px; white-space: nowrap; user-select: all; }
+.lh2-mail em { font-style: normal; color: var(--do); }
+.lh2-nut { display: flex; gap: 12px; flex-wrap: wrap; }
+@media (hover: hover) {
+  .tk2-o:hover .tk2 { transform: rotate(0); }
+}
+.tk2-logo { font: 400 clamp(28px, 3vw, 40px)/1 var(--f-to); }
+.tk2-logo i { font-style: normal; color: var(--do); }
+.tk2-ten { font: 400 clamp(30px, 3.2vw, 46px)/1 var(--f-to); text-transform: uppercase; }
+.tk2-vai { color: var(--do-dam); font-weight: 700; font-size: 13px; margin-top: 6px; }
+.tk2-dong { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; font-size: 14px; color: #4A4843; }
+.tk2-lk { display: flex; gap: 16px; }
+.lh2-dong { display: block; will-change: transform; }
+#lien-he { overflow-x: clip; }
+@media (max-width: 900px) {
+  .lh2 { grid-template-columns: 1fr; }
+  .lh2-mail { font-size: 12.4vw; }
+}
+.thu-bay { width: 120px; margin-bottom: 18px; }
+.thu-bay svg { width: 100%; height: auto; display: block; }
+@keyframes dq-ve {0% { stroke-dashoffset: 700; } 60%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 700; }}
+@keyframes dq-nhoi {0%, 56% { transform: scale(1); } 64% { transform: scale(1.8); } 72%, 100% { transform: scale(1); }}
+.tk2 { position: absolute; inset: 0; background: var(--chu); color: var(--nen); padding: clamp(20px, 2.6vw, 34px); display: flex; flex-direction: column; justify-content: space-between; transform: rotate(-4deg); transition: transform .6s var(--nay); border-radius: 20px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), var(--bong-2); }
+.tk2-lk a { color: var(--nen); font-weight: 700; border-bottom: 2px solid var(--do); position: relative; }
+.tk2-lk a::before { content: ""; position: absolute; inset: -10px -6px; }
+.tk2-sau { position: absolute; inset: 0; background: var(--nen-3); border: 1px solid var(--vien); border-radius: 20px; transform: rotate(4deg); }
+.tk2-o { position: relative; justify-self: center; aspect-ratio: 1.7 / 1; width: min(480px, calc(100% - 28px)); }
+@media (max-width: 900px) {
+  .tk2-o { margin-top: 24px; }
+}
+</style>
+<!-- @khung -->
+<section class="phan khung" id="lien-he" aria-labelledby="lh2-h">
+    <div class="lh2">
+      <div>
+        <h2 class="dau-nho" id="lh2-h"><span>Thông tin liên hệ<i class="cham">.</i></span></h2>
+        <div class="lh2-mail" id="email" aria-label="buituankhanh1901@gmail.com"><span class="lh2-dong" id="lh2-d1">buituankhanh1901</span><span class="lh2-dong" id="lh2-d2"><em>@</em>gmail.com</span></div>
+        <div class="mg2 thu-bay" aria-hidden="true"><svg viewBox="0 0 120 80"><rect class="tb-la" x="34" y="6" width="52" height="40" rx="3" style="fill:var(--chu)"/><path class="tb-la" d="M42 18h36M42 26h28" stroke-width="3" style="stroke:var(--mo)"/><rect x="20" y="30" width="80" height="46" rx="4" style="fill:var(--do)"/><path class="tb-nap" d="M20 32 L60 58 L100 32" stroke-width="2" stroke-linejoin="round" style="fill:var(--do-dam);stroke:var(--do-dam)"/></svg></div>
+<div class="lh2-nut"><button type="button" class="nut-do" id="chep">Chép email</button><a class="nut-vien" href="mailto:buituankhanh1901@gmail.com">Mở ứng dụng thư</a></div>
+      </div>
+      <div class="tk2-o"><div class="tk2-sau"></div>
+        <div class="tk2"><div class="tk2-logo">TK<i>.</i></div>
+          <div><div class="tk2-ten">Bùi Tuấn Khanh</div><div class="tk2-vai">Marketing &amp; AI Maker</div></div>
+          <div class="tk2-dong"><span>TP. Hồ Chí Minh</span><span class="tk2-lk"><a href="https://zaloapp.com/qr/p/c2zq8n5qpjs7" target="_blank" rel="noopener">Zalo</a><a href="https://www.facebook.com/profile.php?id=61594782612444" target="_blank" rel="noopener">Facebook</a></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- @cuoi: đặt sau phần main -->
+<footer class="chan khung ma"><span>© 2026 Bùi Tuấn Khanh<span class="cd-dem-xanh"> · Nền trời: chòm Bảo Bình</span></span><span>Thiết kế và làm cùng AI</span></footer>
+<script>
+(() => {
+  const { $, el, ghi, G, ST, GIAM, CO_DONG, tach, daTach, lenis, cuonToi, dtNho, nhanTT, khiSan } = TK;
+  function lienHe() {
+    $('#chep').onclick = async () => {
+      const n = $('#chep'), chu = 'buituankhanh1901@gmail.com';
+      try { await navigator.clipboard.writeText(chu); n.textContent = 'Đã chép'; }
+      catch { const r = document.createRange(); r.selectNodeContents($('#email')); getSelection().removeAllRanges(); getSelection().addRange(r); n.textContent = 'Đã chọn, bấm giữ để chép'; }
+      ghi('chép-email'); setTimeout(() => { n.textContent = 'Chép email'; }, 1800);
+    };
+  }
+  khiSan(lienHe);
+})();
+</script>

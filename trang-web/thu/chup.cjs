@@ -10,6 +10,6 @@ const PHAN = ['dau', 'dang-lam', 'san-pham', 'game', 've-minh', 'phim', 'nhac', 
     const ctx = await b.newContext(tc); await ctx.addInitScript((m) => { try { sessionStorage.setItem('da-xem-intro', '1'); localStorage.setItem('bo-mau', m); } catch (e) {} }, mau);
     const p = await ctx.newPage(); p.on('pageerror', (e) => loi.push(e.message)); await p.route(/soundcloud|script\.google/, (r) => r.abort());
     await p.goto(TRANG); await p.waitForTimeout(3000); await p.evaluate((m) => { document.documentElement.dataset.mau = m; }, mau);
-    for (const id of PHAN) { await p.evaluate((id) => window.__trang.lenis.scrollTo('#' + id, { immediate: true, force: true }), id); await p.waitForTimeout(1800); await p.screenshot({ path: path.join(RA, `${mau}-${k}-${id}.png`) }); }
+    for (const id of PHAN) { await p.evaluate((id) => window.TK.lenis.scrollTo('#' + id, { immediate: true, force: true }), id); await p.waitForTimeout(1800); await p.screenshot({ path: path.join(RA, `${mau}-${k}-${id}.png`) }); }
     await ctx.close(); }
   console.log(loi.length ? 'LỖI: ' + loi.join(' | ') : 'không lỗi, ảnh ở thu/anh/'); await b.close(); })();
