@@ -1,118 +1,164 @@
 # Trang web cá nhân của Bùi Tuấn Khanh
 
-Tài liệu này dành cho người (và AI) mới mở dự án: trang có gì, sửa ở đâu, và những điều chủ trang đã chốt.
+Tài liệu cho người, và cho AI, mới mở dự án. Gồm: trang có gì, sửa ở đâu, kiểm tra thế nào, và những điều chủ trang đã chốt.
 
 ## Trang là gì
 
-Một trang web cá nhân nằm gọn trong **một tệp HTML** (`ban-moi-nhat/trang.html`). Mọi thứ đều được nhúng sẵn vào tệp: phông chữ, ảnh, thư viện, cảnh 3D. Lý do: trang được đăng thành artifact trên claude.ai, mà ở đó trang không được tải gì từ bên ngoài.
+Trang chạy thật là **một tệp HTML duy nhất**: `ban-moi-nhat/trang.html`. Phông, ảnh, thư viện và cảnh 3D đều được nhúng sẵn vào tệp, vì trang được đăng thành artifact trên claude.ai và ở đó không được tải gì từ bên ngoài.
 
-- Bản xem thử (đăng mọi thay đổi ở đây trước): https://claude.ai/artifact/V97VV52uBk9JypvhgAXrxX
-- Trang chính: https://claude.ai/artifact/5MFpAJgKHm6SD8Xx9Am69F. Chỉ cập nhật khi chủ trang nói "duyệt".
+Tệp đó **không sửa tay**. Nó được ghép ra từ mã nguồn trong `nguon/` bằng một lệnh:
 
-## Các phần của trang (theo thứ tự)
+```
+python3 dung.py        # chạy ở thư mục trang-web
+```
 
-| id | Phần |
-|---|---|
-| `#dau` | Màn đầu: chữ nền KHANH, ảnh chân dung, tên, nút Xem sản phẩm |
-| `#dang-lam` | Dự án đang làm (Kiểm Date) và thước các bước |
-| `#san-pham` | Danh sách app, kèm màn điện thoại và motion graphic cho từng app |
-| `#game` | Game mỗi ngày (game do AI làm, lấy từ Google Drive) |
-| `#ve-minh` | Về mình |
-| `#phim` | Phim ngắn (hiện mới có khung chờ, chưa có phim thật) |
-| `#nhac` | Nhạc đang nghe (SoundCloud) |
-| `#lien-he` | Thông tin liên hệ |
+Lệnh này ghi ra 2 tệp:
+- `ban-moi-nhat/trang.html`: bản để đăng.
+- `ban-moi-nhat/xem.html`: bản có thêm khung HTML chuẩn, để mở bằng trình duyệt và chạy bài thử.
 
-## Ba chủ đề màu
-
-Mỗi lần tải lại trang, chủ đề đổi sang cái kế tiếp (lưu trong `localStorage` khoá `bo-mau`). Nút chủ đề trên thanh đầu trang cũng dùng để đổi. Chủ đề được ghi trên thẻ `<html data-mau="...">`.
-
-| data-mau | Tên | Cảnh nền 3D (Three.js r160) |
-|---|---|---|
-| `dem-xanh` | Đêm yên | bầu trời sao, chòm Bảo Bình sáng nhất (`canh-3d/troi-3d.js`) |
-| `reu-suong` | Rừng sương | núi Tây Bắc, mây sương trôi (`canh-3d/canh-3d.js`) |
-| `dat-tram` | Chiều đất | hoàng hôn trên biển, mặt trời lặn dần theo tay cuộn (`canh-3d/bien-3d.js`) |
-
-Cảnh 3D chỉ chạy khi đang ở đúng chủ đề của nó. Máy không chạy được WebGL thì trang dùng cảnh SVG thay thế.
+Các trang đã đăng:
+- Bản xem thử, đăng mọi thay đổi ở đây trước: https://claude.ai/artifact/V97VV52uBk9JypvhgAXrxX
+- Trang chính, chỉ cập nhật khi chủ trang nói "duyệt": https://claude.ai/artifact/5MFpAJgKHm6SD8Xx9Am69F
 
 ## Cấu trúc thư mục
 
 ```
 trang-web/
-  ban-moi-nhat/trang.html   bản trang mới nhất (chính là tệp đem đăng)
-  dung/                     cách dựng ra trang
-    trang-as.html           bản gốc (đã sửa tay nhiều lần trước khi có các bước bên dưới)
-    lam-*.py                20 bước, mỗi bước đọc tệp của bước trước, vá thêm một phần, ghi ra tệp mới
-    chay.py                 chạy hết 20 bước theo đúng thứ tự, chép kết quả sang ban-moi-nhat/
-  canh-3d/                  mã 3 cảnh nền 3D (được nhúng vào trang ở các bước lam-3d, lam-troi, lam-bien)
-  thu-vien/                 Three.js r160 và GSAP 3.13 (ScrollTrigger, CustomEase); trang nhúng sẵn, không tải ngoài
-  thu/                      bài thử tự động và công cụ kiểm tra
-  luu-cu/                   các bước dựng và cảnh 3D đã bỏ, chỉ để tham khảo (không dùng nữa)
-  graphify-out/             bản đồ dự án do graphify tạo ra (GRAPH_REPORT.md, graph.json, graph.html)
+  dung.py                 lệnh ghép nguon/ thành một tệp HTML
+  nguon/                  MÃ NGUỒN: sửa ở đây
+    khung.html            bộ khung trang và thứ tự các phần
+    cau-hinh.css          bảng màu 3 chủ đề và các giá trị dùng chung
+    du-lieu.js            dữ liệu: các bước dự án, danh sách app (SP), danh sách phim (PHIM)
+    chung.js              lõi dùng chung (window.TK): hộp đen, cuộn mượt, tách chữ, chữ trồi, con trỏ, nút hút, chữ né chuột
+    chung.html            kiểu dùng chung (chữ, nút, khung) + khung con trỏ và hộp đen
+    dau.js                đoạn chạy sớm nhất: chọn chủ đề cho lần mở này
+    canh-nen.html         cảnh nền theo chủ đề (3D + SVG dự phòng)
+    mo-dau.html           màn mở đầu chữ TK.
+    dau-trang.html        thanh đầu trang (đảo nổi)
+    phan-dau.html         màn đầu (chữ nền KHANH, ảnh, tên) + dải chữ chạy
+    dang-lam.html  san-pham.html  game.html  ve-minh.html  phim.html  nhac.html  lien-he.html
+    phong.css + phong/    phông chữ (tệp .woff2)
+    anh/                  ảnh (chân dung, biểu tượng app)
+  canh-3d/                mã 3 cảnh 3D: troi-3d.js (trời sao), canh-3d.js (núi), bien-3d.js (biển)
+  thu-vien/               Lenis, GSAP 3.13 (ScrollTrigger, CustomEase), Three.js r160 bản rút gọn
+  ban-moi-nhat/           tệp trang đã ghép (không sửa tay)
+  thu/                    bài thử tự động và công cụ kiểm tra
+  luu-cu/                 đồ cũ để tham khảo, không dùng nữa (gồm chuỗi 20 bước vá trước đây)
+  graphify-out/           bản đồ dự án do graphify tạo
 ```
 
-### Thứ tự 20 bước dựng (`dung/chay.py`)
+### Một tệp phần trong `nguon/` gồm những gì
 
-`trang-as.html` → motion (motion graphic sản phẩm) → motion-2 → logo (logo TK tự vẽ nét) → doi-mau (3 bảng màu) → chu-de (3 chủ đề + biểu tượng) → sao (trời sao SVG) → nui (núi Tây Bắc SVG) → 3d (núi 3D) → troi (trời sao 3D) → gsap (đổi thư viện chuyển động sang GSAP) → bien (biển hoàng hôn 3D) → apple (khung bo góc có chiều sâu) → emil (đường cong chuyển động nhanh, nút lún khi bấm) → taste (sửa lỗi theo bộ kiểm tra Taste Skill) → tro-chu (lấy lại chữ trồi từng ký tự) → lay-lai (lấy lại thị sai, chữ né chuột, con trỏ riêng, nút hút) → dao (thanh đầu trang kiểu đảo nổi) → dao-dong (chuyển động cho đảo, bỏ chữ "Đang nhận việc") → bo-cham (bỏ chấm trạng thái, chỉ còn giờ TP.HCM) → an-hien (thanh đầu trang tự ẩn khi cuộn xuống, tự hiện khi cuộn lên, thay cho kiểu thu gọn).
+```
+<!-- ===== PHẦN: tên và mô tả ===== -->
+<style> kiểu của phần này </style>
+<!-- @khung -->
+khung HTML, nằm trong <main> đúng vị trí ghi ở khung.html
+<!-- @cuoi: đặt sau phần main -->   (không bắt buộc) khung đặt ngoài <main>: chân trang, lớp xem phim...
+<script> mã của phần này </script>
+```
 
-Mỗi bước nằm ở cuối tệp trong một khối `<style id="...">` hoặc `<script>` riêng, ghi đè lên các bước trước. Muốn biết một phần hiện trông thế nào thì tìm id khối mới nhất có nhắc tới phần đó. Ví dụ thanh đầu trang: `dao-noi`, rồi `dao-dong`, rồi `bo-cham`, rồi `an-hien`.
+Khi ghép, lệnh `dung.py` làm theo thứ tự sau:
+- **Kiểu:** gom hết lên đầu trang, theo thứ tự phông → `cau-hinh.css` → `chung` → các phần theo thứ tự trong `khung.html`.
+- **Mã:** gom xuống cuối trang, theo thứ tự `du-lieu.js` → `chung.js` → mã từng phần.
+- **Ảnh và phông:** chỗ ghi `@anh:ten@` hoặc `@phong:ten@` được thay bằng chính tệp đó, nhúng thẳng vào trang.
+
+### Thứ tự các phần trên trang
+
+| Tệp | id | Phần |
+|---|---|---|
+| `canh-nen.html` | | cảnh nền cố định sau cả trang |
+| `mo-dau.html` | `#intro-tk` | màn mở đầu |
+| `dau-trang.html` | `#tren` | thanh đầu trang |
+| `phan-dau.html` | `#dau` | màn đầu + dải chữ chạy |
+| `dang-lam.html` | `#dang-lam` | dự án đang làm (Kiểm Date), thước các bước |
+| `san-pham.html` | `#san-pham` | danh sách app, màn điện thoại, motion graphic từng app |
+| `game.html` | `#game` | game mỗi ngày (tải từ cầu nối Google Apps Script) |
+| `ve-minh.html` | `#ve-minh` | về mình |
+| `phim.html` | `#phim` | phim ngắn (đang là khung chờ, chưa có phim thật) |
+| `nhac.html` | `#nhac` | nhạc đang nghe (SoundCloud) |
+| `lien-he.html` | `#lien-he` | thông tin liên hệ + chân trang |
 
 ## Sửa cái gì thì mở đâu
 
-- **Sửa nhỏ:** thêm một bước mới `dung/lam-<ten>.py`. Bước này đọc tệp ra của bước cuối, vá, rồi ghi ra tệp mới. Thêm tên bước vào cuối danh sách `BUOC` trong `chay.py`. Nhớ chỉnh `chay.py` để chép tệp ra mới nhất sang `ban-moi-nhat/`.
-- **Cảnh nền 3D:** sửa trong `canh-3d/`, rồi chạy lại `chay.py`.
-- **Dữ liệu sản phẩm** (tên app, mô tả, link tải): mảng `SP` trong trang. Có trong `trang-as.html` và được các bước sau giữ nguyên.
-- **Dữ liệu phim:** mảng `PHIM` trong khối "MỤC PHIM".
+- **Màu một chủ đề, bo góc, tốc độ chuyển động:** `nguon/cau-hinh.css`.
+- **Thêm, sửa app; thêm phim; đổi bước dự án:** `nguon/du-lieu.js`. Thêm app là thêm một dòng trong `SP`.
+- **Motion graphic của một app:** thẻ `<template id="mg-<mã app>">` trong `nguon/san-pham.html`.
+- **Một phần của trang:** mở đúng tệp phần đó. Kiểu, khung và mã của phần nằm chung một tệp.
+- **Cảnh nền:** cách bật, dừng và giải phóng nằm ở bảng `CANH` trong `nguon/canh-nen.html`. Hình 3D nằm trong `canh-3d/`. Thêm chủ đề là thêm một mục trong `CANH`.
+- **Hàm dùng chung** (`TK.$`, `TK.el`, `TK.ghi`, `TK.tach`, `TK.cuonToi`, `TK.khiSan`...): mô tả ở đầu `nguon/chung.js`. Các phần chỉ lấy hàm từ `TK`, không tự viết lại.
+- **Việc cần chờ phông tải xong mới chạy** (ví dụ đo chữ): đăng ký bằng `TK.khiSan(fn)`. Các việc chạy theo thứ tự đăng ký.
+
+Sửa xong thì chạy `python3 dung.py` rồi kiểm tra như phần dưới.
 
 ## Kiểm tra trước khi giao
 
-Chạy từ thư mục `trang-web/`:
+Chạy ở thư mục `trang-web`:
 
 ```
-python3 dung/chay.py                 dựng lại trang
-node thu/thu-dac-trung.cjs           bố cục, không tràn, không lỗi
-node thu/as-rieng.cjs                các điểm sửa riêng
-node thu/thu-fx.cjs                  hiệu ứng (chữ trồi, chữ né chuột, nút lún...)
-node thu/game.cjs                    mục Game
-node thu/thu-as.cjs                  cuộn, menu, điện thoại
-node thu/nhac.cjs                    mục Nhạc (máy không vào được SoundCloud thì bài này hỏng, không phải lỗi trang)
-node thu/kiem_trang_cham.cjs "file://$PWD/ban-moi-nhat/xem.html" x trang     màu và bố cục: chữ chìm, chữ nhỏ, đè nhau, tràn ngang
-node thu/chup.cjs                    chụp ảnh 3 chủ đề × máy tính, điện thoại vào thu/anh/
+sh thu/chay-het.sh                  ghép trang rồi chạy các bài thử chính + kiểm tra màu, bố cục
+node thu/canh-nen.cjs               cảnh nền 3D: bật đúng cảnh, dừng, giải phóng bộ nhớ, dựng lại
+node thu/nhac.cjs                   mục Nhạc (cần vào được SoundCloud; máy không vào được thì hỏng, không phải lỗi trang)
+node thu/chup.cjs                   chụp ảnh 3 chủ đề × máy tính, điện thoại vào thu/anh/
+node thu/do-nhe.cjs                 đo bộ nhớ và thời gian máy bận
 ```
 
-Muốn thử một tệp khác thì đặt biến `TRANG=đường/dẫn/tệp.html`. Cần Node và Playwright (có sẵn Chromium). Máy không có GPU thì cảnh 3D chạy chậm, nên dùng `kiem_trang_cham.cjs` thay cho `kiem_trang.cjs`.
+**So điểm ảnh trước và sau khi sửa.** Bắt buộc với mọi lần dọn mã, vì kiểu sau có thể đè kiểu trước:
 
-Lỗi đã biết, có từ trước: `thu-as.cjs` báo 2 lỗi "404 Not Found" trong console khi mở trang bằng `file://`.
+```
+node thu/chup-moc.cjs thu/anh/moc   # chụp bản TRƯỚC khi sửa (48 ảnh, đứng yên)
+...sửa, python3 dung.py...
+node thu/chup-moc.cjs thu/anh/moi
+python3 thu/so-anh.py thu/anh/moc thu/anh/moi     # in ảnh nào khác; ảnh khác biệt tô đỏ trong thu/anh/moi/khac/
+```
+
+Muốn thử một tệp khác thì đặt biến `TRANG=đường/dẫn.html`. Cần Node và Playwright (đã có sẵn Chromium).
+
+Máy ảo không có card đồ hoạ nên phải vẽ 3D bằng phần mềm. Vì vậy:
+- **Chạy từng bài một**, đừng chạy nhiều bài cùng lúc, kẻo máy hết bộ nhớ.
+- **`canh-nen.cjs` thỉnh thoảng làm trình duyệt thử bị sập.** Đây là lỗi của trình vẽ phần mềm, không phải lỗi trang. Gặp thì chạy lại.
+
+## Hiệu năng (đã làm)
+
+- **Mã 3D:** Three.js chỉ được nạp khi chủ đề đầu tiên cần 3D. Mã từng cảnh chỉ nạp khi cảnh đó được dùng lần đầu.
+- **Khi nào cảnh vẽ:** chỉ cảnh của chủ đề đang xem được vẽ. Ẩn tab thì nghỉ vẽ.
+- **Giải phóng bộ nhớ:** rời một chủ đề quá 20 giây thì cảnh đó trả lại bộ nhớ đồ hoạ.
+- **Three.js rút gọn:** chỉ gồm các phần cảnh dùng tới (danh sách ở `thu-vien/three/danh-sach-dung.js`), dựng bằng esbuild từ `three@0.160.0`.
+- **Đứng yên thì không vẽ:** dải chữ chạy, thị sai theo chuột, con trỏ riêng và sóng nhạc chỉ vẽ khi có chuyển động. Chuyển động lặp (motion graphic, chấm tải) chạy khoảng 5 giây khi hiện ra rồi đứng yên.
 
 ## Những điều chủ trang đã chốt
 
 Phải giữ. Muốn đổi thì hỏi trước.
 
-- **Ngôn ngữ và cách làm việc:** trả lời bằng tiếng Việt, không dùng emoji. Chủ trang không biết code, làm việc trên điện thoại và máy ở quán net, mọi thứ phải miễn phí.
-- **Hỏi trước khi làm:**
+- **Cách làm việc:**
+  - Trả lời bằng tiếng Việt, không dùng emoji.
+  - Chủ trang không biết code, làm trên điện thoại và máy quán net, mọi thứ phải miễn phí.
   - Thay đổi giao diện lớn thì gửi ảnh xem trước rồi mới làm.
   - Chỉ cập nhật trang chính khi chủ trang nói "duyệt".
 - **Nội dung:**
   - **Không bịa thông tin về chủ trang.** Ví dụ: chủ trang không nhận làm app, game hay công cụ cho người khác.
-  - Không hiện chữ "Đang nhận việc", không hiện chấm báo đang online hay offline. Thanh đầu trang chỉ còn giờ TP.HCM.
-  - Trang mang tính nghiêm túc, thể hiện kỹ năng, không kêu gọi. Tiêu đề phần cuối là "Thông tin liên hệ".
+  - Không có chữ "Đang nhận việc", không có chấm online hay offline. Thanh đầu trang chỉ có giờ TP.HCM.
+  - Trang nghiêm túc, thể hiện kỹ năng, không kêu gọi. Phần cuối tên là "Thông tin liên hệ".
   - Chỗ nào đã có motion graphic minh hoạ thì bỏ chữ giải thích thừa.
 - **Phong cách:**
-  - Chill, trầm ổn, bình tĩnh.
-  - Không dùng ánh sáng đỏ, không dùng màu bạc hà.
-  - Rừng sương phải là núi Tây Bắc hùng vĩ, không thấp và rợn (chủ trang là người Tây Bắc).
+  - Chill, trầm ổn.
+  - Không ánh sáng đỏ, không màu bạc hà.
+  - Rừng sương là núi Tây Bắc hùng vĩ (chủ trang là người Tây Bắc).
+  - Đêm yên là trời sao kiểu bình yên, chòm Bảo Bình sáng nhất.
+  - Chiều đất là hoàng hôn trên biển, mặt trời to.
 - **Chuyển động:**
-  - Giữ: chữ trồi từng ký tự, chữ nền và ảnh trôi lệch theo cuộn và theo chuột, chữ tiêu đề né theo chuột, con trỏ chuột tự vẽ, nút hút theo chuột, thanh đầu trang kiểu đảo nổi; cuộn xuống thì thanh tự ẩn, cuộn lên thì tự hiện (như cơ chế ban đầu, không thu gọn).
-  - Đã bỏ: gợn sóng trong nút, điện thoại nghiêng theo tốc độ cuộn, vạch tiến độ ở mép trên trang.
+  - **Giữ:** chữ trồi từng ký tự; chữ nền và ảnh trôi lệch theo cuộn và theo chuột; chữ tiêu đề né chuột; con trỏ tự vẽ; nút hút theo chuột; thanh đầu trang kiểu đảo nổi, cuộn xuống thì ẩn, cuộn lên thì hiện.
+  - **Đã bỏ:** gợn sóng trong nút, điện thoại nghiêng theo tốc độ cuộn, vạch tiến độ ở mép trên, thanh đầu trang thu gọn khi cuộn.
 - **Còn chờ chủ trang quyết:**
-  - Font tiêu đề (đang dùng Anton; các bản xem thử là Fraunces, Lora, Cormorant Garamond).
+  - Font tiêu đề: đang dùng Anton, các bản xem thử là Fraunces, Lora, Cormorant Garamond.
   - Link phim thật.
   - Có đưa bản xem thử lên trang chính hay không.
 
 ## Bản đồ dự án (graphify)
 
-`graphify-out/GRAPH_REPORT.md` tóm tắt các tệp và mối nối giữa chúng. Bản đồ chỉ đọc mã (`dung/`, `canh-3d/`, `thu/`) và tệp này. Các thư mục bị bỏ qua được ghi trong `.graphifyignore`.
+`graphify-out/GRAPH_REPORT.md` tóm tắt các tệp và mối nối giữa chúng. Thư mục bị bỏ qua ghi ở `.graphifyignore`.
 
-Dựng lại sau khi sửa mã (chạy ở `trang-web/`, không cần khoá API):
+Dựng lại bản đồ sau khi sửa mã (chạy ở thư mục `trang-web`, không cần khoá API):
 
 ```
 pip install graphifyy
