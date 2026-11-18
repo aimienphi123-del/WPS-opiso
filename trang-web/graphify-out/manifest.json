@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "DU-AN.md": {
-    "mtime": 1794971403.0864482,
-    "seen": 1794971406.6589503,
-    "ast_hash": "20e79a4d266f882a786631b799f95951",
+    "mtime": 1794981605.00838,
+    "seen": 1794981633.6375713,
+    "ast_hash": "fd1122513f6e6731f3457340dd888f89",
     "semantic_hash": ""
   },
   "thu/kiem_js.txt": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "dung.py": {
-    "mtime": 1794961832.0968773,
-    "seen": 1794963364.5867994,
-    "ast_hash": "509926dbb6747044dec05eb8906859ee",
+    "mtime": 1794980405.3841813,
+    "seen": 1794981633.637523,
+    "ast_hash": "7d43b98ea0b7f4d2723a217c752f3645",
     "semantic_hash": ""
   },
   "nguon/chung.js": {
@@ -162,9 +162,9 @@
     "semantic_hash": ""
   },
   "nguon/dau-trang.html": {
-    "mtime": 1794957951.088617,
-    "seen": 1794963364.5868611,
-    "ast_hash": "3825b46188b167934ece076c0027ffa2",
+    "mtime": 1794980405.3852644,
+    "seen": 1794981633.637576,
+    "ast_hash": "b7d5d967dfa69b24133b67dede862305",
     "semantic_hash": ""
   },
   "nguon/game.html": {
@@ -174,15 +174,15 @@
     "semantic_hash": ""
   },
   "nguon/khung.html": {
-    "mtime": 1794955205.688382,
-    "seen": 1794963364.5868647,
-    "ast_hash": "2c612ec64cb2b324406df42963d76338",
+    "mtime": 1794980405.3845215,
+    "seen": 1794981633.6375804,
+    "ast_hash": "ccd78b28b13276271a57b80036587eaa",
     "semantic_hash": ""
   },
   "nguon/lien-he.html": {
-    "mtime": 1794970916.0224242,
-    "seen": 1794971406.658959,
-    "ast_hash": "e32b88f8a9ba041fa9ad76fee169b364",
+    "mtime": 1794971451.0449493,
+    "seen": 1794981633.6375816,
+    "ast_hash": "2c3ab33b58129a7f32198daa5a88abd5",
     "semantic_hash": ""
   },
   "nguon/mo-dau.html": {
@@ -228,9 +228,69 @@
     "semantic_hash": ""
   },
   "thu/the.cjs": {
-    "mtime": 1794970790.0839174,
-    "seen": 1794971406.6589456,
-    "ast_hash": "5c5ad9f412ed37ebafd59c795c956c0a",
+    "mtime": 1794971451.0457773,
+    "seen": 1794981633.6375656,
+    "ast_hash": "f62c6be91900afb1109814b89a46d4ad",
+    "semantic_hash": ""
+  },
+  "khoi-qr/anh-mau.js": {
+    "mtime": 1794980225.5376725,
+    "seen": 1794981633.6375263,
+    "ast_hash": "167d7129f74847c5df5c0a9f27c1e6d7",
+    "semantic_hash": ""
+  },
+  "khoi-qr/app.js": {
+    "mtime": 1794980987.930587,
+    "seen": 1794981633.6375287,
+    "ast_hash": "9ee1b10d5aec5d992386466134f8d8b5",
+    "semantic_hash": ""
+  },
+  "khoi-qr/jsqr.min.js": {
+    "mtime": 1794980225.5356424,
+    "seen": 1794981633.6375299,
+    "ast_hash": "52b7d517a64f03b04526fad85229f28e",
+    "semantic_hash": ""
+  },
+  "khoi-qr/may.js": {
+    "mtime": 1794980225.5359533,
+    "seen": 1794981633.6375308,
+    "ast_hash": "a0c5917f8cf06d164099d57dcf84eacf",
+    "semantic_hash": ""
+  },
+  "khoi-qr/omggif.js": {
+    "mtime": 1794980225.5358021,
+    "seen": 1794981633.6375344,
+    "ast_hash": "d0fcce7ed4b0674cca1e2c80e0c165ca",
+    "semantic_hash": ""
+  },
+  "khoi-qr/qrcode.min.js": {
+    "mtime": 1794980225.5352752,
+    "seen": 1794981633.637536,
+    "ast_hash": "815b292e4a1c58d8d8e44da414a2bcba",
+    "semantic_hash": ""
+  },
+  "khoi-qr/thoi-vang.js": {
+    "mtime": 1794980225.5360687,
+    "seen": 1794981633.637537,
+    "ast_hash": "adca0e3a269b5ed922dbef86573e5761",
+    "semantic_hash": ""
+  },
+  "khoi-qr/ve.js": {
+    "mtime": 1794980225.5362048,
+    "seen": 1794981633.6375382,
+    "ast_hash": "73c7a3e5779caa221f44dc77923d00c7",
+    "semantic_hash": ""
+  },
+  "thu/khoi-qr.cjs": {
+    "mtime": 1794980630.1720533,
+    "seen": 1794981633.6375577,
+    "ast_hash": "391258f63bbcbe0f606562bd1fc53531",
+    "semantic_hash": ""
+  },
+  "nguon/khoi-qr.html": {
+    "mtime": 1794981404.0066054,
+    "seen": 1794981633.637579,
+    "ast_hash": "5742e03c024f2ef1bb26606c1004f0b0",
     "semantic_hash": ""
   }
 }

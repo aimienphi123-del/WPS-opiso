@@ -1,47 +1,66 @@
 # Graph Report - trang-web  (2026-11-18)
 
 ## Corpus Check
-- 25 files · ~47,248 words
+- 34 files · ~77,697 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 2, .css 2)
 
 ## Summary
-- 113 nodes · 123 edges · 15 communities (8 shown, 7 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.85)
+- 322 nodes · 647 edges · 29 communities (19 shown, 10 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 55 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `182b5ff3`
+- Built from commit: `5daacdd9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - ref_playwright
-- chup-3d.cjs
+- chup-the.cjs
 - canh-3d.js
 - chup.cjs
 - Trang web cá nhân của Bùi Tuấn Khanh
 - chup-moc.cjs
 - kiem_trang.cjs
-- bien-3d.js
+- app.js
 - dung.py
 - chay-het.sh
 - chup-3d.cjs
-- the.cjs
+- ref_path
+- may.js
+- ganKeo
+- capNhatNutMat
+- taoBoVe
+- jsqr.min.js
+- omggif.js
+- thoi-vang.js
+- chayHieuUngTaiGiay
+- khoi-qr.cjs
+- canh-nen.cjs
+- game.cjs
+- nhac.cjs
+- k
 
 ## God Nodes (most connected - your core abstractions)
-1. `Trang web cá nhân của Bùi Tuấn Khanh` - 8 edges
-2. `vong()` - 5 edges
-3. `Cấu trúc thư mục` - 3 edges
-4. `ve()` - 3 edges
-5. `nhung()` - 3 edges
-6. `chay()` - 2 edges
-7. `chay()` - 2 edges
-8. `cuon()` - 2 edges
-9. `chay()` - 2 edges
-10. `cuon()` - 2 edges
+1. `khoiDong()` - 24 edges
+2. `yeuCauGhep()` - 20 edges
+3. `taoBoVe()` - 20 edges
+4. `ganKeo()` - 18 edges
+5. `capNhatNutMat()` - 17 edges
+6. `xepKhoi()` - 16 edges
+7. `capNhatCuaSo()` - 15 edges
+8. `henVe()` - 14 edges
+9. `khongChuyenDong()` - 13 edges
+10. `khungHinh()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `motMat()` --indirect_call--> `f()`  [INFERRED]
+  khoi-qr/app.js → khoi-qr/omggif.js
+- `buoc()` --indirect_call--> `d()`  [INFERRED]
+  khoi-qr/app.js → khoi-qr/jsqr.min.js
+- `mot()` --indirect_call--> `f()`  [INFERRED]
+  khoi-qr/app.js → khoi-qr/omggif.js
 - `chay()` --indirect_call--> `vong()`  [INFERRED]
   canh-3d/bien-3d.js → canh-3d/canh-3d.js
 - `chay()` --indirect_call--> `vong()`  [INFERRED]
@@ -50,19 +69,19 @@
 ## Import Cycles
 - None detected.
 
-## Communities (15 total, 7 thin omitted)
+## Communities (29 total, 10 thin omitted)
 
 ### Community 0 - "ref_playwright"
-Cohesion: 0.10
-Nodes (6): { chromium }, { chromium, devices }, { chromium, devices }, { chromium }, { chromium, devices }, { chromium, devices }
-
-### Community 1 - "chup-3d.cjs"
 Cohesion: 0.15
-Nodes (8): { chromium }, path, { chromium, devices }, fs, path, RA, { chromium }, path
+Nodes (4): { chromium }, { chromium }, { chromium, devices }, { chromium, devices }
+
+### Community 1 - "chup-the.cjs"
+Cohesion: 0.40
+Nodes (4): { chromium, devices }, fs, path, RA
 
 ### Community 2 - "canh-3d.js"
-Cohesion: 0.16
-Nodes (6): chay(), chay(), cuon(), ve(), vong(), chay()
+Cohesion: 0.11
+Nodes (8): chay(), cuon(), ve(), chay(), cuon(), ve(), vong(), chay()
 
 ### Community 3 - "chup.cjs"
 Cohesion: 0.33
@@ -80,19 +99,71 @@ Nodes (5): { chromium, devices }, fs, path, PHAN, RA
 Cohesion: 0.18
 Nodes (8): { chromium }, fs, JS, [url, ra], { chromium }, fs, JS, [url, ra]
 
+### Community 8 - "app.js"
+Cohesion: 0.09
+Nodes (49): anhXam(), baoMa(), batDauXep(), onErr(), onMsg(), trenTrang(), boVang(), capNhatDong() (+41 more)
+
 ### Community 13 - "chup-3d.cjs"
 Cohesion: 0.40
 Nodes (4): { chromium }, [f, ra], fs, path
 
+### Community 14 - "ref_path"
+Cohesion: 0.25
+Nodes (4): { chromium }, path, { chromium, devices }, path
+
+### Community 15 - "may.js"
+Cohesion: 0.11
+Nodes (29): ghepAnh(), ghiMat(), layLuoiSang(), luoiKhoi(), luoiPhang(), nhinMat(), oGiuNguyen(), phienBanCan() (+21 more)
+
+### Community 16 - "ganKeo"
+Cohesion: 0.16
+Nodes (28): batDauHut(), capNhatCuaSo(), coVang(), dangVang(), datNutPhat(), dongCuaSo(), dungNutMat(), ganCuaSo() (+20 more)
+
+### Community 17 - "capNhatNutMat"
+Cohesion: 0.12
+Nodes (27): bam(), batDauLoc(), buocLoc(), buocVang(), capNhatNutMat(), huongCuaMat(), khungHinh(), khungHut() (+19 more)
+
+### Community 18 - "taoBoVe"
+Cohesion: 0.19
+Nodes (19): taoBoVe(), bien(), boKhung(), chonKhung(), datBay(), datKhung(), datLuoi(), docManHinh() (+11 more)
+
+### Community 19 - "jsqr.min.js"
+Cohesion: 0.38
+Nodes (9): a(), B(), c(), d(), i(), k(), l(), n() (+1 more)
+
+### Community 20 - "omggif.js"
+Cohesion: 0.36
+Nodes (7): GifReader(), GifReaderLZWOutputIndexStream(), GifWriter(), f(), GifWriterOutputLZWCodeStream(), s(), v()
+
+### Community 21 - "thoi-vang.js"
+Cohesion: 0.39
+Nodes (5): chiaLop(), demVo(), dungThoiVang(), layMau(), trongThoiVang()
+
+### Community 22 - "chayHieuUngTaiGiay"
+Cohesion: 0.60
+Nodes (5): chayHieuUngTaiGiay(), drawPaper3D(), drawTexTri(), frame(), taiAnhPhang()
+
+### Community 23 - "khoi-qr.cjs"
+Cohesion: 0.40
+Nodes (3): ANH, { chromium, devices }, path
+
 ## Knowledge Gaps
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `chay()` connect `canh-3d.js` to `bien-3d.js`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Are the 4 inferred relationships involving `vong()` (e.g. with `chay()` and `canh-3d.js`) actually correct?**
-  _`vong()` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **Should `ref_playwright` be split into smaller, more focused modules?**
-  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
+- **Why does `buoc()` connect `app.js` to `ganKeo`, `jsqr.min.js`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+- **Are the 3 inferred relationships involving `khoiDong()` (e.g. with `app.js` and `henThanhVang()`) actually correct?**
+  _`khoiDong()` has 3 INFERRED edges - model-reasoned connections that need verification._
+- **Should `canh-3d.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.11428571428571428 - nodes in this community are weakly interconnected._
+- **Why does `d()` connect `jsqr.min.js` to `app.js`?**
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Are the 11 inferred relationships involving `taoBoVe()` (e.g. with `ve.js` and `chonKhung()`) actually correct?**
+  _`taoBoVe()` has 11 INFERRED edges - model-reasoned connections that need verification._
+- **Should `app.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.09220779220779221 - nodes in this community are weakly interconnected._
+- **Why does `f()` connect `omggif.js` to `capNhatNutMat`?**
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
