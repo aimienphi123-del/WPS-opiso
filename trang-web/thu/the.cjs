@@ -16,7 +16,7 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   await p.click('#tdd'); await p.waitForTimeout(900);
   ok(await p.evaluate(() => document.getElementById('tdd').classList.contains('lat') && document.querySelector('.tdd-sau').getAttribute('aria-hidden') === 'false' && document.getElementById('tdd').getAttribute('aria-pressed') === 'true'), '[mt] bấm: lật ra mặt sau, báo trạng thái cho trình đọc màn hình');
   const chu = await p.evaluate(() => document.querySelector('.tdd-sau').innerText.replace(/\s+/g, ' '));
-  for (const c of ['BACKSTAGE CREDENTIAL · #026', 'TK', 'Chuyên môn chính: Quay dựng · và biết sử dụng Claude', 'Arena Multimedia (Quay dựng)', 'CapCut', 'Claude · Gemini · ChatGPT', 'Đang sinh sống và làm việc tại TP. Hồ Chí Minh', 'BTK-2026-ARENA-AI', 'KHANH'])
+  for (const c of ['BACKSTAGE CREDENTIAL · #026', 'TK', 'Chuyên môn chính: Quay dựng · Có thể sử dụng AI để hỗ trợ công việc nếu cần', 'Arena Multimedia (Quay dựng)', 'CapCut', 'Claude · Gemini · ChatGPT', 'Đang sinh sống và làm việc tại TP. Hồ Chí Minh', 'BTK-2026-ARENA-AI', 'KHANH'])
     ok(chu.includes(c), '[mt] mặt sau có: ' + c);
   ok(!/Đang build|Premiere|Sprint/.test(chu), '[mt] mặt sau không còn dòng đã bỏ / đã thay');
   ok(await p.evaluate(() => getComputedStyle(document.querySelector('.tdd-ky')).fontFamily.includes('Dancing Script')), '[mt] chữ KHANH dùng phông chữ ký');
