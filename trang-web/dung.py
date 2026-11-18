@@ -5,7 +5,7 @@
 import os, re, base64, sys
 GOC = os.path.dirname(os.path.abspath(__file__)); NG = os.path.join(GOC, 'nguon')
 doc = lambda p: open(os.path.join(GOC, p), encoding='utf-8').read()
-MIME = {'webp': 'image/webp', 'png': 'image/png', 'jpg': 'image/jpeg', 'svg': 'image/svg+xml', 'woff2': 'font/woff2'}
+MIME = {'webp': 'image/webp', 'png': 'image/png', 'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'svg': 'image/svg+xml', 'woff2': 'font/woff2'}
 def nhung(s):   # @anh:ten@ và @phong:ten@ -> data URI
     def thay(m):
         thu, ten = m.group(1), m.group(2); p = os.path.join(NG, thu, ten)
@@ -34,9 +34,12 @@ khung = khung.replace('@tep:dau.js', doc('nguon/dau.js').strip())
 khung = re.sub(r'<!-- @cuoi[^>]*-->', lambda _: '\n'.join(cuoi + cuoi_chung), khung)
 tv = ''.join(f'<script>{doc("thu-vien/" + f).strip()}\n</script>\n' for f in ['lenis.min.js', 'gsap/gsap.min.js', 'gsap/ScrollTrigger.min.js', 'gsap/CustomEase.min.js'])
 tv += ''.join(f'<script type="text/plain" id="{i}">{doc(p)}</script>\n' for i, p in [('ma-three', 'thu-vien/three/three-gon.min.js'), ('ma-canh-3d', 'canh-3d/canh-3d.js'), ('ma-troi-3d', 'canh-3d/troi-3d.js'), ('ma-bien-3d', 'canh-3d/bien-3d.js')])
+# bộ máy Khối QR: chỉ chạy khi người xem cuộn gần tới mục (xem nguon/khoi-qr.html)
+KHOI_QR = [('ma-qr-tao', 'qrcode.min.js'), ('ma-jsqr', 'jsqr.min.js'), ('ma-gif', 'omggif.js'), ('ma-may', 'may.js'), ('ma-vang', 'thoi-vang.js'), ('ma-qr-ve', 've.js'), ('ma-qr-anh-mau', 'anh-mau.js'), ('ma-qr-app', 'app.js')]
+tv += ''.join(f'<script type="text/plain" id="{i}">{doc("khoi-qr/" + p)}</script>\n' for i, p in KHOI_QR)
 khung = re.sub(r'<!-- @thu-vien[^>]*-->', lambda _: tv.rstrip(), khung)
 khung = re.sub(r'<!-- @ma[^>]*-->', lambda _: '<script>\n' + doc('nguon/du-lieu.js').strip() + '\n</script>\n<script>\n' + doc('nguon/chung.js').strip() + '\n</script>\n' + ''.join(f'<script>/* ===== {t} ===== */\n{s}\n</script>\n' for t, s in ma if t != 'chung'), khung)
-for p in ['thu-vien/three/three-gon.min.js', 'canh-3d/canh-3d.js', 'canh-3d/troi-3d.js', 'canh-3d/bien-3d.js']:
+for p in ['thu-vien/three/three-gon.min.js', 'canh-3d/canh-3d.js', 'canh-3d/troi-3d.js', 'canh-3d/bien-3d.js'] + ['khoi-qr/' + p for _, p in KHOI_QR]:
     assert '</script' not in doc(p), p + ' chứa </script, sẽ làm vỡ trang'
 trang = nhung(khung)
 os.makedirs(os.path.join(GOC, 'ban-moi-nhat'), exist_ok=True)

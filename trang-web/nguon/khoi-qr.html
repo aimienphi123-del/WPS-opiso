@@ -1,0 +1,279 @@
+<!-- ===== PHẦN: Khối QR: khối lập phương ghép mã QR, xoay được, tụ thành thỏi vàng; gõ link, ghép ảnh / GIF, tải PNG (bộ máy ở khoi-qr/) ===== -->
+<style>
+/* trên trang web không dùng: dòng kết quả, nút mặt trước/sau, thanh trạng thái dưới khối, cửa sổ Mẹo (các bước đã ghi bên trái).
+   Vẫn để trong khung vì app.js còn ghi vào; chỉ ẩn đi. */
+#khoi-qr .mp, #khoi-qr .thanh-tt, #khoi-qr #chi-dan, #khoi-qr #nut-chi-dan { display: none !important; }
+/* bỏ tab Thỏi vàng, nút đếm mặt quét được (6/6) và số đếm trên tiêu đề khối; khối vẫn tự tụ thành thỏi vàng khi giữ xoay hoặc để yên */
+#khoi-qr #nut-mo-vang, #khoi-qr #nut-sau-mat, #khoi-qr #so-tieu { display: none !important; }
+#khoi-qr .kqr-an { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* ===== KHỐI QR: khung tối theo trang, giữ chút chất cổ (thanh tiêu đề KHOI_QR.EXE, nút nổi khối, chữ máy) =====
+   Mọi kiểu đều nằm trong #khoi-qr để không đụng tên lớp của phần khác. Sân khối luôn là giấy trắng để máy quét đọc được. */
+#khoi-qr { --kq-giay: #F2F0EB; --kq-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; --kq-o: #0d1116; }
+#khoi-qr .kqr { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(24px, 3vw, 48px); align-items: start; max-width: 1440px; }
+#khoi-qr .kqr-to { font: 400 clamp(64px, 7.2vw, 112px)/1.05 var(--f-to); color: var(--chu); text-transform: uppercase; }
+#khoi-qr .kqr-mo { margin-top: 18px; color: var(--chu-2); font-size: 16px; max-width: 30ch; }
+#khoi-qr .kqr-buoc { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 12px; }
+#khoi-qr .kqr-buoc li { display: flex; gap: 12px; align-items: flex-start; color: var(--chu); font-size: 14px; }
+#khoi-qr .kqr-buoc b { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: rgba(var(--do-rgb), .15); color: var(--do); font-size: 12px; }
+/* cửa sổ chung */
+#khoi-qr .cs { border-radius: 16px; overflow: hidden; border: 1px solid rgba(var(--chu-rgb), .14); background: var(--nen-2); box-shadow: inset 0 1px 0 rgba(var(--chu-rgb), .06), 0 24px 60px -24px rgba(0, 0, 0, .7); }
+#khoi-qr .tieu { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 8px 6px 14px; background: linear-gradient(90deg, var(--do-dam), rgba(var(--do-rgb), .22)); color: #fff; font: 600 14px var(--f-chu); }
+#khoi-qr .kqr-exe { font: 600 13px var(--kq-mono); letter-spacing: .06em; }
+#khoi-qr .tieu .ten { font: inherit; margin: 0; }
+#khoi-qr .tieu .bt { width: 16px; height: 16px; flex: none; }
+#khoi-qr .tieu .so { margin-left: auto; font-variant-numeric: tabular-nums; opacity: .85; }
+#khoi-qr .kqr-den { margin-left: auto; display: flex; gap: 6px; } #khoi-qr .kqr-den b { width: 12px; height: 12px; border-radius: 3px; background: rgba(255, 255, 255, .35); }
+#khoi-qr .nut-tieu { width: 30px; height: 30px; display: grid; place-items: center; border: 0; border-radius: 8px; background: rgba(255, 255, 255, .16); color: #fff; font: 700 15px var(--f-chu); cursor: pointer; }
+#khoi-qr .nut-tieu svg { width: 10px; height: 10px; }
+#khoi-qr .nut-tieu:hover { background: rgba(255, 255, 255, .26); }
+#khoi-qr .than { padding: 14px; }
+/* nút: nổi khối nhẹ (gờ dưới tối), màu theo trang */
+#khoi-qr .nut { min-height: 44px; padding: 0 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid rgba(var(--chu-rgb), .12); border-radius: 10px;
+  background: var(--nen-3); color: var(--chu); font: 600 14px var(--f-chu); cursor: pointer; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), inset 0 -2px 0 rgba(0, 0, 0, .4); transition: background-color .15s, transform .09s; }
+#khoi-qr .nut:hover { background: rgba(var(--chu-rgb), .12); }
+#khoi-qr .nut:active { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .5); }
+#khoi-qr .nut.chinh { background: var(--do); color: var(--nen); border-color: transparent; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .25); }
+#khoi-qr .nut.chinh:hover { background: var(--chu); }
+#khoi-qr .nut:disabled { opacity: .45; cursor: default; }
+#khoi-qr .nut svg { width: 18px; height: 18px; flex: none; }
+#khoi-qr .nut-rong { width: 100%; }
+#khoi-qr .hang { display: flex; gap: 8px; flex-wrap: wrap; } #khoi-qr .hang .nut { flex: 1 1 auto; } #khoi-qr .hang-phai { justify-content: flex-end; padding: 0 14px 14px; }
+/* sân khối: giấy trắng */
+#khoi-qr .kqr-khoi .than { padding: 0; }
+#khoi-qr .san { position: relative; aspect-ratio: 1; background: var(--kq-giay); }
+#khoi-qr #khoi { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; outline: none; }
+#khoi-qr #khoi:active { cursor: grabbing; }
+#khoi-qr #khoi:focus-visible { box-shadow: inset 0 0 0 3px var(--do); }
+#khoi-qr .san.dang-lam #khoi { cursor: progress; }
+#khoi-qr .san-bao { position: absolute; inset: 0; display: grid; place-content: center; gap: 6px; padding: 24px; text-align: center; background: rgba(242, 240, 235, .92); color: #111; }
+#khoi-qr .san-bao-tieu-de { font-weight: 700; } #khoi-qr .san-bao-phu { font-size: 14px; color: #4b4942; }
+#khoi-qr .mp { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid rgba(var(--chu-rgb), .1); }
+#khoi-qr .ttd { flex: 1; min-width: 0; }
+#khoi-qr .kq-tieu-de { color: var(--chu); font-weight: 600; } #khoi-qr .kq-phu { color: var(--chu-2); font-size: 14px; overflow-wrap: anywhere; }
+#khoi-qr .kq-phu a { display: inline-flex; align-items: center; min-height: 44px; color: var(--do); text-decoration: underline; text-underline-offset: 3px; }   /* vùng chạm cao 44px */
+#khoi-qr .khay small { font-size: 12px; }
+#khoi-qr .kq-goi-y { color: var(--mo); font-size: 13px; } #khoi-qr .kq-goi-y:empty { display: none; }
+#khoi-qr .nut-phat { width: 52px; padding: 0; } #khoi-qr .nut-phat svg { width: 14px; height: 14px; fill: currentColor; }
+#khoi-qr .thanh-tt { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-top: 1px solid rgba(var(--chu-rgb), .1); color: var(--mo); font: 12px var(--f-chu); font-variant-numeric: tabular-nums; }
+#khoi-qr .thanh-tt span:first-child { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#khoi-qr .thanh-tt span:empty { display: none; } #khoi-qr .thanh-tt .so { font-variant-numeric: tabular-nums; }
+#khoi-qr .tien-do { flex: 1; min-width: 60px; display: flex; gap: 2px; height: 12px; padding: 2px; overflow: hidden; border-radius: 4px; background: rgba(var(--chu-rgb), .08); }
+#khoi-qr .tien-do i { width: 9px; flex: none; border-radius: 2px; background: var(--do); }
+/* bảng công cụ */
+#khoi-qr .tac-vu { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 12px 14px 0; }
+#khoi-qr .tac-vu .nut { min-height: 44px; padding: 0 6px; font-size: 13px; border-radius: 8px; flex-direction: column; gap: 2px; line-height: 1.1; }
+#khoi-qr .tac-vu .nut svg { width: 16px; height: 16px; }
+#khoi-qr .tac-vu .nut[aria-pressed="true"] { background: var(--do); color: var(--nen); border-color: transparent; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .25); }
+#khoi-qr .khay { min-height: 40px; padding: 0 10px; border: 1px solid rgba(var(--chu-rgb), .12); border-radius: 8px; background: var(--kq-o); color: var(--chu-2); font: 12px var(--f-chu); font-variant-numeric: tabular-nums; cursor: pointer; display: inline-flex; flex-direction: column; justify-content: center; line-height: 1.15; }
+#khoi-qr .khay[aria-pressed="true"] { border-color: var(--do); color: var(--chu); }
+#khoi-qr .kqr-cua [data-trang] { display: grid; gap: 14px; }
+#khoi-qr .kqr-cua [data-trang][hidden] { display: none; }
+#khoi-qr .nhom { margin: 0; padding: 12px; border: 1px solid rgba(var(--chu-rgb), .1); border-radius: 12px; display: grid; gap: 10px; }
+#khoi-qr .nhom legend { padding: 0 6px; color: var(--chu-2); font: 600 12px var(--f-chu); letter-spacing: .04em; text-transform: uppercase; }
+#khoi-qr .ghi { color: var(--mo); font-size: 13px; } #khoi-qr .la-loi, #khoi-qr .ghi.la-loi { color: #E8A5A0; }
+#khoi-qr .nhan-o { display: block; margin-bottom: 6px; color: var(--chu-2); font-size: 13px; }
+#khoi-qr .o { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid rgba(var(--chu-rgb), .14); border-radius: 10px; background: var(--kq-o); color: var(--chu); font: 14px var(--kq-mono); }
+#khoi-qr .o:focus-visible { outline: 2px solid var(--do); outline-offset: 1px; }
+#khoi-qr .o[aria-invalid="true"] { border-color: #E8A5A0; }
+#khoi-qr .ghim { display: flex; gap: 12px; align-items: center; }
+#khoi-qr .ghim-anh { padding: 0; border: 1px solid rgba(var(--chu-rgb), .14); border-radius: 10px; overflow: hidden; background: var(--kq-giay); cursor: pointer; }
+#khoi-qr .ghim-anh canvas { display: block; width: 64px; height: 64px; }
+#khoi-qr .ghim-ten { color: var(--chu); font-weight: 600; } #khoi-qr .ghim-tt { color: var(--mo); font-size: 13px; }
+#khoi-qr .thanh { display: grid; grid-template-columns: 6.5em 1fr 3.2em; align-items: center; gap: 10px; font-size: 13px; color: var(--chu-2); }
+#khoi-qr .thanh output { text-align: right; font: 12px var(--kq-mono); color: var(--chu); }
+#khoi-qr .thanh:has(input:disabled) label { opacity: .5; }
+#khoi-qr input[type="range"] { width: 100%; accent-color: var(--do); }
+#khoi-qr .chk { display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--chu-2); font-size: 14px; min-height: 44px; }
+#khoi-qr .chk input { position: absolute; opacity: 0; pointer-events: none; }
+#khoi-qr .chk i { width: 20px; height: 20px; border-radius: 6px; border: 1px solid rgba(var(--chu-rgb), .3); display: grid; place-items: center; background: var(--kq-o); }
+#khoi-qr .chk i svg { width: 12px; height: 12px; opacity: 0; } #khoi-qr .chk input:checked + i { background: var(--do); border-color: var(--do); } #khoi-qr .chk input:checked + i svg { opacity: 1; }
+#khoi-qr .chk input:focus-visible + i { outline: 2px solid var(--do); outline-offset: 2px; }
+#khoi-qr #tai-tt:empty { display: none; }
+#khoi-qr .anh-tai { width: 100%; border-radius: 10px; background: var(--kq-giay); }
+#khoi-qr .anh-tai.dang-tai { animation: kqr-hien .5s cubic-bezier(.2, .8, .2, 1); } @keyframes kqr-hien { from { opacity: 0; transform: translateY(8px) scale(.97); } }
+#khoi-qr .luoi-mat { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+#khoi-qr .nut-mat { width: 100%; justify-content: space-between; font-size: 13px; }
+#khoi-qr .mat-ten { display: flex; gap: 8px; align-items: center; } #khoi-qr .mat-so { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; background: rgba(var(--do-rgb), .18); color: var(--do); font: 12px var(--f-chu); }
+#khoi-qr .mat-tt { color: var(--mo); font-size: 12px; } #khoi-qr .mat-tt.la-loi { color: #E8A5A0; }
+/* mẹo cho người mới */
+#khoi-qr .meo { margin-top: 24px; }
+#khoi-qr .meo .than { display: flex; gap: 12px; align-items: flex-start; }
+#khoi-qr .meo .bong { width: 34px; height: 34px; flex: none; }
+#khoi-qr .chi-dan-buoc { color: var(--do); font: 600 12px var(--f-chu); } #khoi-qr .chi-dan-chu { color: var(--chu); font-size: 14px; }
+/* lớp chuyển động khi bấm Tải PNG (app.js gắn vào body) */
+/* gợi ý cho người mới: bàn tay kéo qua lại trên khối, mất đi khi người xem chạm vào khối lần đầu */
+#khoi-qr .kqr-tay { position: absolute; left: 50%; top: 58%; z-index: 2; width: 54px; height: 54px; margin: -27px; pointer-events: none; color: #111; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .25)); animation: kqr-keo 2.4s cubic-bezier(.45, 0, .2, 1) infinite; transition: opacity .3s; }
+#khoi-qr .kqr-tay::after { content: ""; position: absolute; left: 10px; top: 6px; width: 16px; height: 16px; border-radius: 50%; background: rgba(var(--do-rgb), .55); animation: kqr-cham 2.4s ease-out infinite; }
+#khoi-qr .kqr-tay.di { opacity: 0; }
+@keyframes kqr-keo { 0%, 12% { translate: -60px 0; } 50%, 62% { translate: 60px -10px; } 100% { translate: -60px 0; } }
+@keyframes kqr-cham { 0%, 10% { transform: scale(.4); opacity: 0; } 14% { opacity: 1; transform: scale(1); } 60% { opacity: .8; } 70%, 100% { opacity: 0; transform: scale(1.6); } }
+#lop-tai-anim { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 80; pointer-events: none; }
+/* máy tính hẹp / điện thoại: xếp chồng */
+@media (max-width: 1180px) { #khoi-qr .kqr { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } #khoi-qr .kqr-gioi { grid-column: 1 / -1; } }
+@media (max-width: 760px) { #khoi-qr .kqr { grid-template-columns: minmax(0, 1fr); } #khoi-qr .thanh { grid-template-columns: 5.5em 1fr 3em; } }
+@media (prefers-reduced-motion: reduce) { #khoi-qr .nut, #khoi-qr .anh-tai.dang-tai, #khoi-qr .kqr-tay, #khoi-qr .kqr-tay::after { transition: none; animation: none; } }
+</style>
+<!-- @khung -->
+<section class="phan khung" id="khoi-qr" aria-labelledby="h-kqr">
+  <div class="kqr">
+    <div class="kqr-gioi">
+      <h2 class="kqr-to" id="h-kqr" data-tach data-vao>Khối QR</h2>
+      <p class="kqr-mo">Khối lập phương ghép từ các khối nhỏ. Nhìn thẳng vào mặt nào cũng ra cùng một mã QR.</p>
+      <ol class="kqr-buoc">
+        <li><b>1</b>Kéo để xoay khối.</li>
+        <li><b>2</b>Giữ tay khi đang xoay, hoặc để yên 15 giây, khối tụ thành thỏi vàng.</li>
+        <li><b>3</b>Tab Link để gõ link của bạn, tab Ảnh để ghép ảnh hoặc ảnh động vào mã.</li>
+      </ol>
+      <!-- Mẹo cho người mới (app.js tự hiện / ẩn) -->
+      <section class="cs meo" id="chi-dan" aria-labelledby="ten-meo" hidden>
+        <div class="tieu"><h3 class="ten" id="ten-meo">Mẹo</h3>
+          <button type="button" class="nut-tieu" id="chi-dan-dong" aria-label="Đóng mẹo"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" stroke-width="2"/></svg></button></div>
+        <div class="than"><svg class="bong" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="16" r="11" fill="#FFF8B0" stroke="#000"/><rect x="15" y="27" width="10" height="7" fill="#C0C0C0" stroke="#000"/><path d="M16 31h8" stroke="#000"/></svg>
+          <div class="meo-chu"><p class="chi-dan-buoc" id="chi-dan-buoc"></p><p class="chi-dan-chu" id="chi-dan-chu"></p></div></div>
+        <div class="hang hang-phai">
+          <button type="button" class="nut" id="chi-dan-bo">Bỏ qua</button>
+          <button type="button" class="nut chinh" id="chi-dan-tiep">Tiếp</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- khối: sân giấy để quét được, dòng kết quả, nút mặt, thanh trạng thái -->
+    <section class="cs kqr-khoi" id="cs-khoi" aria-labelledby="ten-khoi">
+      <div class="tieu"><svg class="bt" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="#fff"/><rect x="3" y="3" width="4" height="4"/><rect x="9" y="3" width="4" height="4"/><rect x="3" y="9" width="4" height="4"/><rect x="10" y="10" width="2" height="2"/></svg><p class="ten" id="ten-khoi">Khối QR</p><span class="so" id="so-tieu" aria-hidden="true"></span>
+        <button type="button" class="nut-tieu" id="nut-chi-dan" aria-label="Xem lại mẹo">?</button></div>
+      <div class="than">
+      <div class="san" id="san">
+        <canvas id="khoi" tabindex="0" role="application"></canvas>
+        <div class="san-bao" id="san-bao" hidden>
+          <p class="san-bao-tieu-de" id="san-bao-tieu-de"></p>
+          <p class="san-bao-phu" id="san-bao-phu"></p>
+        </div>
+      </div>
+      <div class="mp">
+        <div class="ttd" aria-live="polite">
+          <p class="kq-tieu-de" id="kq-tieu-de"></p>
+          <p class="kq-phu" id="kq-phu"></p>
+          <p class="kq-goi-y" id="kq-goi-y"></p>
+        </div>
+        <button type="button" class="nut nut-phat" id="nut-truoc"></button>
+        <button type="button" class="nut nut-phat" id="nut-sau"></button>
+      </div>
+      <div class="thanh-tt" id="thanh-tt">
+        <span id="tt-mat"></span>
+        <div class="tien-do" id="tien-do" role="progressbar" aria-label="Tiến độ ghép" aria-valuemin="0" hidden></div>
+        <span id="tt-o"></span><span class="so" id="tt-khoi"></span><span class="so" id="tt-buoc" hidden></span>
+      </div>
+      </div>
+    </section>
+
+    <!-- bảng công cụ: tab ở trên, mỗi tab một trang -->
+    <section class="cs kqr-cua" id="cs-cong-cu" aria-labelledby="ten-cong-cu">
+      <div class="tieu"><span class="kqr-exe" aria-hidden="true">KHOI_QR.EXE</span><span aria-hidden="true">·</span><h3 class="ten" id="ten-cong-cu">Link</h3>
+        <span class="kqr-den" aria-hidden="true"><b></b><b></b></span>
+        <button type="button" class="nut-tieu" id="cong-cu-dong" aria-label="Đóng cửa sổ công cụ" hidden><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" stroke-width="2"/></svg></button></div>
+      <nav class="tac-vu" aria-label="Công cụ Khối QR">
+  <button type="button" class="nut" data-mo="anh" id="nut-mo-anh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" fill="none"/><circle cx="9" cy="10" r="1.6"/><path d="M3 17l5-4 4 3 3-2 6 4"/></svg>Ảnh</button>
+  <button type="button" class="nut" data-mo="link" id="nut-mo-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1"/><path d="M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></svg>Link</button>
+  <button type="button" class="nut" data-mo="chinh" id="nut-mo-chinh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 7h14M5 17h14"/><circle cx="9" cy="7" r="2.4" fill="none"/><circle cx="15" cy="17" r="2.4" fill="none"/></svg>Chỉnh</button>
+  <button type="button" class="nut" data-mo="vang" id="nut-mo-vang"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 11c2 0 3-2 5-2h8c2 0 3 2 5 2-1 5-4 8-9 8s-8-3-9-8z" fill="#E9B42A"/><path d="M8 9c1-3 7-3 8 0" fill="#F6D27A"/></svg>Thỏi vàng</button>
+  <button type="button" class="nut" data-mo="hopden" id="nut-hop-den"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="6" width="16" height="13" fill="none"/><path d="M4 10h16M10 14h4"/></svg>Hộp đen</button>
+  <button type="button" class="khay" data-mo="mat" id="nut-sau-mat"><span class="so" id="khay-so"></span><small>quét</small></button>
+      </nav>
+      <div class="than">
+      <!-- 3a. ẢNH -->
+      <div data-trang="anh">
+        <div class="ghim" id="ghim">
+          <button type="button" class="ghim-anh" id="ghim-nut"><canvas id="xem-nho" width="96" height="96"></canvas></button>
+          <div class="ghim-chu">
+            <p class="ghim-ten">Xem trước</p>
+            <p class="ghim-tt" id="ghim-tt" aria-live="polite"></p>
+          </div>
+        </div>
+        <fieldset class="nhom"><legend>Mã QR có sẵn</legend>
+          <button type="button" class="nut nut-rong" id="nut-doc-ma">Chọn ảnh mã QR</button>
+          <input type="file" id="tep-ma" accept="image/*" hidden>
+          <p class="ghi" id="ma-tt" aria-live="polite"></p>
+        </fieldset>
+        <fieldset class="nhom"><legend>Ảnh ghép</legend>
+          <div class="hang">
+            <button type="button" class="nut chinh" id="nut-chon-anh">Chọn ảnh</button>
+            <button type="button" class="nut" id="nut-anh-mau">Dùng ảnh mẫu</button>
+            <button type="button" class="nut" id="nut-bo-anh">Bỏ ảnh</button>
+          </div>
+          <button type="button" class="nut nut-rong" id="nut-dong" hidden></button>
+          <input type="file" id="tep-anh" accept="image/*" hidden>
+          <p class="ghi" id="anh-tt" aria-live="polite"></p>
+        </fieldset>
+        <fieldset class="nhom"><legend>Vị trí ảnh</legend><div id="ds-thanh-anh"></div></fieldset>
+        <button type="button" class="nut nut-rong" id="nut-tai-anh">Tải ảnh QR (PNG)</button>
+        <p class="ghi" id="tai-tt" aria-live="polite"></p>
+        <img class="anh-tai" id="anh-tai" alt="Ảnh QR phẳng vừa tạo" hidden>
+        <p class="ghi">Ảnh chỉ xử lý trên máy bạn, không gửi đi đâu.</p>
+      </div>
+      <!-- 3b. LINK -->
+      <div data-trang="link" hidden>
+        <form id="mau-link" novalidate>
+          <label class="nhan-o kqr-an" for="link">Link cho cả sáu mặt</label>
+          <input class="o" id="link" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="link-nhac">
+          <p class="ghi" id="link-nhac" hidden></p>
+        </form>
+      </div>
+      <!-- 3c. CHỈNH -->
+      <div data-trang="chinh" hidden>
+        <fieldset class="nhom"><legend>Hình trên mã</legend><div id="ds-thanh-chinh"></div></fieldset>
+        <p class="ghi">Chi tiết cao thì ảnh rõ hơn, nhưng mã khó quét hơn và máy chạy nặng hơn.</p>
+      </div>
+      <!-- 3d. THỎI VÀNG -->
+      <div data-trang="vang" hidden>
+        <div class="hang">
+          <button type="button" class="nut chinh" id="nut-vang">Thành thỏi vàng</button>
+          <button type="button" class="nut" id="nut-ma">Ghép lại thành mã</button>
+        </div>
+        <label class="chk" for="tu-vang"><input type="checkbox" id="tu-vang" checked><i aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-6" stroke="currentColor" stroke-width="2" fill="none"/></svg></i><span id="tu-vang-chu"></span></label>
+      </div>
+      <!-- 3e. SÁU MẶT -->
+      <div data-trang="mat" hidden>
+        <ol id="ds-mat" class="luoi-mat"></ol>
+        <p class="ghi" id="thong-so"></p>
+        <p class="ghi">Trang tự quét thử từng mặt. Trước khi dùng thật, bạn nên quét lại bằng điện thoại.</p>
+      </div>
+      
+      <div data-trang="hopden" id="hop-den" hidden>
+        <textarea class="o" id="hop-den-chu" readonly aria-label="Nhật ký hộp đen"></textarea>
+        <p class="hop-den-bao" id="hop-den-bao" aria-live="polite"></p>
+        <div class="hang">
+          <button type="button" class="nut chinh" id="hop-den-chep">Sao chép</button>
+          <button type="button" class="nut" id="hop-den-dong">Đóng</button>
+        </div>
+        <p class="ghi">Không ghi link và ảnh. Gửi kèm khi báo lỗi.</p>
+      </div>
+      </div>
+    </section>
+  </div>
+</section>
+<script>
+// Khối QR: mã của bộ máy (khoi-qr/*.js) nằm sẵn trong trang dưới dạng chữ, chỉ chạy khi người xem cuộn gần tới mục này,
+// để lúc mở trang không phải tải và chạy khoảng 300KB mã. Ra khỏi màn hình thì khối nghỉ vẽ.
+(() => {
+  const { ghi } = TK, muc = document.getElementById('khoi-qr');
+  const MA = ['ma-qr-tao', 'ma-jsqr', 'ma-gif', 'ma-may', 'ma-vang', 'ma-qr-ve', 'ma-qr-anh-mau', 'ma-qr-app'];
+  let daChay = false;
+  const chay = () => {
+    if (daChay) return; daChay = true;
+    const t0 = performance.now();
+    try {
+      MA.forEach((id) => { const s = document.createElement('script'); s.textContent = document.getElementById(id).textContent; document.head.appendChild(s); });
+      ghi('khối-qr', 'bật sau ' + Math.round(performance.now() - t0) + ' ms');
+    } catch (e) { ghi('LỖI', 'khối QR: ' + e.message); }
+  };
+  // bàn tay gợi ý kéo xoay, mất đi khi người xem chạm vào khối lần đầu
+  const san = document.getElementById('san'), tay = document.createElement('div');
+  tay.className = 'kqr-tay'; tay.setAttribute('aria-hidden', 'true');
+  tay.innerHTML = '<svg viewBox="0 0 24 24" fill="#fff" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5-2.4 0-3.7-1-5-2.7l-3-4a1.6 1.6 0 0 1 2.4-2L9 14.5V11"/></svg>';
+  san.appendChild(tay);
+  san.addEventListener('pointerdown', () => { tay.classList.add('di'); setTimeout(() => tay.remove(), 400); }, { once: true });
+  if (!('IntersectionObserver' in window)) { chay(); return; }
+  new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) chay(); }, { rootMargin: '600px 0px' }).observe(muc);
+  new IntersectionObserver((es) => { if (window.KhoiQR && window.KhoiQR.anDi) window.KhoiQR.anDi(!es[0].isIntersecting); }).observe(muc);
+})();
+</script>

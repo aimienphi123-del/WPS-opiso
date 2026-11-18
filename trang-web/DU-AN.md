@@ -36,9 +36,10 @@ trang-web/
     mo-dau.html           màn mở đầu chữ TK.
     dau-trang.html        thanh đầu trang (đảo nổi)
     phan-dau.html         màn đầu (chữ nền KHANH, ảnh, tên) + dải chữ chạy
-    dang-lam.html  san-pham.html  game.html  ve-minh.html  phim.html  nhac.html  lien-he.html
+    dang-lam.html  san-pham.html  game.html  ve-minh.html  phim.html  nhac.html  khoi-qr.html  lien-he.html
     phong.css + phong/    phông chữ (tệp .woff2)
     anh/                  ảnh (chân dung, biểu tượng app)
+  khoi-qr/                bộ máy Khối QR (app.js, ve.js, may.js, thoi-vang.js, jsQR, qrcode, omggif), nhúng dạng chữ, chỉ chạy khi cuộn gần tới
   canh-3d/                mã 3 cảnh 3D: troi-3d.js (trời sao), canh-3d.js (núi), bien-3d.js (biển)
   thu-vien/               Lenis, GSAP 3.13 (ScrollTrigger, CustomEase), Three.js r160 bản rút gọn
   ban-moi-nhat/           tệp trang đã ghép (không sửa tay)
@@ -77,6 +78,7 @@ Khi ghép, lệnh `dung.py` làm theo thứ tự sau:
 | `ve-minh.html` | `#ve-minh` | về mình |
 | `phim.html` | `#phim` | phim ngắn (đang là khung chờ, chưa có phim thật) |
 | `nhac.html` | `#nhac` | nhạc đang nghe (SoundCloud) |
+| `khoi-qr.html` | `#khoi-qr` | Khối QR: khối lập phương ghép mã QR, kéo xoay, gõ link, ghép ảnh / GIF, tải PNG |
 | `lien-he.html` | `#lien-he` | thông tin liên hệ (email, Zalo, Facebook), thẻ chân dung lật được, chân trang |
 
 ## Sửa cái gì thì mở đâu
@@ -92,6 +94,8 @@ Khi ghép, lệnh `dung.py` làm theo thứ tự sau:
 
 Sửa xong thì chạy `python3 dung.py` rồi kiểm tra như phần dưới.
 
+- **Khối QR:** khung và chữ trong `nguon/khoi-qr.html`, chữ thông báo trong khối `CHU` của `khoi-qr/app.js`. Trên trang đã ẩn (vẫn còn trong khung vì app.js ghi vào): dòng kết quả và nút mặt dưới khối, thanh trạng thái, cửa sổ Mẹo, tab Thỏi vàng, nút đếm 6/6 và số đếm trên tiêu đề. Khối vẫn tự tụ thành thỏi vàng khi giữ xoay hoặc để yên 15 giây. Mặc định là mã QR thường, ảnh mẫu chỉ hiện khi bấm "Dùng ảnh mẫu".
+
 ## Kiểm tra trước khi giao
 
 Chạy ở thư mục `trang-web`:
@@ -100,6 +104,7 @@ Chạy ở thư mục `trang-web`:
 sh thu/chay-het.sh                  ghép trang rồi chạy các bài thử chính + kiểm tra màu, bố cục
 node thu/canh-nen.cjs               cảnh nền 3D: bật đúng cảnh, dừng, giải phóng bộ nhớ, dựng lại
 node thu/the.cjs                    thẻ chân dung: nghiêng, lật, phím, chữ mặt sau đúng bản đã duyệt
+node thu/khoi-qr.cjs                Khối QR: chạy chậm, mặc định QR thường, 6 mặt quét được, kéo xoay, đổi link, ghép ảnh, tải PNG, nghỉ khi cuộn đi
 node thu/chup-the.cjs               chụp thẻ chân dung (mặt trước, khi nghiêng, mặt sau) vào thu/anh/the/
 node thu/nhac.cjs                   mục Nhạc (cần vào được SoundCloud; máy không vào được thì hỏng, không phải lỗi trang)
 node thu/chup.cjs                   chụp ảnh 3 chủ đề × máy tính, điện thoại vào thu/anh/
@@ -143,6 +148,7 @@ Phải giữ. Muốn đổi thì hỏi trước.
   - Không có chữ "Đang nhận việc", không có chấm online hay offline. Thanh đầu trang chỉ có giờ TP.HCM.
   - Trang nghiêm túc, thể hiện kỹ năng, không kêu gọi. Phần cuối tên là "Thông tin liên hệ".
   - Chỗ nào đã có motion graphic minh hoạ thì bỏ chữ giải thích thừa.
+  - Chữ thừa là chữ nói lại điều người xem đã thấy trên màn hình (nhãn lặp lại ô hay nút), hoặc lời khuyên không làm họ đổi cách dùng. Chữ cần giữ là điều họ không tự thấy được mà ảnh hưởng tới việc họ làm: báo lỗi, kết quả sau khi bấm, ảnh không gửi đi, đánh đổi khi chỉnh.
 - **Phong cách:**
   - Chill, trầm ổn.
   - Không ánh sáng đỏ, không màu bạc hà.
