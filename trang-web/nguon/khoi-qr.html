@@ -190,18 +190,18 @@
           </div>
         </div>
         <fieldset class="nhom"><legend>Mã QR có sẵn</legend>
-          <button type="button" class="nut nut-rong" id="nut-doc-ma">Chọn ảnh mã QR</button>
-          <input type="file" id="tep-ma" accept="image/*" hidden>
+          <button type="button" class="nut nut-rong" id="nut-doc-ma">Tải ảnh mã QR lên</button>
+          <input type="file" id="tep-ma" accept="image/*" class="kqr-an" tabindex="-1" aria-hidden="true">
           <p class="ghi" id="ma-tt" aria-live="polite"></p>
         </fieldset>
         <fieldset class="nhom"><legend>Ảnh ghép</legend>
           <div class="hang">
-            <button type="button" class="nut chinh" id="nut-chon-anh">Chọn ảnh</button>
+            <button type="button" class="nut chinh" id="nut-chon-anh">Tải ảnh lên</button>
             <button type="button" class="nut" id="nut-anh-mau">Dùng ảnh mẫu</button>
             <button type="button" class="nut" id="nut-bo-anh">Bỏ ảnh</button>
           </div>
           <button type="button" class="nut nut-rong" id="nut-dong" hidden></button>
-          <input type="file" id="tep-anh" accept="image/*" hidden>
+          <input type="file" id="tep-anh" accept="image/*" class="kqr-an" tabindex="-1" aria-hidden="true">
           <p class="ghi" id="anh-tt" aria-live="polite"></p>
         </fieldset>
         <fieldset class="nhom"><legend>Vị trí ảnh</legend><div id="ds-thanh-anh"></div></fieldset>

@@ -131,7 +131,7 @@
     chiDan: [
       'Giữ và kéo khối để xoay. Khối tụ thành thỏi vàng.',
       'Buông tay: khối về lại mã QR và tự thử quét.',
-      'Mở tab Ảnh, bấm Chọn ảnh để ghép ảnh của bạn vào mã.'
+      'Mở tab Ảnh, bấm Tải ảnh lên để ghép ảnh của bạn vào mã.'
     ],
     chiDanTiep: 'Tiếp', chiDanXong: 'Xong',
     daSaoChep: 'Đã sao chép',
@@ -1153,7 +1153,7 @@
     baoMa(CHU.maDuoc(doc.length > 60 ? doc.slice(0, 57) + '...' : doc, noiDung.length) + (thanhToan ? CHU.maThanhToan : ''), false);
   }
   function ganMa() {
-    $('nut-doc-ma').addEventListener('click', function () { hopDen.ghi('bấm Chọn ảnh mã QR'); $('tep-ma').click(); });
+    $('nut-doc-ma').addEventListener('click', function () { hopDen.ghi('bấm Tải ảnh mã QR lên'); $('tep-ma').click(); });
     $('tep-ma').addEventListener('change', function () {
       var f = this.files && this.files[0];
       this.value = '';
@@ -1459,7 +1459,7 @@
   }
 
   function ganAnh() {
-    $('nut-chon-anh').addEventListener('click', function () { hopDen.ghi('bấm Chọn ảnh'); $('tep-anh').click(); });
+    $('nut-chon-anh').addEventListener('click', function () { hopDen.ghi('bấm Tải ảnh lên'); $('tep-anh').click(); });
     $('tep-anh').addEventListener('change', function () {
       var f = this.files && this.files[0];
       this.value = '';
