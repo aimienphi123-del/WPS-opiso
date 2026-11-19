@@ -1,17 +1,17 @@
 # Graph Report - trang-web  (2026-11-19)
 
 ## Corpus Check
-- 35 files · ~90,905 words
+- 35 files · ~91,050 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 2, .css 2)
 
 ## Summary
-- 395 nodes · 873 edges · 33 communities (23 shown, 10 thin omitted)
+- 396 nodes · 877 edges · 33 communities (23 shown, 10 thin omitted)
 - Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 70 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6fda4d55`
+- Built from commit: `59167992`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -49,26 +49,26 @@
 ## God Nodes (most connected - your core abstractions)
 1. `khoiDong()` - 24 edges
 2. `gan()` - 23 edges
-3. `yeuCauGhep()` - 20 edges
-4. `henVe()` - 20 edges
-5. `taoBoVe()` - 20 edges
+3. `henVe()` - 20 edges
+4. `taoBoVe()` - 20 edges
+5. `yeuCauGhep()` - 20 edges
 6. `ganKeo()` - 18 edges
-7. `capNhatNutMat()` - 17 edges
-8. `ganKeoTha()` - 16 edges
+7. `ganKeoTha()` - 17 edges
+8. `capNhatNutMat()` - 17 edges
 9. `xepKhoi()` - 16 edges
 10. `capNhatCuaSo()` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Sửa cái gì thì mở đâu` --references--> `veTienDo()`  [INFERRED]
   DU-AN.md → khoi-qr/app.js
-- `motMat()` --indirect_call--> `f()`  [INFERRED]
-  khoi-qr/app.js → khoi-qr/omggif.js
-- `buoc()` --indirect_call--> `d()`  [INFERRED]
-  khoi-qr/app.js → khoi-qr/jsqr.min.js
 - `suaChoDeQuet()` --indirect_call--> `buoc()`  [INFERRED]
   khoi-qr/chinh-anh.js → khoi-qr/app.js
-- `mot()` --indirect_call--> `f()`  [INFERRED]
-  khoi-qr/app.js → khoi-qr/omggif.js
+- `xong()` --indirect_call--> `i()`  [INFERRED]
+  khoi-qr/chinh-anh.js → khoi-qr/jsqr.min.js
+- `buoc()` --indirect_call--> `d()`  [INFERRED]
+  khoi-qr/app.js → khoi-qr/jsqr.min.js
+- `chay()` --indirect_call--> `vong()`  [INFERRED]
+  canh-3d/bien-3d.js → canh-3d/canh-3d.js
 
 ## Import Cycles
 - None detected.
@@ -145,7 +145,7 @@ Nodes (5): chiaLop(), demVo(), dungThoiVang(), layMau(), trongThoiVang()
 
 ### Community 22 - "chinh-anh.js"
 Cohesion: 0.10
-Nodes (62): anhChoMay(), anhChup(), apBut(), apMT(), apTach(), bo(), butGanDau(), capNhatNut() (+54 more)
+Nodes (63): anhChoMay(), anhChup(), apBut(), apMT(), apTach(), bo(), butGanDau(), capNhatNut() (+55 more)
 
 ### Community 23 - "khoi-qr.cjs"
 Cohesion: 0.40
@@ -174,16 +174,16 @@ Nodes (4): chayHieuUngTaiGiay(), drawPaper3D(), drawTexTri(), frame()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `buoc()` connect `henVe` to `capNhatCuaSo`, `jsqr.min.js`, `chinh-anh.js`?**
-  _High betweenness centrality (0.137) - this node is a cross-community bridge._
+  _High betweenness centrality (0.138) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `khoiDong()` (e.g. with `app.js` and `henThanhVang()`) actually correct?**
   _`khoiDong()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Should `canh-3d.js` be split into smaller, more focused modules?**
   _Cohesion score 0.11428571428571428 - nodes in this community are weakly interconnected._
 - **Why does `suaChoDeQuet()` connect `chinh-anh.js` to `henVe`?**
-  _High betweenness centrality (0.117) - this node is a cross-community bridge._
+  _High betweenness centrality (0.118) - this node is a cross-community bridge._
 - **Are the 7 inferred relationships involving `gan()` (e.g. with `apCoRieng()` and `ghepVaoMa()`) actually correct?**
   _`gan()` has 7 INFERRED edges - model-reasoned connections that need verification._
 - **Should `may.js` be split into smaller, more focused modules?**
   _Cohesion score 0.08773784355179703 - nodes in this community are weakly interconnected._
 - **Why does `capNhatCuaSo()` connect `capNhatCuaSo` to `Trang web cá nhân của Bùi Tuấn Khanh`, `capNhatNutMat`, `khoiDong`, `capNhatNutMat`, `henVe`?**
-  _High betweenness centrality (0.052) - this node is a cross-community bridge._
+  _High betweenness centrality (0.053) - this node is a cross-community bridge._

@@ -26,7 +26,7 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   // trình chỉnh ảnh: mở ra trước khi ghép; thử từng công cụ
   await p.waitForFunction(() => window.ChinhAnhQR && ChinhAnhQR.trangThai().mo && ChinhAnhQR.trangThai().w > 0, null, { timeout: 20000 }).catch(() => {});
   let ca = await p.evaluate(() => ChinhAnhQR.trangThai()); ok(ca.mo && ca.w > 0 && await p.evaluate(() => KhoiQR.trangThai().cuaSo === 'chinh' && document.querySelector('#khoi-qr .kqr').classList.contains('dang-chinh')), 'tải ảnh lên: ảnh vào trình chỉnh ở tab Chỉnh, cửa sổ công cụ rộng ra (' + ca.w + 'x' + ca.h + ')');
-  const thap = await p.evaluate(() => [...document.querySelectorAll('#ca button, #ca input')].filter((e) => e.offsetParent && e.getBoundingClientRect().height < 44 && e.type !== 'checkbox').map((e) => e.id || e.className || e.type));
+  const thap = await p.evaluate(() => [...document.querySelectorAll('#ca button, #ca input')].filter((e) => e.offsetParent && e.getBoundingClientRect().height < 44 && e.type !== 'checkbox' && !e.closest('.ca-phong')).map((e) => e.id || e.className || e.type));
   ok(!thap.length, 'trình chỉnh ảnh: nút và ô nhập cao từ 44px ' + thap.join(' '));
   ok(await p.evaluate(() => [...document.querySelectorAll('#ca *')].filter((e) => e.offsetParent && e.childNodes.length && [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())).every((e) => parseFloat(getComputedStyle(e).fontSize) >= 12)), 'trình chỉnh ảnh: chữ từ 12px');
   await p.click('#ca [data-ti="1"]'); ca = await p.evaluate(() => ChinhAnhQR.trangThai()); ok(ca.tiLe === 1, 'khung: chọn tỉ lệ 1:1');
@@ -45,6 +45,7 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   await p.click('#ca-lui'); const lui = await p.evaluate(() => ChinhAnhQR.trangThai()); await p.click('#ca-toi'); const toi = await p.evaluate(() => ChinhAnhQR.trangThai());
   ok(!lui.latX && !lui.latY && (toi.latX || toi.latY), 'hoàn tác, làm lại');
   await p.waitForTimeout(600); ok(/Quét được|Khó quét/.test(await p.textContent('#ca-ma-tieu')), 'xem trên mã: ' + await p.textContent('#ca-ma-tieu'));
+  ok(await p.evaluate(() => [...document.querySelectorAll('.ca-phong .ca-n')].every((b) => { const r = b.getBoundingClientRect(), a = getComputedStyle(b, '::after'); return r.height + 2 * parseFloat(a.top === 'auto' ? 0 : -parseFloat(a.top)) >= 44; })), 'thanh phóng: nút nhỏ, vùng bấm vẫn từ 44px');
   await p.click('#ca-phong-to'); await p.click('#ca-phong-to'); ca = await p.evaluate(() => ChinhAnhQR.trangThai()); ok(ca.zoom > 2 && /225%/.test(await p.textContent('#ca-vua')), 'phóng to bằng nút +: ' + Math.round(ca.zoom * 100) + '%');
   await p.mouse.move(cx, cy); await p.keyboard.down('Control'); await p.mouse.wheel(0, 300); await p.keyboard.up('Control');
   const zLan = await p.evaluate(() => ChinhAnhQR.trangThai().zoom); ok(zLan < ca.zoom, 'Ctrl + lăn chuột: thu nhỏ lại');

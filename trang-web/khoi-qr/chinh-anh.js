@@ -182,10 +182,11 @@
     var t = coXoay(), u = (px - nhin.ox) / nhin.sc, v = (py - nhin.oy) / nhin.sc, sc = nhin.sc0 * z;
     st.zoom = z;
     st.pan = [px - u * sc - (nhin.W - t.w * sc) / 2, py - v * sc - (nhin.H - nhin.duoi - t.h * sc) / 2];
-    $('ca-vua').textContent = Math.round(z * 100) + '%';
+    capNhatPhong();
     henVe();
   }
-  function vuaKhung() { st.zoom = 1; st.pan = [0, 0]; var b = $('ca-vua'); if (b) b.textContent = '100%'; henVe(); }
+  function capNhatPhong() { var b = $('ca-vua'); if (!b) return; b.textContent = Math.round(st.zoom * 100) + '%'; b.parentNode.classList.toggle('dang-phong', st.zoom > 1.001); }
+  function vuaKhung() { st.zoom = 1; st.pan = [0, 0]; capNhatPhong(); henVe(); }
   function tuNhinSangXoay(px, py) { return [(px - nhin.ox) / nhin.sc, (py - nhin.oy) / nhin.sc]; }
   function tuNhinSangGoc(px, py) { var u = tuNhinSangXoay(px, py); return apMT(nghichMT(maTranXoay()), u[0], u[1]); }
   function tuGocSangNhin(x, y) { var u = apMT(maTranXoay(), x, y); return [nhin.ox + u[0] * nhin.sc, nhin.oy + u[1] * nhin.sc]; }
@@ -605,7 +606,7 @@
         var z = Math.max(1, Math.min(8, chum.z0 * Math.hypot(a[0] - b[0], a[1] - b[1]) / chum.d0)), giua = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
         var t = coXoay(), sc = nhin.sc0 * z;
         st.zoom = z; st.pan = [giua[0] - chum.u * sc - (nhin.W - t.w * sc) / 2, giua[1] - chum.v * sc - (nhin.H - nhin.duoi - t.h * sc) / 2];
-        $('ca-vua').textContent = Math.round(z * 100) + '%'; henVe(); return;
+        capNhatPhong(); henVe(); return;
       }
       if (st.cu === 'tay' && e.pointerType !== 'touch') { st.troTay = p; henVe(); }
       if (!keo) return;

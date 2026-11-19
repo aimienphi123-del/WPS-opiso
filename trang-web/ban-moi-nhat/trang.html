@@ -895,9 +895,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 #khoi-qr .ca-noi { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); display: flex; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(var(--nen-rgb), .86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--vien); }
 #khoi-qr .ca-noi[hidden] { display: none; }
 /* phóng to: chạm hai ngón (điện thoại), lăn chuột hoặc ba nút này; đang phóng thì kéo bằng hai ngón, chuột giữa hoặc giữ phím cách */
-#khoi-qr .ca-phong { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: rgba(var(--nen-rgb), .86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--vien); }
-#khoi-qr .ca-phong .ca-n { padding: 0 10px; font-size: 18px; }
-#khoi-qr .ca-phong .ca-phong-so { min-width: 62px; font: 600 13px var(--kq-mono); }
+/* viên nhỏ: nút nhìn 32px, vùng bấm vẫn 44px nhờ lớp vô hình ::after */
+#khoi-qr .ca-phong { position: absolute; top: 10px; right: 10px; display: flex; align-items: center; height: 32px; padding: 0 2px; border-radius: 999px; background: rgba(var(--nen-rgb), .72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--vien); }
+#khoi-qr .ca-phong .ca-n { position: relative; min-height: 28px; height: 28px; min-width: 28px; padding: 0 6px; border: 0; border-radius: 999px; background: none; font-size: 16px; line-height: 1; color: var(--chu-2); }
+#khoi-qr .ca-phong .ca-n::after { content: ""; position: absolute; inset: -8px -4px; }
+#khoi-qr .ca-phong .ca-n:hover { color: var(--chu); background: rgba(var(--chu-rgb), .08); }
+#khoi-qr .ca-phong .ca-phong-so { min-width: 46px; font: 600 12px var(--kq-mono); }
 #khoi-qr #ca-sua-quet[hidden] { display: none; }
 #khoi-qr .ca-n { min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--vien); background: var(--nen-2); color: var(--chu); font: 600 14px var(--f-chu); display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; cursor: pointer; transition: background-color .2s, transform .15s cubic-bezier(.22, 1, .36, 1); }
 #khoi-qr .ca-n:active:not(:disabled) { transform: scale(.96); }
@@ -943,6 +946,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   #khoi-qr .ca-vung { grid-template-columns: minmax(0, 1fr); }
   #khoi-qr .ca-giua { min-height: 340px; }
   #khoi-qr .ca-an-hep { display: none; }
+  /* điện thoại phóng bằng hai ngón: chỉ hiện ô phần trăm khi đang phóng, chạm để về vừa khung */
+  #khoi-qr .ca-phong { display: none; }
+  #khoi-qr .ca-phong.dang-phong { display: flex; }
+  #khoi-qr .ca-phong #ca-thu-nho, #khoi-qr .ca-phong #ca-phong-to { display: none; }
   /* thanh hoàn tác / làm lại / Ghép dính đáy màn hình khi đang ở trong trình chỉnh, khỏi cuộn qua hết các tùy chọn */
   #khoi-qr .kqr-cua.cs { overflow: clip; }   /* overflow: hidden chặn position: sticky; clip cắt viền y hệt mà không chặn */
   #khoi-qr .ca-chan { position: sticky; bottom: 0; z-index: 3; margin: 0 -14px -14px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(var(--nen-rgb), .92); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid var(--vien); }
@@ -8829,10 +8836,11 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
     var t = coXoay(), u = (px - nhin.ox) / nhin.sc, v = (py - nhin.oy) / nhin.sc, sc = nhin.sc0 * z;
     st.zoom = z;
     st.pan = [px - u * sc - (nhin.W - t.w * sc) / 2, py - v * sc - (nhin.H - nhin.duoi - t.h * sc) / 2];
-    $('ca-vua').textContent = Math.round(z * 100) + '%';
+    capNhatPhong();
     henVe();
   }
-  function vuaKhung() { st.zoom = 1; st.pan = [0, 0]; var b = $('ca-vua'); if (b) b.textContent = '100%'; henVe(); }
+  function capNhatPhong() { var b = $('ca-vua'); if (!b) return; b.textContent = Math.round(st.zoom * 100) + '%'; b.parentNode.classList.toggle('dang-phong', st.zoom > 1.001); }
+  function vuaKhung() { st.zoom = 1; st.pan = [0, 0]; capNhatPhong(); henVe(); }
   function tuNhinSangXoay(px, py) { return [(px - nhin.ox) / nhin.sc, (py - nhin.oy) / nhin.sc]; }
   function tuNhinSangGoc(px, py) { var u = tuNhinSangXoay(px, py); return apMT(nghichMT(maTranXoay()), u[0], u[1]); }
   function tuGocSangNhin(x, y) { var u = apMT(maTranXoay(), x, y); return [nhin.ox + u[0] * nhin.sc, nhin.oy + u[1] * nhin.sc]; }
@@ -9252,7 +9260,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
         var z = Math.max(1, Math.min(8, chum.z0 * Math.hypot(a[0] - b[0], a[1] - b[1]) / chum.d0)), giua = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
         var t = coXoay(), sc = nhin.sc0 * z;
         st.zoom = z; st.pan = [giua[0] - chum.u * sc - (nhin.W - t.w * sc) / 2, giua[1] - chum.v * sc - (nhin.H - nhin.duoi - t.h * sc) / 2];
-        $('ca-vua').textContent = Math.round(z * 100) + '%'; henVe(); return;
+        capNhatPhong(); henVe(); return;
       }
       if (st.cu === 'tay' && e.pointerType !== 'touch') { st.troTay = p; henVe(); }
       if (!keo) return;
