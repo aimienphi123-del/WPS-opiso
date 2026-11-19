@@ -1,5 +1,7 @@
 <!-- ===== PHẦN: Khối QR: khối lập phương ghép mã QR, xoay được, tụ thành thỏi vàng; gõ link, ghép ảnh / GIF, tải PNG (bộ máy ở khoi-qr/) ===== -->
 <style>
+#khoi-qr .kqr-png { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+#khoi-qr .kqr-png .nut[aria-pressed="true"] { background: var(--do); color: var(--nen); border-color: transparent; }
 /* trên trang web không dùng: dòng kết quả, nút mặt trước/sau, thanh trạng thái dưới khối, cửa sổ Mẹo (các bước đã ghi bên trái).
    Vẫn để trong khung vì app.js còn ghi vào; chỉ ẩn đi. */
 #khoi-qr .mp, #khoi-qr .thanh-tt, #khoi-qr #chi-dan, #khoi-qr #nut-chi-dan { display: none !important; }
@@ -144,6 +146,11 @@
 #khoi-qr #ca-ve[data-cu="mau"], #khoi-qr #ca-ve[data-cu="xoay"], #khoi-qr #ca-ve[data-cu="tren-ma"], #khoi-qr #ca-ve[data-cu="xuat"] { cursor: default; }
 #khoi-qr .ca-noi { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); display: flex; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(var(--nen-rgb), .86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--vien); }
 #khoi-qr .ca-noi[hidden] { display: none; }
+/* phóng to: chạm hai ngón (điện thoại), lăn chuột hoặc ba nút này; đang phóng thì kéo bằng hai ngón, chuột giữa hoặc giữ phím cách */
+#khoi-qr .ca-phong { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: rgba(var(--nen-rgb), .86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--vien); }
+#khoi-qr .ca-phong .ca-n { padding: 0 10px; font-size: 18px; }
+#khoi-qr .ca-phong .ca-phong-so { min-width: 62px; font: 600 13px var(--kq-mono); }
+#khoi-qr #ca-sua-quet[hidden] { display: none; }
 #khoi-qr .ca-n { min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--vien); background: var(--nen-2); color: var(--chu); font: 600 14px var(--f-chu); display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; cursor: pointer; transition: background-color .2s, transform .15s cubic-bezier(.22, 1, .36, 1); }
 #khoi-qr .ca-n:active:not(:disabled) { transform: scale(.96); }
 #khoi-qr .ca-n:disabled { opacity: .45; cursor: default; }
@@ -188,6 +195,9 @@
   #khoi-qr .ca-vung { grid-template-columns: minmax(0, 1fr); }
   #khoi-qr .ca-giua { min-height: 340px; }
   #khoi-qr .ca-an-hep { display: none; }
+  /* thanh hoàn tác / làm lại / Ghép dính đáy màn hình khi đang ở trong trình chỉnh, khỏi cuộn qua hết các tùy chọn */
+  #khoi-qr .kqr-cua.cs { overflow: clip; }   /* overflow: hidden chặn position: sticky; clip cắt viền y hệt mà không chặn */
+  #khoi-qr .ca-chan { position: sticky; bottom: 0; z-index: 3; margin: 0 -14px -14px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(var(--nen-rgb), .92); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid var(--vien); }
   #khoi-qr .kqr.dang-chinh .kqr-khoi { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { #khoi-qr .ca-n, #khoi-qr .ca-chip, #khoi-qr .ca-cu { transition: none; } }
@@ -283,7 +293,8 @@
           <input type="file" id="tep-anh" accept="image/*" class="kqr-an" tabindex="-1" aria-hidden="true">
           <p class="ghi" id="anh-tt" aria-live="polite"></p>
         </fieldset>
-        <fieldset class="nhom"><legend>Vị trí ảnh</legend><div id="ds-thanh-anh"></div></fieldset>
+        
+        <fieldset class="nhom"><legend>Cỡ ảnh PNG</legend><div class="kqr-png"><button type="button" class="nut" data-png="1024" aria-pressed="false">1024 px</button><button type="button" class="nut" data-png="2048" aria-pressed="false">2048 px</button><button type="button" class="nut" data-png="4096" aria-pressed="false">4096 px</button></div></fieldset>
         <button type="button" class="nut nut-rong" id="nut-tai-anh">Tải ảnh QR (PNG)</button>
         <p class="ghi" id="tai-tt" aria-live="polite"></p>
         <img class="anh-tai" id="anh-tai" alt="Ảnh QR phẳng vừa tạo" hidden>
@@ -310,7 +321,8 @@
           <div class="ca-vung">
             <div class="ca-giua">
               <canvas id="ca-ve" aria-label="Ảnh đang chỉnh"></canvas>
-              <div class="ca-noi" data-bang="khung"><button type="button" class="ca-n" id="ca-lat-ngang">Lật ngang</button><button type="button" class="ca-n" id="ca-xoay-90">Xoay 90°</button><button type="button" class="ca-n" id="ca-dat-lai">Bỏ cắt</button></div>
+              <div class="ca-noi" data-bang="khung"><button type="button" class="ca-n" id="ca-dat-lai">Bỏ cắt</button></div>
+              <div class="ca-phong" role="group" aria-label="Phóng to ảnh"><button type="button" class="ca-n" id="ca-thu-nho" aria-label="Thu nhỏ">−</button><button type="button" class="ca-n ca-phong-so" id="ca-vua" aria-label="Vừa khung">100%</button><button type="button" class="ca-n" id="ca-phong-to" aria-label="Phóng to">+</button></div>
               <div class="ca-noi" data-bang="nen" hidden><button type="button" class="ca-n" id="ca-tu-tach-2">Tự tách nền</button></div>
               <div class="ca-noi" data-bang="but" hidden><button type="button" class="ca-n" id="ca-but-lui">Bỏ điểm cuối</button><button type="button" class="ca-n" id="ca-but-bo">Bỏ vùng</button></div>
             </div>
@@ -351,13 +363,12 @@
               </section>
               <section data-bang="tren-ma" id="ca-bang-tren-ma" hidden></section>
               <section data-bang="xuat" hidden>
-                <h4>Cỡ ảnh QR khi tải PNG</h4>
-                <div class="ca-chips"><button type="button" class="ca-chip" data-png="1024" aria-pressed="false">1024 px</button><button type="button" class="ca-chip" data-png="2048" aria-pressed="false">2048 px</button><button type="button" class="ca-chip" data-png="4096" aria-pressed="false">4096 px</button></div>
                 <button type="button" class="ca-n ca-rong" id="ca-tai">Tải ảnh đã chỉnh (PNG)</button>
                 <p class="ca-ghi" id="ca-xuat-tt" aria-live="polite">Nền đã tách được giữ trong suốt. Có kích thước tự chọn thì ảnh ra đúng cỡ đó.</p>
               </section>
               <div class="ca-ma-hop" id="ca-ma-hop"><canvas id="ca-ma" width="168" height="168" aria-hidden="true"></canvas>
                 <div><b id="ca-ma-tieu" aria-live="polite">Đang thử quét…</b><p id="ca-ma-phu"></p></div></div>
+              <button type="button" class="ca-n ca-rong" id="ca-sua-quet" hidden>Sửa cho dễ quét</button>
             </div>
           </div>
           <div class="ca-chan">

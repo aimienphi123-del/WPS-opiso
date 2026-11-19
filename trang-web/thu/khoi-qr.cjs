@@ -45,7 +45,12 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   await p.click('#ca-lui'); const lui = await p.evaluate(() => ChinhAnhQR.trangThai()); await p.click('#ca-toi'); const toi = await p.evaluate(() => ChinhAnhQR.trangThai());
   ok(!lui.latX && !lui.latY && (toi.latX || toi.latY), 'hoàn tác, làm lại');
   await p.waitForTimeout(600); ok(/Quét được|Khó quét/.test(await p.textContent('#ca-ma-tieu')), 'xem trên mã: ' + await p.textContent('#ca-ma-tieu'));
-  await p.click('#ca [data-cu="xuat"]'); await p.click('#ca [data-png="4096"]'); ok(await p.evaluate(() => KhoiQR.trangThai().coPng === 4096), 'xuất: chọn cỡ PNG 4096');
+  await p.click('#ca-phong-to'); await p.click('#ca-phong-to'); ca = await p.evaluate(() => ChinhAnhQR.trangThai()); ok(ca.zoom > 2 && /225%/.test(await p.textContent('#ca-vua')), 'phóng to bằng nút +: ' + Math.round(ca.zoom * 100) + '%');
+  await p.mouse.move(cx, cy); await p.keyboard.down('Control'); await p.mouse.wheel(0, 300); await p.keyboard.up('Control');
+  const zLan = await p.evaluate(() => ChinhAnhQR.trangThai().zoom); ok(zLan < ca.zoom, 'Ctrl + lăn chuột: thu nhỏ lại');
+  await p.click('#ca-vua'); ok(await p.evaluate(() => ChinhAnhQR.trangThai().zoom === 1), 'nút phần trăm: về vừa khung');
+  await p.click('#ca [data-cu="xuat"]');
+  ok(await p.evaluate(() => !document.querySelector('#ca [data-png]') && !document.getElementById('ca-lat-ngang') && !document.getElementById('ds-thanh-anh')), 'đã bỏ: cỡ PNG trong trình chỉnh, nút lật/xoay trùng ở thanh nổi, thanh Vị trí ảnh');
   const taiCa = p.waitForEvent('download', { timeout: 15000 }).catch(() => null); await p.click('#ca-tai'); const fc = await taiCa;
   ok(!!fc && fc.suggestedFilename() === 'anh-da-chinh.png', 'tải ảnh đã chỉnh (PNG)');
   await p.click('#ca-ghep');
@@ -56,7 +61,14 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   await p.click('#ca [data-cu="tren-ma"]'); ok(await p.isVisible('#ds-thanh-chinh'), 'mục Trên mã: có các thanh hình trên mã'); await p.click('label[for="giu-mau"]');
   await p.waitForFunction(() => !KhoiQR.trangThai().coMau && KhoiQR.trangThai().thuXong && !KhoiQR.trangThai().dangGhep, null, { timeout: 60000 }).catch(() => {});
   t = await p.evaluate(() => KhoiQR.trangThai()); ok(!t.coMau && t.kqMat.every(Boolean), 'tắt giữ màu: mã trắng đen, 6 mặt quét được');
+  // sửa cho dễ quét: phép thử trong trang gần như luôn quét được nên nút hiếm khi tự hiện; cho nút hiện để thử cơ chế dò và áp thông số
+  await p.evaluate(() => { KhoiQR.datChinh({ tuongPhan: -60, chiTiet: 10 }); document.getElementById('ca-sua-quet').hidden = false; }); await p.waitForTimeout(600);
+  await p.click('#ca-sua-quet'); await p.waitForFunction(() => !document.getElementById('ca-sua-quet').disabled && /Đã|Chưa tìm/.test(document.getElementById('ca-ma-phu').textContent), null, { timeout: 30000 }).catch(() => {});
+  const sau = await p.evaluate(() => KhoiQR.trangThai().chinh);
+  ok(/Đã /.test(await p.textContent('#ca-ma-phu')) && sau.tuongPhan > -60 && /Quét được/.test(await p.textContent('#ca-ma-tieu')), 'sửa cho dễ quét: dò và đặt thanh (' + await p.textContent('#ca-ma-phu') + ')');
+  await p.waitForFunction(() => KhoiQR.trangThai().thuXong && !KhoiQR.trangThai().dangGhep, null, { timeout: 60000 }).catch(() => {});
   await p.click('#nut-mo-anh'); ok(await p.evaluate(() => !document.querySelector('#khoi-qr .kqr').classList.contains('dang-chinh')), 'sang tab Ảnh: bố cục về như cũ');
+  await p.click('#khoi-qr [data-png="4096"]'); ok(await p.evaluate(() => KhoiQR.trangThai().coPng === 4096 && document.querySelector('#khoi-qr [data-png="4096"]').getAttribute('aria-pressed') === 'true'), 'tab Ảnh: chọn cỡ PNG 4096 cạnh nút tải');
   const tai = p.waitForEvent('download', { timeout: 15000 }).catch(() => null); await p.click('#nut-tai-anh'); const f = await tai;
   ok(!!f && /\.png$/.test(f.suggestedFilename()), 'tải ảnh QR (PNG)' + (f ? ': ' + f.suggestedFilename() : ''));
   await p.click('#nut-bo-anh'); ok(await p.evaluate(() => !ChinhAnhQR.trangThai().mo && !document.getElementById('ca-trong').hidden), 'bỏ ảnh: trình chỉnh trả về ô "chưa có ảnh"');

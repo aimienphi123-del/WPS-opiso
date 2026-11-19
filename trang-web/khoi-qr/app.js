@@ -74,9 +74,7 @@
      nhom: thanh nằm ở trang nào của cửa sổ công cụ (anh = khung Vị trí ảnh, chinh = khung Hình trên mã).
      canAnh: chỉ có nghĩa khi đã có ảnh. anhMoi: đặt lại về mặc định mỗi khi đổi ảnh. */
   var THANH_CHINH = [
-    { ma: 'phong', nhom: 'anh',     nhan: 'Phóng ảnh',   nho: 100,  lon: 300, buoc: 5, macDinh: 100, hien: function (v) { return v + '%'; }, canAnh: true, anhMoi: true },
-    { ma: 'doiX', nhom: 'anh',      nhan: 'Dời ngang',   nho: -100, lon: 100, buoc: 5, macDinh: 0,   hien: coDau, canAnh: true, anhMoi: true },
-    { ma: 'doiY', nhom: 'anh',      nhan: 'Dời dọc',     nho: -100, lon: 100, buoc: 5, macDinh: 0,   hien: coDau, canAnh: true, anhMoi: true },
+    // phóng / dời ảnh đã bỏ: công cụ Khung của trình chỉnh ảnh (chinh-anh.js) cắt vùng ảnh, máy lấy giữa ảnh
     { ma: 'tuongPhan', nhom: 'chinh', nhan: 'Tương phản',  nho: -60,  lon: 80,  buoc: 5, macDinh: 20,  hien: coDau, canAnh: true },
     { ma: 'doSang', nhom: 'chinh',    nhan: 'Độ sáng',     nho: -60,  lon: 60,  buoc: 5, macDinh: 0,   hien: coDau, canAnh: true },
     { ma: 'chiTiet', nhom: 'chinh',   nhan: 'Độ chi tiết', nho: 1,    lon: 10,  buoc: 1, macDinh: 6,   hien: function (v) { return (17 + 4 * v) + ' ô'; }, canAnh: true }
@@ -789,8 +787,7 @@
        d) thử quét cả 6 mặt. */
   function chinhChoMay() {
     var c = tt.chinh;
-    // thanh "Dời" đẩy ẢNH đi, còn máy nhận hướng trượt của Ô LẤY ẢNH, nên đổi dấu
-    return { phong: c.phong / 100, doiX: -c.doiX / 100, doiY: -c.doiY / 100, tuongPhan: c.tuongPhan, doSang: c.doSang, giuMau: tt.giuMau };
+    return { phong: 1, doiX: 0, doiY: 0, tuongPhan: c.tuongPhan, doSang: c.doSang, giuMau: tt.giuMau };
   }
 
   function huyViecCu() {
@@ -1430,7 +1427,6 @@
     tt.anh = anh; tt.nguonAnh = loai; tt.dongAnh = dong || null;
     if (dong) tt.dongChay = !khongChuyenDong();   // máy bật giảm chuyển động: ảnh động đứng yên cho tới khi bấm Chạy
     THANH_CHINH.forEach(function (t) { if (t.anhMoi) tt.chinh[t.ma] = t.macDinh; });
-    if (anh.cao > anh.rong * 1.15) tt.chinh.doiY = 40;   // ảnh dọc (chân dung): lấy phần trên, nơi thường có khuôn mặt
     $('anh-tt').classList.remove('la-loi');
     var ghi = { nguon: loai, rong: anh.rong, cao: anh.cao };
     if (ghiThem) for (var k in ghiThem) ghi[k] = ghiThem[k];
@@ -1477,6 +1473,10 @@
       hopDen.ghi('chọn file', { loai: f.type || '?', kb: Math.round(f.size / 1024) });
       napAnh(f, 'cua-ban', true);   // ghép ngay để khối đổi theo ảnh
       if (window.ChinhAnhQR) { if (laGif(f)) window.ChinhAnhQR.bo(); else window.ChinhAnhQR.nap(f, true); }   // ảnh tĩnh: vào trình chỉnh, mở tab Chỉnh
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#khoi-qr [data-png]'), function (b) {   // cỡ ảnh PNG cạnh nút tải
+      b.setAttribute('aria-pressed', String(+b.dataset.png === tt.coPng));
+      b.addEventListener('click', function () { window.KhoiQR.datCoPng(+b.dataset.png); });
     });
     var gm = $('giu-mau');
     if (gm) { gm.checked = tt.giuMau; gm.addEventListener('change', function () { window.KhoiQR.datGiuMau(this.checked); }); }
@@ -1836,11 +1836,24 @@
     /* trang web báo mục Khối QR ra / vào màn hình: ra thì nghỉ vẽ, vào thì vẽ tiếp */
     anDi: function (an) { tt.anDi = !!an; if (!an) { tt.lucTruoc = 0; henVe(); henThanhVang(); } },
     /* Trình chỉnh ảnh (chinh-anh.js) dùng: lấy thông số ghép để xem trước mã, gửi ảnh đã chỉnh vào khối */
-    thamSoGhep: function () { return { link: tt.link, chiTiet: tt.chinh.chiTiet, chinh: chinhChoMay(), giuMau: tt.giuMau, coPng: tt.coPng }; },
+    thamSoGhep: function () { return { link: tt.link, chiTiet: tt.chinh.chiTiet, chinh: chinhChoMay(), giuMau: tt.giuMau, coPng: tt.coPng, chiTietNhoNhat: tt.link ? May.phienBanCan(tt.link) : 1 }; },
+    /* đặt giá trị các thanh hình trên mã (nút "Sửa cho dễ quét" dùng) rồi ghép lại */
+    datChinh: function (gt) {
+      var doi = false;
+      THANH_CHINH.forEach(function (t) {
+        if (!(t.ma in gt) || gt[t.ma] === tt.chinh[t.ma]) return;
+        tt.chinh[t.ma] = gt[t.ma]; $('th-' + t.ma).value = gt[t.ma]; $('gt-' + t.ma).textContent = t.hien(gt[t.ma]); doi = true;
+      });
+      hopDen.ghi('đặt thanh chỉnh', gt);
+      if (doi && tt.anh) yeuCauGhep(0, 'sửa cho dễ quét');
+    },
     moTab: function (trang) { if (tt.cuaSo !== trang) moCuaSo(trang, 'trình chỉnh ảnh'); },
     dungAnh: function (canvas, ghi) { nhanAnh(anhXam(canvas, canvas.width, canvas.height), 'cua-ban', true, null, ghi); },
     datGiuMau: function (b) { b = !!b; if (b === tt.giuMau) return; tt.giuMau = b; var o = $('giu-mau'); if (o) o.checked = b; hopDen.ghi('giữ màu', b); if (tt.anh) yeuCauGhep(0, 'giữ màu'); },
-    datCoPng: function (co) { tt.coPng = co; hopDen.ghi('cỡ PNG', co); },
+    datCoPng: function (co) {
+      tt.coPng = co; hopDen.ghi('cỡ PNG', co);
+      Array.prototype.forEach.call(document.querySelectorAll('#khoi-qr [data-png]'), function (b) { b.setAttribute('aria-pressed', String(+b.dataset.png === co)); });
+    },
     ghi: function (viec, chiTiet) { hopDen.ghi(viec, chiTiet); },
     /* hình đích của một mặt (đã bọc viền), để bài kiểm tra so từng ô với ảnh chụp màn hình */
     matDich: function () { return tt.matNay ? { n: tt.matNay.mat.n, o: Array.prototype.join.call(tt.matNay.mat.o, '') } : null; }
