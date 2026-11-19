@@ -1,7 +1,7 @@
 # Graph Report - trang-web  (2026-11-19)
 
 ## Corpus Check
-- 35 files · ~88,958 words
+- 35 files · ~89,053 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 2, .css 2)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7bcce66d`
+- Built from commit: `2c57d597`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

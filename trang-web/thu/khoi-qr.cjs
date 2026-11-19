@@ -60,6 +60,9 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   const tai = p.waitForEvent('download', { timeout: 15000 }).catch(() => null); await p.click('#nut-tai-anh'); const f = await tai;
   ok(!!f && /\.png$/.test(f.suggestedFilename()), 'tải ảnh QR (PNG)' + (f ? ': ' + f.suggestedFilename() : ''));
   await p.click('#nut-bo-anh'); ok(await p.evaluate(() => !ChinhAnhQR.trangThai().mo && !document.getElementById('ca-trong').hidden), 'bỏ ảnh: trình chỉnh trả về ô "chưa có ảnh"');
+  await p.click('#nut-anh-mau'); await p.waitForFunction(() => ChinhAnhQR.trangThai().mo, null, { timeout: 15000 }).catch(() => {});
+  await p.click('#nut-mo-chinh'); await p.waitForTimeout(300);
+  ok(await p.evaluate(() => ChinhAnhQR.trangThai().mo && !document.getElementById('ca').hidden && document.getElementById('ca-ve').getBoundingClientRect().width > 100), 'dùng ảnh mẫu rồi mở tab Chỉnh: thấy trình chỉnh với ảnh mẫu');
   await p.evaluate(() => scrollTo(0, 0)); await p.waitForTimeout(800);
   ok(await p.evaluate(() => KhoiQR.trangThai && document.getElementById('khoi-qr').getBoundingClientRect().top > innerHeight), 'cuộn đi: mục ra khỏi màn hình (khối nghỉ vẽ)');
   await p.click('#hd-nut'); const nk = await p.inputValue('#hd-chu'); ok(/khối-qr/.test(nk), 'Hộp đen chung có nhật ký Khối QR');

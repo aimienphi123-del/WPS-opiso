@@ -81,8 +81,8 @@
   function ghiHop(viec, ct) { try { window.KhoiQR && window.KhoiQR.ghi && window.KhoiQR.ghi('chỉnh ảnh: ' + viec, ct); } catch (e) {} }
 
   /* ===== 2. NẠP ẢNH ===== */
-  function napTep(tep, xong) {
-    var url = URL.createObjectURL(tep), img = new Image();
+  function napTep(tep, xong) {   // tep: tệp người xem chọn, hoặc địa chỉ ảnh (ảnh mẫu nhúng sẵn)
+    var laChu = typeof tep === 'string', url = laChu ? tep : URL.createObjectURL(tep), img = new Image();
     img.onload = function () {
       st.rongGoc = img.naturalWidth; st.caoGoc = img.naturalHeight;
       var dai = Math.max(st.rongGoc, st.caoGoc), muon = st.coNap || CH.GOC_TOI_DA;
@@ -91,7 +91,7 @@
       st.src = document.createElement('canvas'); st.src.width = st.w; st.src.height = st.h;
       var g = st.src.getContext('2d', { willReadFrequently: true });
       g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, st.w, st.h);
-      URL.revokeObjectURL(url);
+      if (!laChu) URL.revokeObjectURL(url);
       st.srcDu = g.getImageData(0, 0, st.w, st.h).data;
       var mask = new Uint8Array(st.w * st.h);
       for (var i = 0; i < mask.length; i++) mask[i] = st.srcDu[i * 4 + 3];   // ảnh PNG có sẵn nền trong suốt thì giữ
@@ -106,7 +106,7 @@
       ghiHop('mở ảnh', { goc: st.rongGoc + 'x' + st.caoGoc, lam: st.w + 'x' + st.h });
       if (xong) xong(true);
     };
-    img.onerror = function () { URL.revokeObjectURL(url); ghiHop('LỖI đọc ảnh'); if (xong) xong(false); };
+    img.onerror = function () { if (!laChu) URL.revokeObjectURL(url); ghiHop('LỖI đọc ảnh'); if (xong) xong(false); };
     img.src = url;
   }
 
@@ -440,19 +440,19 @@
   }
 
   /* ===== 9. MỞ / ĐÓNG, GẮN SỰ KIỆN ===== */
-  /* Tải ảnh lên (tab Ảnh hoặc nút trong tab Chỉnh): nạp vào trình chỉnh rồi mở tab Chỉnh. */
-  function mo(tep) {
-    st.tep = tep;
-    napTep(tep, function (ok) {
-      if (!ok) { var b = $('anh-tt'); if (b) { b.textContent = CHU.anhHong; b.classList.add('la-loi'); } return; }
+  /* Nạp ảnh đang ghép trên khối vào trình chỉnh (ảnh tải lên hoặc ảnh mẫu). moTab: mở luôn tab Chỉnh. */
+  function nap(nguon, moTab) {
+    st.tep = nguon;
+    napTep(nguon, function (ok) {
+      if (!ok) return;
       st.mo = true; $('ca').hidden = false; $('ca-trong').hidden = true;
       $('ca-bang-tren-ma').appendChild($('ca-tren-ma'));   // các thanh hình trên mã vào mục công cụ "Trên mã"
       chonCu('khung');
-      window.KhoiQR.moTab('chinh');
+      if (moTab) window.KhoiQR.moTab('chinh');
       datBoCuc(); henVe(); henXemMa();
     });
   }
-  /* Bỏ ảnh đang chỉnh (bấm Bỏ ảnh, Dùng ảnh mẫu): trả tab Chỉnh về như cũ và giải phóng bộ nhớ ảnh lớn. */
+  /* Bỏ ảnh đang chỉnh (bấm Bỏ ảnh, chọn ảnh động GIF): trả tab Chỉnh về như cũ và giải phóng bộ nhớ ảnh lớn. */
   function bo() {
     if (!st.mo) return;
     st.mo = false; $('ca').hidden = true; $('ca-trong').hidden = false;
@@ -544,6 +544,7 @@
 
   function gan() {
     $('ca-tai-len').addEventListener('click', function () { ghiHop('bấm Tải ảnh lên (tab Chỉnh)'); $('tep-anh').click(); });
+    $('ca-anh-mau').addEventListener('click', function () { $('nut-anh-mau').click(); });
     $('ca-ghep').addEventListener('click', ghepVaoMa);
     $('ca-lui').addEventListener('click', function () { veBuoc(st.buoc - 1); ghiHop('hoàn tác'); });
     $('ca-toi').addEventListener('click', function () { veBuoc(st.buoc + 1); ghiHop('làm lại'); });
@@ -599,5 +600,5 @@
   }
 
   gan();
-  window.ChinhAnhQR = { mo: mo, bo: bo, khiDoiTab: khiDoiTab, trangThai: function () { return { mo: st.mo, w: st.w, h: st.h, cu: st.cu, buoc: st.buoc, soBuoc: st.lichSu.length, xoay: st.xoay, latX: st.latX, latY: st.latY, cat: st.cat, tiLe: st.tiLe, but: st.but.length, butKhep: st.butKhep, sang: st.sang, trong: st.mask ? Array.prototype.filter.call(st.mask, function (v) { return v < 128; }).length : 0 }; } };
+  window.ChinhAnhQR = { nap: nap, bo: bo, khiDoiTab: khiDoiTab, trangThai: function () { return { mo: st.mo, w: st.w, h: st.h, cu: st.cu, buoc: st.buoc, soBuoc: st.lichSu.length, xoay: st.xoay, latX: st.latX, latY: st.latY, cat: st.cat, tiLe: st.tiLe, but: st.but.length, butKhep: st.butKhep, sang: st.sang, trong: st.mask ? Array.prototype.filter.call(st.mask, function (v) { return v < 128; }).length : 0 }; } };
 })();

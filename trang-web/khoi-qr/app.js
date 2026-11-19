@@ -1475,13 +1475,12 @@
       this.value = '';
       if (!f) return;
       hopDen.ghi('chọn file', { loai: f.type || '?', kb: Math.round(f.size / 1024) });
-      if (window.ChinhAnhQR) window.ChinhAnhQR.bo();   // ảnh mới: bỏ ảnh đang chỉnh (nếu có)
-      if (!laGif(f) && window.ChinhAnhQR) { window.ChinhAnhQR.mo(f); return; }   // ảnh tĩnh: nạp vào trình chỉnh ở tab Chỉnh trước khi ghép
-      napAnh(f, 'cua-ban', true);
+      napAnh(f, 'cua-ban', true);   // ghép ngay để khối đổi theo ảnh
+      if (window.ChinhAnhQR) { if (laGif(f)) window.ChinhAnhQR.bo(); else window.ChinhAnhQR.nap(f, true); }   // ảnh tĩnh: vào trình chỉnh, mở tab Chỉnh
     });
     var gm = $('giu-mau');
     if (gm) { gm.checked = tt.giuMau; gm.addEventListener('change', function () { window.KhoiQR.datGiuMau(this.checked); }); }
-    $('nut-anh-mau').addEventListener('click', function () { hopDen.ghi('bấm Dùng ảnh mẫu'); if (window.ChinhAnhQR) window.ChinhAnhQR.bo(); napAnh(window.ANH_MAU_KHOI_QR, 'mau', true); });
+    $('nut-anh-mau').addEventListener('click', function () { hopDen.ghi('bấm Dùng ảnh mẫu'); napAnh(window.ANH_MAU_KHOI_QR, 'mau', true); if (window.ChinhAnhQR) window.ChinhAnhQR.nap(window.ANH_MAU_KHOI_QR, false); });
     $('nut-bo-anh').addEventListener('click', function () {
       hopDen.ghi('bấm Bỏ ảnh');
       if (window.ChinhAnhQR) window.ChinhAnhQR.bo();
