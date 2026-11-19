@@ -1475,14 +1475,16 @@
       this.value = '';
       if (!f) return;
       hopDen.ghi('chọn file', { loai: f.type || '?', kb: Math.round(f.size / 1024) });
-      if (!laGif(f) && window.ChinhAnhQR) { window.ChinhAnhQR.mo(f); return; }   // ảnh tĩnh: mở trình chỉnh ảnh trước khi ghép
+      if (window.ChinhAnhQR) window.ChinhAnhQR.bo();   // ảnh mới: bỏ ảnh đang chỉnh (nếu có)
+      if (!laGif(f) && window.ChinhAnhQR) { window.ChinhAnhQR.mo(f); return; }   // ảnh tĩnh: nạp vào trình chỉnh ở tab Chỉnh trước khi ghép
       napAnh(f, 'cua-ban', true);
     });
     var gm = $('giu-mau');
     if (gm) { gm.checked = tt.giuMau; gm.addEventListener('change', function () { window.KhoiQR.datGiuMau(this.checked); }); }
-    $('nut-anh-mau').addEventListener('click', function () { hopDen.ghi('bấm Dùng ảnh mẫu'); napAnh(window.ANH_MAU_KHOI_QR, 'mau', true); });
+    $('nut-anh-mau').addEventListener('click', function () { hopDen.ghi('bấm Dùng ảnh mẫu'); if (window.ChinhAnhQR) window.ChinhAnhQR.bo(); napAnh(window.ANH_MAU_KHOI_QR, 'mau', true); });
     $('nut-bo-anh').addEventListener('click', function () {
       hopDen.ghi('bấm Bỏ ảnh');
+      if (window.ChinhAnhQR) window.ChinhAnhQR.bo();
       tt.anh = null; tt.nguonAnh = 'khong'; tt.dongAnh = null;
       $('anh-tt').classList.remove('la-loi');
       capNhatDong();
@@ -1677,6 +1679,7 @@
     for (var i = 0; i < nut.length; i++) nut[i].setAttribute('aria-pressed', nut[i].getAttribute('data-mo') === trang ? 'true' : 'false');
     for (var j = 0; j < trangCo.length; j++) trangCo[j].hidden = trangCo[j].getAttribute('data-trang') !== trang;
     cs.hidden = !trang;
+    if (window.ChinhAnhQR) window.ChinhAnhQR.khiDoiTab(trang);   // trình chỉnh ảnh đổi bố cục theo tab
     if (!trang) { henThanhVang(); return; }
     $('ten-cong-cu').textContent = CHU.tenCua[trang];
     if (lyDo) hopDen.ghi('mở cửa sổ', { trang: trang, vi: lyDo });
@@ -1835,6 +1838,7 @@
     anDi: function (an) { tt.anDi = !!an; if (!an) { tt.lucTruoc = 0; henVe(); henThanhVang(); } },
     /* Trình chỉnh ảnh (chinh-anh.js) dùng: lấy thông số ghép để xem trước mã, gửi ảnh đã chỉnh vào khối */
     thamSoGhep: function () { return { link: tt.link, chiTiet: tt.chinh.chiTiet, chinh: chinhChoMay(), giuMau: tt.giuMau, coPng: tt.coPng }; },
+    moTab: function (trang) { if (tt.cuaSo !== trang) moCuaSo(trang, 'trình chỉnh ảnh'); },
     dungAnh: function (canvas, ghi) { nhanAnh(anhXam(canvas, canvas.width, canvas.height), 'cua-ban', true, null, ghi); },
     datGiuMau: function (b) { b = !!b; if (b === tt.giuMau) return; tt.giuMau = b; var o = $('giu-mau'); if (o) o.checked = b; hopDen.ghi('giữ màu', b); if (tt.anh) yeuCauGhep(0, 'giữ màu'); },
     datCoPng: function (co) { tt.coPng = co; hopDen.ghi('cỡ PNG', co); },

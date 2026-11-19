@@ -25,7 +25,7 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   await p.click('#nut-mo-anh'); await p.setInputFiles('#tep-anh', ANH);
   // trình chỉnh ảnh: mở ra trước khi ghép; thử từng công cụ
   await p.waitForFunction(() => window.ChinhAnhQR && ChinhAnhQR.trangThai().mo && ChinhAnhQR.trangThai().w > 0, null, { timeout: 20000 }).catch(() => {});
-  let ca = await p.evaluate(() => ChinhAnhQR.trangThai()); ok(ca.mo && ca.w > 0, 'tải ảnh lên: mở trình chỉnh ảnh (' + ca.w + 'x' + ca.h + ')');
+  let ca = await p.evaluate(() => ChinhAnhQR.trangThai()); ok(ca.mo && ca.w > 0 && await p.evaluate(() => KhoiQR.trangThai().cuaSo === 'chinh' && document.querySelector('#khoi-qr .kqr').classList.contains('dang-chinh')), 'tải ảnh lên: ảnh vào trình chỉnh ở tab Chỉnh, cửa sổ công cụ rộng ra (' + ca.w + 'x' + ca.h + ')');
   const thap = await p.evaluate(() => [...document.querySelectorAll('#ca button, #ca input')].filter((e) => e.offsetParent && e.getBoundingClientRect().height < 44 && e.type !== 'checkbox').map((e) => e.id || e.className || e.type));
   ok(!thap.length, 'trình chỉnh ảnh: nút và ô nhập cao từ 44px ' + thap.join(' '));
   ok(await p.evaluate(() => [...document.querySelectorAll('#ca *')].filter((e) => e.offsetParent && e.childNodes.length && [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())).every((e) => parseFloat(getComputedStyle(e).fontSize) >= 12)), 'trình chỉnh ảnh: chữ từ 12px');
@@ -51,14 +51,15 @@ let hong = 0; const ok = (c, m) => { console.log((c ? 'ĐẠT  ' : 'HỎNG ') + 
   await p.click('#ca-ghep');
   await p.waitForFunction(() => KhoiQR.trangThai().coAnh && KhoiQR.trangThai().thuXong && !KhoiQR.trangThai().dangGhep, null, { timeout: 60000 }).catch(() => {});
   t = await p.evaluate(() => KhoiQR.trangThai()); ok(t.coAnh, 'chọn ảnh: ghép ảnh vào mã (' + t.kqMat.filter(Boolean).length + '/6 mặt quét được)');
-  ok(t.coMau && !await p.evaluate(() => ChinhAnhQR.trangThai().mo), 'ghép vào mã: đóng trình chỉnh, mã giữ màu ảnh');
+  ok(t.coMau && await p.evaluate(() => ChinhAnhQR.trangThai().mo), 'ghép vào mã: mã giữ màu ảnh, ảnh vẫn ở trình chỉnh để chỉnh tiếp');
   ok(t.kqMat.every(Boolean), 'mã có màu: cả 6 mặt quét được ' + JSON.stringify(t.kqMat));
-  await p.click('#nut-mo-chinh'); await p.click('label[for="giu-mau"]');
+  await p.click('#ca [data-cu="tren-ma"]'); ok(await p.isVisible('#ds-thanh-chinh'), 'mục Trên mã: có các thanh hình trên mã'); await p.click('label[for="giu-mau"]');
   await p.waitForFunction(() => !KhoiQR.trangThai().coMau && KhoiQR.trangThai().thuXong && !KhoiQR.trangThai().dangGhep, null, { timeout: 60000 }).catch(() => {});
   t = await p.evaluate(() => KhoiQR.trangThai()); ok(!t.coMau && t.kqMat.every(Boolean), 'tắt giữ màu: mã trắng đen, 6 mặt quét được');
-  await p.click('#nut-mo-anh');
+  await p.click('#nut-mo-anh'); ok(await p.evaluate(() => !document.querySelector('#khoi-qr .kqr').classList.contains('dang-chinh')), 'sang tab Ảnh: bố cục về như cũ');
   const tai = p.waitForEvent('download', { timeout: 15000 }).catch(() => null); await p.click('#nut-tai-anh'); const f = await tai;
   ok(!!f && /\.png$/.test(f.suggestedFilename()), 'tải ảnh QR (PNG)' + (f ? ': ' + f.suggestedFilename() : ''));
+  await p.click('#nut-bo-anh'); ok(await p.evaluate(() => !ChinhAnhQR.trangThai().mo && !document.getElementById('ca-trong').hidden), 'bỏ ảnh: trình chỉnh trả về ô "chưa có ảnh"');
   await p.evaluate(() => scrollTo(0, 0)); await p.waitForTimeout(800);
   ok(await p.evaluate(() => KhoiQR.trangThai && document.getElementById('khoi-qr').getBoundingClientRect().top > innerHeight), 'cuộn đi: mục ra khỏi màn hình (khối nghỉ vẽ)');
   await p.click('#hd-nut'); const nk = await p.inputValue('#hd-chu'); ok(/khối-qr/.test(nk), 'Hộp đen chung có nhật ký Khối QR');

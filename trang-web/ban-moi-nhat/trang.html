@@ -869,76 +869,76 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @media (max-width: 1180px) { #khoi-qr .kqr { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } #khoi-qr .kqr-gioi { grid-column: 1 / -1; } }
 @media (max-width: 760px) { #khoi-qr .kqr { grid-template-columns: minmax(0, 1fr); } #khoi-qr .thanh { grid-template-columns: 5.5em 1fr 3em; } }
 @media (prefers-reduced-motion: reduce) { #khoi-qr .nut, #khoi-qr .anh-tai.dang-tai, #khoi-qr .kqr-tay, #khoi-qr .kqr-tay::after { transition: none; animation: none; } }
-/* ===== trình chỉnh ảnh ===== */
-#ca { position: fixed; inset: 0; z-index: 90; background: rgba(8, 7, 6, .72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: grid; grid-template-columns: minmax(0, 1fr); padding: 24px; overflow: hidden; font: 15px/1.45 var(--f-chu); color: var(--chu); }
-#ca[hidden] { display: none; }
-#ca .ca-hop { min-height: 0; min-width: 0; background: var(--nen); border: 1px solid var(--vien); border-radius: 22px; display: grid; grid-template-rows: 60px minmax(0, 1fr); overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); }
-#ca .ca-dau { display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--vien); background: linear-gradient(90deg, var(--do-dam), rgba(var(--do-rgb), .14)); }
-#ca .ca-dau { min-width: 0; }
-#ca .ca-dau h2 { flex: 1 1 auto; min-width: 0; margin: 0 4px; font: 600 16px var(--f-chu); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#ca .ca-n { min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--vien); background: var(--nen-2); color: var(--chu); font: 600 14px var(--f-chu); display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; cursor: pointer; transition: background-color .2s, transform .15s cubic-bezier(.22, 1, .36, 1); }
-#ca .ca-n:active:not(:disabled) { transform: scale(.96); }
-#ca .ca-n:disabled { opacity: .45; cursor: default; }
-#ca .ca-n svg { width: 18px; height: 18px; }
-#ca .ca-n[aria-pressed="true"] { background: var(--nen-3); border-color: var(--do); }
-#ca .ca-chinh { background: var(--do); color: var(--nen); border-color: transparent; }
-#ca .ca-rong { width: 100%; }
-#ca .ca-than { display: grid; grid-template-columns: 88px minmax(0, 1fr) 312px; min-height: 0; }
-#ca .ca-ray { border-right: 1px solid var(--vien); padding: 10px 8px; display: flex; flex-direction: column; gap: 6px; overflow: auto; }
-#ca .ca-cu { min-height: 62px; border-radius: 12px; border: 1px solid transparent; background: none; color: var(--chu-2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font: 500 12px var(--f-chu); cursor: pointer; transition: background-color .2s, color .2s; }
-#ca .ca-cu svg { width: 22px; height: 22px; }
-#ca .ca-cu[aria-pressed="true"] { background: var(--nen-3); color: var(--chu); border-color: var(--vien); box-shadow: inset 3px 0 0 var(--do); }
-/* ô cờ đủ tương phản để thấy rõ chỗ đã trong suốt (đã tách nền, đã tẩy) */
-#ca .ca-giua { position: relative; min-width: 0; min-height: 0; background-color: #2a2724;
+/* ===== trình chỉnh ảnh trong tab Chỉnh =====
+   Đang chỉnh ảnh (.kqr.dang-chinh): cột trái giữ tên mục + khối thu nhỏ (vẫn xoay được), cửa sổ công cụ rộng ra chiếm phần còn lại. */
+#khoi-qr .kqr.dang-chinh { grid-template-columns: minmax(260px, .7fr) minmax(0, 2.3fr); grid-template-areas: "gioi cua" "khoi cua"; grid-template-rows: auto 1fr; }
+#khoi-qr .kqr.dang-chinh .kqr-gioi { grid-area: gioi; }
+#khoi-qr .kqr.dang-chinh .kqr-khoi { grid-area: khoi; }
+#khoi-qr .kqr.dang-chinh .kqr-cua { grid-area: cua; }
+#khoi-qr .kqr.dang-chinh .kqr-buoc { display: none; }
+#khoi-qr .ca-trong { display: grid; gap: 10px; }
+#khoi-qr .ca-trong[hidden], #khoi-qr .ca[hidden] { display: none; }
+#khoi-qr .ca { display: grid; gap: 12px; min-width: 0; }
+#khoi-qr .ca-con { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+#khoi-qr .ca-cu { flex: none; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--vien); background: none; color: var(--chu-2); display: inline-flex; align-items: center; gap: 7px; font: 500 14px var(--f-chu); cursor: pointer; transition: background-color .2s, color .2s, border-color .2s; }
+#khoi-qr .ca-cu svg { width: 17px; height: 17px; }
+#khoi-qr .ca-cu[aria-pressed="true"] { background: var(--nen-3); color: var(--chu); border-color: var(--do); }
+#khoi-qr .ca-vung { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 14px; min-width: 0; }
+#khoi-qr .ca-giua { position: relative; min-width: 0; min-height: 440px; border-radius: 14px; overflow: hidden; background-color: #2a2724;
   background-image: linear-gradient(45deg, #3d3934 25%, transparent 25%, transparent 75%, #3d3934 75%), linear-gradient(45deg, #3d3934 25%, transparent 25%, transparent 75%, #3d3934 75%);
-  background-size: 20px 20px; background-position: 0 0, 10px 10px; }
-#ca #ca-ve { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
-#ca #ca-ve[data-cu="khung"] { cursor: move; }
-#ca .ca-noi { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(var(--nen-rgb), .86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--vien); }
-#ca .ca-noi[hidden] { display: none; }
-#ca .ca-phai { border-left: 1px solid var(--vien); padding: 16px; overflow: auto; display: flex; flex-direction: column; gap: 14px; }
-#ca .ca-phai section { display: flex; flex-direction: column; gap: 10px; }
-#ca .ca-phai section[hidden] { display: none; }
-#ca h3 { margin: 4px 0 0; font: 600 12px var(--f-chu); letter-spacing: .06em; text-transform: uppercase; color: var(--chu-2); }
-#ca .ca-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-#ca .ca-chip { min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--vien); background: none; color: var(--chu-2); font: 500 14px var(--f-chu); display: inline-flex; align-items: center; gap: 7px; cursor: pointer; transition: background-color .2s, color .2s; }
-#ca .ca-chip em { display: inline-block; border: 1.5px solid currentColor; border-radius: 2px; }
-#ca .ca-chip[aria-pressed="true"] { background: var(--do); color: var(--nen); border-color: transparent; font-weight: 600; }
-#ca .ca-hai { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-#ca .ca-so { min-height: 46px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--vien); background: var(--nen-2); }
-#ca .ca-so input { width: 100%; min-width: 0; min-height: 44px; border: 0; background: none; color: var(--chu); font: 500 15px var(--f-ma); outline: none; }
-#ca .ca-so span { color: var(--chu-2); font-size: 13px; }
-#ca .ca-so:focus-within { border-color: var(--do); }
-#ca .ca-ghi { margin: 0; font-size: 13px; color: var(--chu-2); }
-#ca .ca-thanh { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; align-items: center; font-size: 14px; }
-#ca .ca-thanh output { color: var(--chu-2); font: 500 13px var(--f-ma); }
-#ca .ca-thanh input { grid-column: 1 / -1; width: 100%; min-height: 44px; accent-color: var(--do); }
-#ca .ca-chk { min-height: 44px; display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; }
-#ca .ca-chk input { width: 20px; height: 20px; accent-color: var(--do); }
-#ca .ca-ma-khoi { margin-top: auto; }
-#ca .ca-ma-hop { display: flex; gap: 12px; align-items: center; padding: 10px; border-radius: 14px; background: var(--nen-2); border: 1px solid var(--vien); }
-#ca .ca-ma-hop canvas { width: 84px; height: 84px; border-radius: 8px; background: #fff; flex: none; }
-#ca .ca-ma-hop b { display: block; font-size: 15px; }
-#ca .ca-ma-hop.kho b { color: var(--do); }
-#ca .ca-ma-hop p { margin: 2px 0 0; font-size: 13px; color: var(--chu-2); }
-#ca :focus-visible { outline: 2px solid var(--do); outline-offset: 2px; }
-@media (max-width: 760px) {
-  #ca { padding: 0; }
-  #ca .ca-hop { border-radius: 0; border: 0; grid-template-rows: 56px minmax(0, 1fr); }
-  #ca .ca-dau { gap: 6px; padding: 0 8px; }
-  #ca .ca-dau h2 { font-size: 15px; }
-  #ca .ca-dau .ca-n { padding: 0 10px; }
-  #ca .ca-phai > section, #ca .ca-chips { min-width: 0; }
-  #ca .ca-an-dt { display: none; }
-  #ca .ca-than { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; }
-  #ca .ca-giua { min-height: 46vh; }
-  #ca .ca-phai { border: 0; border-top: 1px solid var(--vien); padding: 12px 14px; max-height: 34vh; gap: 10px; }
-  #ca .ca-ma-khoi { margin-top: 0; }
-  #ca .ca-ray { grid-row: 3; flex-direction: row; border: 0; border-top: 1px solid var(--vien); padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
-  #ca .ca-cu { min-width: 66px; min-height: 58px; flex: none; }
-  #ca .ca-cu[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--do); }
+  background-size: 20px 20px; background-position: 0 0, 10px 10px; }   /* ô cờ đủ tương phản để thấy rõ chỗ đã trong suốt */
+#khoi-qr #ca-ve { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+#khoi-qr #ca-ve[data-cu="khung"] { cursor: move; }
+#khoi-qr #ca-ve[data-cu="mau"], #khoi-qr #ca-ve[data-cu="xoay"], #khoi-qr #ca-ve[data-cu="tren-ma"], #khoi-qr #ca-ve[data-cu="xuat"] { cursor: default; }
+#khoi-qr .ca-noi { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); display: flex; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(var(--nen-rgb), .86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--vien); }
+#khoi-qr .ca-noi[hidden] { display: none; }
+#khoi-qr .ca-n { min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--vien); background: var(--nen-2); color: var(--chu); font: 600 14px var(--f-chu); display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; cursor: pointer; transition: background-color .2s, transform .15s cubic-bezier(.22, 1, .36, 1); }
+#khoi-qr .ca-n:active:not(:disabled) { transform: scale(.96); }
+#khoi-qr .ca-n:disabled { opacity: .45; cursor: default; }
+#khoi-qr .ca-n svg { width: 18px; height: 18px; }
+#khoi-qr .ca-n[aria-pressed="true"] { background: var(--nen-3); border-color: var(--do); }
+#khoi-qr .ca-chinh { background: var(--do); color: var(--nen); border-color: transparent; }
+#khoi-qr .ca-rong { width: 100%; }
+#khoi-qr .ca-phai { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+#khoi-qr .ca-phai section { display: flex; flex-direction: column; gap: 10px; }
+#khoi-qr .ca-phai section[hidden] { display: none; }
+#khoi-qr .ca h4 { margin: 2px 0 0; font: 600 12px var(--f-chu); letter-spacing: .06em; text-transform: uppercase; color: var(--chu-2); }
+#khoi-qr .ca-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+#khoi-qr .ca-chip { min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--vien); background: none; color: var(--chu-2); font: 500 14px var(--f-chu); display: inline-flex; align-items: center; gap: 7px; cursor: pointer; transition: background-color .2s, color .2s; }
+#khoi-qr .ca-chip em { display: inline-block; border: 1.5px solid currentColor; border-radius: 2px; }
+#khoi-qr .ca-chip[aria-pressed="true"] { background: var(--do); color: var(--nen); border-color: transparent; font-weight: 600; }
+#khoi-qr .ca-hai { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#khoi-qr .ca-so { min-height: 46px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--vien); background: var(--nen-2); }
+#khoi-qr .ca-so input { width: 100%; min-width: 0; min-height: 44px; border: 0; background: none; color: var(--chu); font: 500 15px var(--kq-mono); outline: none; }
+#khoi-qr .ca-so span { color: var(--chu-2); font-size: 13px; }
+#khoi-qr .ca-so:focus-within { border-color: var(--do); }
+#khoi-qr .ca-ghi { margin: 0; font-size: 13px; color: var(--chu-2); }
+#khoi-qr .ca-thanh { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; align-items: center; font-size: 14px; }
+#khoi-qr .ca-thanh output { color: var(--chu-2); font: 500 13px var(--kq-mono); }
+#khoi-qr .ca-thanh input { grid-column: 1 / -1; width: 100%; min-height: 44px; accent-color: var(--do); }
+#khoi-qr .ca-chk { min-height: 44px; display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; }
+#khoi-qr .ca-chk input { width: 20px; height: 20px; accent-color: var(--do); }
+#khoi-qr .ca-ma-hop { margin-top: auto; display: flex; gap: 12px; align-items: center; padding: 10px; border-radius: 14px; background: var(--nen-2); border: 1px solid var(--vien); }
+#khoi-qr .ca-ma-hop canvas { width: 72px; height: 72px; border-radius: 8px; background: #fff; flex: none; }
+#khoi-qr .ca-ma-hop b { display: block; font-size: 15px; }
+#khoi-qr .ca-ma-hop.kho b { color: var(--do); }
+#khoi-qr .ca-ma-hop p { margin: 2px 0 0; font-size: 13px; color: var(--chu-2); }
+#khoi-qr .ca-chan { display: flex; align-items: center; gap: 8px; }
+#khoi-qr .ca-gian { flex: 1; }
+#khoi-qr .ca-tren-ma { display: grid; gap: 14px; }
+#khoi-qr .ca :focus-visible { outline: 2px solid var(--do); outline-offset: 2px; }
+@media (max-width: 1180px) {
+  #khoi-qr .kqr.dang-chinh { grid-template-columns: minmax(0, 1fr); grid-template-areas: "gioi" "khoi" "cua"; grid-template-rows: none; }
+  #khoi-qr .kqr.dang-chinh .kqr-khoi { width: min(100%, 420px); }
+  #khoi-qr .ca-vung { grid-template-columns: minmax(0, 1fr) 260px; }
 }
-@media (prefers-reduced-motion: reduce) { #ca .ca-n, #ca .ca-chip, #ca .ca-cu { transition: none; } }
+@media (max-width: 760px) {
+  #khoi-qr .ca-vung { grid-template-columns: minmax(0, 1fr); }
+  #khoi-qr .ca-giua { min-height: 340px; }
+  #khoi-qr .ca-an-hep { display: none; }
+  #khoi-qr .kqr.dang-chinh .kqr-khoi { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { #khoi-qr .ca-n, #khoi-qr .ca-chip, #khoi-qr .ca-cu { transition: none; } }
 /* ===== lien-he ===== */
 .chan { padding-block: 28px calc(env(safe-area-inset-bottom, 0px) + 28px); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--mo); border-top: 1px solid var(--vien); }
 .chep:active { transform: scale(.96); transition: transform .08s; }
@@ -1317,9 +1317,80 @@ document.documentElement.lang = 'vi'; try { if (sessionStorage.getItem('da-xem-i
       </div>
       <!-- 3c. CHỈNH -->
       <div data-trang="chinh" hidden>
+        <div class="ca-trong" id="ca-trong">
+          <p class="ghi">Chưa có ảnh để chỉnh.</p>
+          <button type="button" class="nut chinh nut-rong" id="ca-tai-len">Tải ảnh lên</button>
+        </div>
+        <div class="ca" id="ca" hidden>
+          <nav class="ca-con" aria-label="Công cụ chỉnh ảnh">
+            <button type="button" class="ca-cu" data-cu="khung" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2v16h16M2 6h16v16"/></svg><span>Khung</span></button><button type="button" class="ca-cu" data-cu="nen" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/><path d="M3 3l18 18" stroke-dasharray="2 2"/></svg><span>Tách nền</span></button><button type="button" class="ca-cu" data-cu="but" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></svg><span>Bút cắt</span></button><button type="button" class="ca-cu" data-cu="tay" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20H8l-5-5 10-10 8 8-6 7"/><path d="M8 10l7 7"/></svg><span>Tẩy</span></button><button type="button" class="ca-cu" data-cu="mau" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 3a9 9 0 010 18z" fill="currentColor" opacity=".35"/></svg><span>Màu</span></button><button type="button" class="ca-cu" data-cu="xoay" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg><span>Xoay</span></button><button type="button" class="ca-cu" data-cu="tren-ma" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M8 8h3v3H8zM13 13h3v3h-3zM13 8h3M8 13v3"/></svg><span>Trên mã</span></button><button type="button" class="ca-cu" data-cu="xuat" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/></svg><span>Xuất</span></button>
+          </nav>
+          <div class="ca-vung">
+            <div class="ca-giua">
+              <canvas id="ca-ve" aria-label="Ảnh đang chỉnh"></canvas>
+              <div class="ca-noi" data-bang="khung"><button type="button" class="ca-n" id="ca-lat-ngang">Lật ngang</button><button type="button" class="ca-n" id="ca-xoay-90">Xoay 90°</button><button type="button" class="ca-n" id="ca-dat-lai">Bỏ cắt</button></div>
+              <div class="ca-noi" data-bang="nen" hidden><button type="button" class="ca-n" id="ca-tu-tach-2">Tự tách nền</button></div>
+              <div class="ca-noi" data-bang="but" hidden><button type="button" class="ca-n" id="ca-but-lui">Bỏ điểm cuối</button><button type="button" class="ca-n" id="ca-but-bo">Bỏ vùng</button></div>
+            </div>
+            <div class="ca-phai">
+              <section data-bang="khung">
+                <h4>Tỉ lệ khung</h4>
+                <div class="ca-chips"><button type="button" class="ca-chip" data-ti="0" aria-pressed="false">Tự do</button><button type="button" class="ca-chip" data-ti="1" aria-pressed="false"><em style="width:12px;height:12px" aria-hidden="true"></em>1:1</button><button type="button" class="ca-chip" data-ti="0.8" aria-pressed="false"><em style="width:10px;height:13px" aria-hidden="true"></em>4:5</button><button type="button" class="ca-chip" data-ti="0.5625" aria-pressed="false"><em style="width:9px;height:15px" aria-hidden="true"></em>9:16</button><button type="button" class="ca-chip" data-ti="1.7778" aria-pressed="false"><em style="width:15px;height:9px" aria-hidden="true"></em>16:9</button><button type="button" class="ca-chip" data-ti="1.3333" aria-pressed="false"><em style="width:13px;height:10px" aria-hidden="true"></em>4:3</button></div>
+                <h4>Kích thước tự chọn</h4>
+                <div class="ca-hai"><label class="ca-so"><input id="ca-rong" type="number" inputmode="numeric" min="16" max="4096" placeholder="1080"><span>rộng</span></label>
+                  <label class="ca-so"><input id="ca-cao" type="number" inputmode="numeric" min="16" max="4096" placeholder="1080"><span>cao</span></label></div>
+                <h4>Ảnh tải lên</h4>
+                <div class="ca-chips"><button type="button" class="ca-chip" data-nap="0" aria-pressed="false">Gốc</button><button type="button" class="ca-chip" data-nap="2048" aria-pressed="false">2048 px</button><button type="button" class="ca-chip" data-nap="1024" aria-pressed="false">1024 px</button></div>
+                <p class="ca-ghi">Đổi cỡ thì ảnh nạp lại từ đầu, các bước đã chỉnh sẽ mất.</p>
+              </section>
+              <section data-bang="nen" hidden>
+                <p class="ca-ghi">Chạm vào nền trên ảnh để xoá vùng cùng màu.</p>
+                <div class="ca-thanh"><label for="ca-sai-so">Độ lệch màu</label><output id="ca-sai-so-gt" for="ca-sai-so"></output><input type="range" id="ca-sai-so" min="5" max="80" step="1" value="30"></div>
+                <label class="ca-chk"><input type="checkbox" id="ca-lien-nhau" checked><span>Chỉ xoá vùng liền nhau</span></label>
+                <button type="button" class="ca-n ca-rong" id="ca-tu-tach">Tự tách nền theo màu ở mép ảnh</button>
+                <p class="ca-ghi" id="ca-nen-tt" aria-live="polite"></p>
+              </section>
+              <section data-bang="but" hidden>
+                <p class="ca-ghi" id="ca-but-tt" aria-live="polite"></p>
+                <div class="ca-hai"><button type="button" class="ca-n" id="ca-but-giu" disabled>Giữ trong vùng</button><button type="button" class="ca-n" id="ca-but-xoa" disabled>Xoá trong vùng</button></div>
+              </section>
+              <section data-bang="tay" hidden>
+                <div class="ca-chips"><button type="button" class="ca-chip" data-tay="tay" aria-pressed="true">Tẩy</button><button type="button" class="ca-chip" data-tay="khoi-phuc" aria-pressed="false">Khôi phục</button></div>
+                <div class="ca-thanh"><label for="ca-co-co">Cỡ cọ</label><output id="ca-co-co-gt" for="ca-co-co"></output><input type="range" id="ca-co-co" min="6" max="160" step="1" value="36"></div>
+              </section>
+              <section data-bang="mau" hidden>
+                <div class="ca-thanh"><label for="ca-sang">Độ sáng</label><output id="ca-sang-gt" for="ca-sang"></output><input type="range" id="ca-sang" min="-100" max="100" step="1" value="0"></div>
+                <div class="ca-thanh"><label for="ca-tuong-phan">Tương phản</label><output id="ca-tuong-phan-gt" for="ca-tuong-phan"></output><input type="range" id="ca-tuong-phan" min="-100" max="100" step="1" value="0"></div>
+                <div class="ca-thanh"><label for="ca-bao-hoa">Độ bão hoà</label><output id="ca-bao-hoa-gt" for="ca-bao-hoa"></output><input type="range" id="ca-bao-hoa" min="-100" max="100" step="1" value="0"></div>
+              </section>
+              <section data-bang="xoay" hidden>
+                <div class="ca-hai"><button type="button" class="ca-n" id="ca-xoay-trai">Xoay trái</button><button type="button" class="ca-n" id="ca-xoay-phai">Xoay phải</button>
+                  <button type="button" class="ca-n" id="ca-lat-ngang-2">Lật ngang</button><button type="button" class="ca-n" id="ca-lat-doc">Lật dọc</button></div>
+              </section>
+              <section data-bang="tren-ma" id="ca-bang-tren-ma" hidden></section>
+              <section data-bang="xuat" hidden>
+                <h4>Cỡ ảnh QR khi tải PNG</h4>
+                <div class="ca-chips"><button type="button" class="ca-chip" data-png="1024" aria-pressed="false">1024 px</button><button type="button" class="ca-chip" data-png="2048" aria-pressed="false">2048 px</button><button type="button" class="ca-chip" data-png="4096" aria-pressed="false">4096 px</button></div>
+                <button type="button" class="ca-n ca-rong" id="ca-tai">Tải ảnh đã chỉnh (PNG)</button>
+                <p class="ca-ghi" id="ca-xuat-tt" aria-live="polite">Nền đã tách được giữ trong suốt. Có kích thước tự chọn thì ảnh ra đúng cỡ đó.</p>
+              </section>
+              <div class="ca-ma-hop" id="ca-ma-hop"><canvas id="ca-ma" width="168" height="168" aria-hidden="true"></canvas>
+                <div><b id="ca-ma-tieu" aria-live="polite">Đang thử quét…</b><p id="ca-ma-phu"></p></div></div>
+            </div>
+          </div>
+          <div class="ca-chan">
+            <button type="button" class="ca-n" id="ca-lui" aria-label="Hoàn tác" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/></svg></button>
+            <button type="button" class="ca-n" id="ca-toi" aria-label="Làm lại" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 000 12h3"/></svg></button>
+            <button type="button" class="ca-n" id="ca-truoc-sau" aria-pressed="false" aria-label="Giữ để xem ảnh gốc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="ca-an-hep" aria-hidden="true">Giữ để xem gốc</span></button>
+            <span class="ca-gian"></span>
+            <button type="button" class="ca-n ca-chinh" id="ca-ghep">Ghép vào mã</button>
+          </div>
+        </div>
+        <div class="ca-tren-ma" id="ca-tren-ma">
         <fieldset class="nhom"><legend>Hình trên mã</legend><div id="ds-thanh-chinh"></div></fieldset>
         <label class="chk" for="giu-mau"><input type="checkbox" id="giu-mau" checked><i aria-hidden="true"></i><span>Giữ màu của ảnh</span></label>
         <p class="ghi">Chi tiết cao thì ảnh rõ hơn, nhưng mã khó quét hơn và máy chạy nặng hơn.</p>
+        </div>
       </div>
       <!-- 3d. THỎI VÀNG -->
       <div data-trang="vang" hidden>
@@ -1347,78 +1418,6 @@ document.documentElement.lang = 'vi'; try { if (sessionStorage.getItem('da-xem-i
       </div>
       </div>
     </section>
-  </div>
-  <!-- trình chỉnh ảnh (khoi-qr/chinh-anh.js): mở khi tải ảnh tĩnh lên, ghép xong thì đóng -->
-  <div class="ca" id="ca" hidden data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="ca-ten">
-    <div class="ca-hop">
-      <div class="ca-dau">
-        <button type="button" class="ca-n" id="ca-dong" aria-label="Đóng, không ghép"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-        <h2 id="ca-ten">Chỉnh ảnh</h2>
-        <button type="button" class="ca-n" id="ca-lui" aria-label="Hoàn tác" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/></svg></button>
-        <button type="button" class="ca-n" id="ca-toi" aria-label="Làm lại" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 000 12h3"/></svg></button>
-        <button type="button" class="ca-n" id="ca-truoc-sau" aria-pressed="false" aria-label="Giữ để xem ảnh gốc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="ca-an-dt" aria-hidden="true">Giữ để xem ảnh gốc</span></button>
-        <button type="button" class="ca-n ca-chinh" id="ca-ghep">Ghép vào mã</button>
-      </div>
-      <div class="ca-than">
-        <nav class="ca-ray" aria-label="Công cụ chỉnh ảnh">
-          <button type="button" class="ca-cu" data-cu="khung" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2v16h16M2 6h16v16"/></svg><span>Khung</span></button><button type="button" class="ca-cu" data-cu="nen" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/><path d="M3 3l18 18" stroke-dasharray="2 2"/></svg><span>Tách nền</span></button><button type="button" class="ca-cu" data-cu="but" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></svg><span>Bút cắt</span></button><button type="button" class="ca-cu" data-cu="tay" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20H8l-5-5 10-10 8 8-6 7"/><path d="M8 10l7 7"/></svg><span>Tẩy</span></button><button type="button" class="ca-cu" data-cu="mau" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 3a9 9 0 010 18z" fill="currentColor" opacity=".35"/></svg><span>Màu</span></button><button type="button" class="ca-cu" data-cu="xoay" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg><span>Xoay</span></button><button type="button" class="ca-cu" data-cu="xuat" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/></svg><span>Xuất</span></button>
-        </nav>
-        <div class="ca-giua">
-          <canvas id="ca-ve" aria-label="Ảnh đang chỉnh"></canvas>
-          <div class="ca-noi" data-bang="khung"><button type="button" class="ca-n" id="ca-lat-ngang">Lật ngang</button><button type="button" class="ca-n" id="ca-xoay-90">Xoay 90°</button><button type="button" class="ca-n" id="ca-dat-lai">Bỏ cắt</button></div>
-          <div class="ca-noi" data-bang="nen" hidden><button type="button" class="ca-n" id="ca-tu-tach-2">Tự tách nền</button></div>
-          <div class="ca-noi" data-bang="but" hidden><button type="button" class="ca-n" id="ca-but-lui">Bỏ điểm cuối</button><button type="button" class="ca-n" id="ca-but-bo">Bỏ vùng</button></div>
-        </div>
-        <aside class="ca-phai">
-          <section data-bang="khung">
-            <h3>Tỉ lệ khung</h3>
-            <div class="ca-chips"><button type="button" class="ca-chip" data-ti="0" aria-pressed="false">Tự do</button><button type="button" class="ca-chip" data-ti="1" aria-pressed="false"><em style="width:12px;height:12px" aria-hidden="true"></em>1:1</button><button type="button" class="ca-chip" data-ti="0.8" aria-pressed="false"><em style="width:10px;height:13px" aria-hidden="true"></em>4:5</button><button type="button" class="ca-chip" data-ti="0.5625" aria-pressed="false"><em style="width:9px;height:15px" aria-hidden="true"></em>9:16</button><button type="button" class="ca-chip" data-ti="1.7778" aria-pressed="false"><em style="width:15px;height:9px" aria-hidden="true"></em>16:9</button><button type="button" class="ca-chip" data-ti="1.3333" aria-pressed="false"><em style="width:13px;height:10px" aria-hidden="true"></em>4:3</button></div>
-            <h3>Kích thước tự chọn</h3>
-            <div class="ca-hai"><label class="ca-so"><input id="ca-rong" type="number" inputmode="numeric" min="16" max="4096" placeholder="1080"><span>rộng</span></label>
-              <label class="ca-so"><input id="ca-cao" type="number" inputmode="numeric" min="16" max="4096" placeholder="1080"><span>cao</span></label></div>
-            <h3>Ảnh tải lên</h3>
-            <div class="ca-chips"><button type="button" class="ca-chip" data-nap="0" aria-pressed="false">Gốc</button><button type="button" class="ca-chip" data-nap="2048" aria-pressed="false">2048 px</button><button type="button" class="ca-chip" data-nap="1024" aria-pressed="false">1024 px</button></div>
-            <p class="ca-ghi">Đổi cỡ thì ảnh nạp lại từ đầu, các bước đã chỉnh sẽ mất.</p>
-          </section>
-          <section data-bang="nen" hidden>
-            <p class="ca-ghi">Chạm vào nền trên ảnh để xoá vùng cùng màu.</p>
-            <div class="ca-thanh"><label for="ca-sai-so">Độ lệch màu</label><output id="ca-sai-so-gt" for="ca-sai-so"></output><input type="range" id="ca-sai-so" min="5" max="80" step="1" value="30"></div>
-            <label class="ca-chk"><input type="checkbox" id="ca-lien-nhau" checked><span>Chỉ xoá vùng liền nhau</span></label>
-            <button type="button" class="ca-n ca-rong" id="ca-tu-tach">Tự tách nền theo màu ở mép ảnh</button>
-            <p class="ca-ghi" id="ca-nen-tt" aria-live="polite"></p>
-          </section>
-          <section data-bang="but" hidden>
-            <p class="ca-ghi" id="ca-but-tt" aria-live="polite"></p>
-            <div class="ca-hai"><button type="button" class="ca-n" id="ca-but-giu" disabled>Giữ trong vùng</button><button type="button" class="ca-n" id="ca-but-xoa" disabled>Xoá trong vùng</button></div>
-          </section>
-          <section data-bang="tay" hidden>
-            <div class="ca-chips"><button type="button" class="ca-chip" data-tay="tay" aria-pressed="true">Tẩy</button><button type="button" class="ca-chip" data-tay="khoi-phuc" aria-pressed="false">Khôi phục</button></div>
-            <div class="ca-thanh"><label for="ca-co-co">Cỡ cọ</label><output id="ca-co-co-gt" for="ca-co-co"></output><input type="range" id="ca-co-co" min="6" max="160" step="1" value="36"></div>
-          </section>
-          <section data-bang="mau" hidden>
-            <div class="ca-thanh"><label for="ca-sang">Độ sáng</label><output id="ca-sang-gt" for="ca-sang"></output><input type="range" id="ca-sang" min="-100" max="100" step="1" value="0"></div>
-            <div class="ca-thanh"><label for="ca-tuong-phan">Tương phản</label><output id="ca-tuong-phan-gt" for="ca-tuong-phan"></output><input type="range" id="ca-tuong-phan" min="-100" max="100" step="1" value="0"></div>
-            <div class="ca-thanh"><label for="ca-bao-hoa">Độ bão hoà</label><output id="ca-bao-hoa-gt" for="ca-bao-hoa"></output><input type="range" id="ca-bao-hoa" min="-100" max="100" step="1" value="0"></div>
-            <label class="ca-chk"><input type="checkbox" id="ca-giu-mau" checked><span>Giữ màu của ảnh trên mã</span></label>
-          </section>
-          <section data-bang="xoay" hidden>
-            <div class="ca-hai"><button type="button" class="ca-n" id="ca-xoay-trai">Xoay trái</button><button type="button" class="ca-n" id="ca-xoay-phai">Xoay phải</button>
-              <button type="button" class="ca-n" id="ca-lat-ngang-2">Lật ngang</button><button type="button" class="ca-n" id="ca-lat-doc">Lật dọc</button></div>
-          </section>
-          <section data-bang="xuat" hidden>
-            <h3>Cỡ ảnh QR khi tải PNG</h3>
-            <div class="ca-chips"><button type="button" class="ca-chip" data-png="1024" aria-pressed="false">1024 px</button><button type="button" class="ca-chip" data-png="2048" aria-pressed="false">2048 px</button><button type="button" class="ca-chip" data-png="4096" aria-pressed="false">4096 px</button></div>
-            <button type="button" class="ca-n ca-rong" id="ca-tai">Tải ảnh đã chỉnh (PNG)</button>
-            <p class="ca-ghi" id="ca-xuat-tt" aria-live="polite">Nền đã tách được giữ trong suốt. Có kích thước tự chọn thì ảnh ra đúng cỡ đó.</p>
-          </section>
-          <section class="ca-ma-khoi">
-            <h3>Xem trên mã</h3>
-            <div class="ca-ma-hop" id="ca-ma-hop"><canvas id="ca-ma" width="168" height="168" aria-hidden="true"></canvas>
-              <div><b id="ca-ma-tieu" aria-live="polite">Đang thử quét…</b><p id="ca-ma-phu"></p></div></div>
-          </section>
-        </aside>
-      </div>
-    </div>
   </div>
 </section>
 <!-- ===== lien-he ===== -->
@@ -8248,14 +8247,16 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
       this.value = '';
       if (!f) return;
       hopDen.ghi('chọn file', { loai: f.type || '?', kb: Math.round(f.size / 1024) });
-      if (!laGif(f) && window.ChinhAnhQR) { window.ChinhAnhQR.mo(f); return; }   // ảnh tĩnh: mở trình chỉnh ảnh trước khi ghép
+      if (window.ChinhAnhQR) window.ChinhAnhQR.bo();   // ảnh mới: bỏ ảnh đang chỉnh (nếu có)
+      if (!laGif(f) && window.ChinhAnhQR) { window.ChinhAnhQR.mo(f); return; }   // ảnh tĩnh: nạp vào trình chỉnh ở tab Chỉnh trước khi ghép
       napAnh(f, 'cua-ban', true);
     });
     var gm = $('giu-mau');
     if (gm) { gm.checked = tt.giuMau; gm.addEventListener('change', function () { window.KhoiQR.datGiuMau(this.checked); }); }
-    $('nut-anh-mau').addEventListener('click', function () { hopDen.ghi('bấm Dùng ảnh mẫu'); napAnh(window.ANH_MAU_KHOI_QR, 'mau', true); });
+    $('nut-anh-mau').addEventListener('click', function () { hopDen.ghi('bấm Dùng ảnh mẫu'); if (window.ChinhAnhQR) window.ChinhAnhQR.bo(); napAnh(window.ANH_MAU_KHOI_QR, 'mau', true); });
     $('nut-bo-anh').addEventListener('click', function () {
       hopDen.ghi('bấm Bỏ ảnh');
+      if (window.ChinhAnhQR) window.ChinhAnhQR.bo();
       tt.anh = null; tt.nguonAnh = 'khong'; tt.dongAnh = null;
       $('anh-tt').classList.remove('la-loi');
       capNhatDong();
@@ -8450,6 +8451,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
     for (var i = 0; i < nut.length; i++) nut[i].setAttribute('aria-pressed', nut[i].getAttribute('data-mo') === trang ? 'true' : 'false');
     for (var j = 0; j < trangCo.length; j++) trangCo[j].hidden = trangCo[j].getAttribute('data-trang') !== trang;
     cs.hidden = !trang;
+    if (window.ChinhAnhQR) window.ChinhAnhQR.khiDoiTab(trang);   // trình chỉnh ảnh đổi bố cục theo tab
     if (!trang) { henThanhVang(); return; }
     $('ten-cong-cu').textContent = CHU.tenCua[trang];
     if (lyDo) hopDen.ghi('mở cửa sổ', { trang: trang, vi: lyDo });
@@ -8608,6 +8610,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
     anDi: function (an) { tt.anDi = !!an; if (!an) { tt.lucTruoc = 0; henVe(); henThanhVang(); } },
     /* Trình chỉnh ảnh (chinh-anh.js) dùng: lấy thông số ghép để xem trước mã, gửi ảnh đã chỉnh vào khối */
     thamSoGhep: function () { return { link: tt.link, chiTiet: tt.chinh.chiTiet, chinh: chinhChoMay(), giuMau: tt.giuMau, coPng: tt.coPng }; },
+    moTab: function (trang) { if (tt.cuaSo !== trang) moCuaSo(trang, 'trình chỉnh ảnh'); },
     dungAnh: function (canvas, ghi) { nhanAnh(anhXam(canvas, canvas.width, canvas.height), 'cua-ban', true, null, ghi); },
     datGiuMau: function (b) { b = !!b; if (b === tt.giuMau) return; tt.giuMau = b; var o = $('giu-mau'); if (o) o.checked = b; hopDen.ghi('giữ màu', b); if (tt.anh) yeuCauGhep(0, 'giữ màu'); },
     datCoPng: function (co) { tt.coPng = co; hopDen.ghi('cỡ PNG', co); },
@@ -8620,7 +8623,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
 })();
 </script>
 <script type="text/plain" id="ma-qr-chinh-anh">/* ============================================================
-   chinh-anh.js : trình chỉnh ảnh trước khi ghép vào Khối QR. Chạy sau app.js (cần window.KhoiQR, MayKhoiQR, jsQR).
+   chinh-anh.js : trình chỉnh ảnh trong tab Chỉnh của Khối QR, dùng trước khi ghép ảnh vào mã. Chạy sau app.js (cần window.KhoiQR, MayKhoiQR, jsQR).
    Mục lục:
      0. Cấu hình, chữ
      1. Trạng thái và lịch sử (hoàn tác / làm lại)
@@ -8631,7 +8634,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
      6. Công cụ: khung, tách nền theo màu, bút cắt, tẩy, màu, xoay, xuất
      7. Xem trên mã (thử quét ngay trong trình chỉnh)
      8. Xuất ảnh: ghép vào mã, tải về
-     9. Mở / đóng, gắn sự kiện
+     9. Nạp vào tab / bỏ ảnh, đổi bố cục khi đang chỉnh, gắn sự kiện
    Mọi việc chạy trên máy người xem, không gửi ảnh đi đâu.
    ============================================================ */
 (function () {
@@ -8778,6 +8781,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
   var nhin = { ox: 0, oy: 0, sc: 1, W: 0, H: 0, dpr: 1 };
   function tinhNhin() {
     var cv = $('ca-ve'), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (r.width < 2 || r.height < 2) return false;   // tab Chỉnh đang đóng: khỏi vẽ
     if (cv.width !== Math.round(r.width * dpr) || cv.height !== Math.round(r.height * dpr)) { cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); }
     var t = coXoay(), dem = Math.min(40, r.width * 0.06), duoi = 0;
     // chừa chỗ cho thanh nút nổi dưới ảnh của công cụ đang mở, để thanh không đè lên ảnh
@@ -8785,6 +8789,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
     if (noi) duoi = Math.max(0, noi.offsetHeight + 14 - dem / 2);
     var sc = Math.min((r.width - 2 * dem) / t.w, (r.height - 2 * dem - duoi) / t.h);
     nhin = { ox: (r.width - t.w * sc) / 2, oy: (r.height - duoi - t.h * sc) / 2, sc: sc, W: r.width, H: r.height, dpr: dpr };
+    return true;
   }
   function tuNhinSangXoay(px, py) { return [(px - nhin.ox) / nhin.sc, (py - nhin.oy) / nhin.sc]; }
   function tuNhinSangGoc(px, py) { var u = tuNhinSangXoay(px, py); return apMT(nghichMT(maTranXoay()), u[0], u[1]); }
@@ -8794,8 +8799,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
   /* ===== 5. VẼ KHUNG NHÌN ===== */
   function henVe() { if (!st.henVe) st.henVe = requestAnimationFrame(function () { st.henVe = 0; ve(); }); }
   function ve() {
-    if (!st.mo || !st.src) return;
-    tinhNhin();
+    if (!st.mo || !st.src || !tinhNhin()) return;
     var cv = $('ca-ve'), g = cv.getContext('2d'), M = maTranXoay();
     g.setTransform(nhin.dpr, 0, 0, nhin.dpr, 0, 0);
     g.clearRect(0, 0, nhin.W, nhin.H);
@@ -9049,8 +9053,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
   function ghepVaoMa() {
     var c = xuatCanvas(CH.XUAT_GHEP);
     ghiHop('ghép vào mã', { co: c.width + 'x' + c.height, xoay: st.xoay * 90, cat: st.tiLe || 'tự do' });
-    dong();
-    window.KhoiQR.dungAnh(c, { daChinh: true });
+    window.KhoiQR.dungAnh(c, { daChinh: true });   // ảnh vẫn ở lại trình chỉnh: chỉnh tiếp rồi ghép lại được
   }
   function taiAnh() {
     var c = xuatCanvas(CH.XUAT_TOI_DA, true), a = document.createElement('a');
@@ -9061,24 +9064,32 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
   }
 
   /* ===== 9. MỞ / ĐÓNG, GẮN SỰ KIỆN ===== */
-  var truocKhiMo = null;
+  /* Tải ảnh lên (tab Ảnh hoặc nút trong tab Chỉnh): nạp vào trình chỉnh rồi mở tab Chỉnh. */
   function mo(tep) {
-    st.tep = tep; truocKhiMo = document.activeElement;
-    $('ca').hidden = false; st.mo = true;
-    document.documentElement.style.overflow = 'hidden'; if (window.TK && TK.lenis) TK.lenis.stop();
-    chonCu('khung');
+    st.tep = tep;
     napTep(tep, function (ok) {
-      if (!ok) { dong(); var b = $('anh-tt'); if (b) { b.textContent = CHU.anhHong; b.classList.add('la-loi'); } return; }
-      setTimeout(function () { $('ca-ghep').focus({ preventScroll: true }); }, 30);
+      if (!ok) { var b = $('anh-tt'); if (b) { b.textContent = CHU.anhHong; b.classList.add('la-loi'); } return; }
+      st.mo = true; $('ca').hidden = false; $('ca-trong').hidden = true;
+      $('ca-bang-tren-ma').appendChild($('ca-tren-ma'));   // các thanh hình trên mã vào mục công cụ "Trên mã"
+      chonCu('khung');
+      window.KhoiQR.moTab('chinh');
+      datBoCuc(); henVe(); henXemMa();
     });
   }
-  function dong() {
+  /* Bỏ ảnh đang chỉnh (bấm Bỏ ảnh, Dùng ảnh mẫu): trả tab Chỉnh về như cũ và giải phóng bộ nhớ ảnh lớn. */
+  function bo() {
     if (!st.mo) return;
-    st.mo = false; $('ca').hidden = true;
-    document.documentElement.style.overflow = ''; if (window.TK && TK.lenis) TK.lenis.start();
-    // giải phóng bộ nhớ ảnh lớn; lần mở sau nạp lại từ tệp
-    st.src = st.lop = st.lopG = st.lopAnh = st.srcDu = st.mask = null; st.lichSu = []; st.buoc = -1;
-    if (truocKhiMo && truocKhiMo.focus) truocKhiMo.focus({ preventScroll: true });
+    st.mo = false; $('ca').hidden = true; $('ca-trong').hidden = false;
+    $('ca-trong').parentNode.insertBefore($('ca-tren-ma'), $('ca').nextSibling);
+    st.src = st.lop = st.lopG = st.lopAnh = st.srcDu = st.mask = null; st.lichSu = []; st.buoc = -1; st.tep = null;
+    datBoCuc(); ghiHop('bỏ ảnh đang chỉnh');
+  }
+  /* Đang chỉnh ảnh và tab Chỉnh đang mở: cửa sổ công cụ rộng ra, khối thu nhỏ sang cột trái. app.js báo mỗi lần đổi tab. */
+  var tabDangMo = '';
+  function khiDoiTab(trang) { tabDangMo = trang; datBoCuc(); if (trang === 'chinh') henVe(); }
+  function datBoCuc() {
+    var k = document.querySelector('#khoi-qr .kqr'), bat = st.mo && tabDangMo === 'chinh';
+    if (k && k.classList.contains('dang-chinh') !== bat) k.classList.toggle('dang-chinh', bat);
   }
   function chonCu(cu) {
     st.cu = cu;
@@ -9099,7 +9110,6 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
     $('ca-rong').value = st.coRiengW || ''; $('ca-cao').value = st.coRiengH || '';
     var ts = window.KhoiQR && window.KhoiQR.thamSoGhep ? window.KhoiQR.thamSoGhep() : null;
     if (ts) {
-      $('ca-giu-mau').checked = ts.giuMau;
       Array.prototype.forEach.call(document.querySelectorAll('#ca [data-png]'), function (b) { b.setAttribute('aria-pressed', String(+b.dataset.png === ts.coPng)); });
     }
     $('ca-but-giu').disabled = $('ca-but-xoa').disabled = !st.butKhep;
@@ -9157,7 +9167,7 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
   }
 
   function gan() {
-    $('ca-dong').addEventListener('click', function () { ghiHop('đóng, không ghép'); dong(); });
+    $('ca-tai-len').addEventListener('click', function () { ghiHop('bấm Tải ảnh lên (tab Chỉnh)'); $('tep-anh').click(); });
     $('ca-ghep').addEventListener('click', ghepVaoMa);
     $('ca-lui').addEventListener('click', function () { veBuoc(st.buoc - 1); ghiHop('hoàn tác'); });
     $('ca-toi').addEventListener('click', function () { veBuoc(st.buoc + 1); ghiHop('làm lại'); });
@@ -9200,27 +9210,20 @@ window.ANH_MAU_KHOI_QR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wB
       $(p[0]).addEventListener('input', function () { st[p[1]] = +this.value; $(p[0] + '-gt').textContent = (st[p[1]] > 0 ? '+' : '') + st[p[1]]; henDungLop(); });
       $(p[0]).addEventListener('change', function () { ghiBuoc(); ghiHop('màu', { thanh: p[1], giaTri: st[p[1]] }); });
     });
-    $('ca-giu-mau').addEventListener('change', function () { window.KhoiQR.datGiuMau(this.checked); henXemMa(); });
+    $('ca-tren-ma').addEventListener('input', henXemMa); $('ca-tren-ma').addEventListener('change', henXemMa);   // thanh trên mã đổi: thử quét lại
     Array.prototype.forEach.call(document.querySelectorAll('#ca [data-png]'), function (b) { b.addEventListener('click', function () { window.KhoiQR.datCoPng(+b.dataset.png); dongBoBang(); }); });
     $('ca-tai').addEventListener('click', taiAnh);
     $('ca').addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { e.preventDefault(); ghiHop('đóng bằng Esc'); dong(); return; }
       var phim = (e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z');
       if (phim && !/INPUT/.test(e.target.tagName)) { e.preventDefault(); veBuoc(st.buoc + (e.shiftKey ? 1 : -1)); }
-      if (e.key === 'Tab') {   // giữ tiêu điểm trong hộp thoại
-        var ds = Array.prototype.filter.call($('ca').querySelectorAll('button, input'), function (x) { return !x.disabled && x.offsetParent; });
-        if (!ds.length) return;
-        if (e.shiftKey && document.activeElement === ds[0]) { e.preventDefault(); ds[ds.length - 1].focus(); }
-        else if (!e.shiftKey && document.activeElement === ds[ds.length - 1]) { e.preventDefault(); ds[0].focus(); }
-      }
     });
-    window.addEventListener('resize', henVe);
+    if (window.ResizeObserver) new ResizeObserver(henVe).observe($('ca-ve')); else window.addEventListener('resize', henVe);
     ganKeoTha();
     $('ca-co-co-gt').textContent = st.coCo + ' px'; $('ca-sai-so-gt').textContent = st.saiSo;
   }
 
   gan();
-  window.ChinhAnhQR = { mo: mo, dong: dong, trangThai: function () { return { mo: st.mo, w: st.w, h: st.h, cu: st.cu, buoc: st.buoc, soBuoc: st.lichSu.length, xoay: st.xoay, latX: st.latX, latY: st.latY, cat: st.cat, tiLe: st.tiLe, but: st.but.length, butKhep: st.butKhep, sang: st.sang, trong: st.mask ? Array.prototype.filter.call(st.mask, function (v) { return v < 128; }).length : 0 }; } };
+  window.ChinhAnhQR = { mo: mo, bo: bo, khiDoiTab: khiDoiTab, trangThai: function () { return { mo: st.mo, w: st.w, h: st.h, cu: st.cu, buoc: st.buoc, soBuoc: st.lichSu.length, xoay: st.xoay, latX: st.latX, latY: st.latY, cat: st.cat, tiLe: st.tiLe, but: st.but.length, butKhep: st.butKhep, sang: st.sang, trong: st.mask ? Array.prototype.filter.call(st.mask, function (v) { return v < 128; }).length : 0 }; } };
 })();
 </script>
 <script>

@@ -1,5 +1,5 @@
 /* ============================================================
-   chinh-anh.js : trình chỉnh ảnh trước khi ghép vào Khối QR. Chạy sau app.js (cần window.KhoiQR, MayKhoiQR, jsQR).
+   chinh-anh.js : trình chỉnh ảnh trong tab Chỉnh của Khối QR, dùng trước khi ghép ảnh vào mã. Chạy sau app.js (cần window.KhoiQR, MayKhoiQR, jsQR).
    Mục lục:
      0. Cấu hình, chữ
      1. Trạng thái và lịch sử (hoàn tác / làm lại)
@@ -10,7 +10,7 @@
      6. Công cụ: khung, tách nền theo màu, bút cắt, tẩy, màu, xoay, xuất
      7. Xem trên mã (thử quét ngay trong trình chỉnh)
      8. Xuất ảnh: ghép vào mã, tải về
-     9. Mở / đóng, gắn sự kiện
+     9. Nạp vào tab / bỏ ảnh, đổi bố cục khi đang chỉnh, gắn sự kiện
    Mọi việc chạy trên máy người xem, không gửi ảnh đi đâu.
    ============================================================ */
 (function () {
@@ -157,6 +157,7 @@
   var nhin = { ox: 0, oy: 0, sc: 1, W: 0, H: 0, dpr: 1 };
   function tinhNhin() {
     var cv = $('ca-ve'), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (r.width < 2 || r.height < 2) return false;   // tab Chỉnh đang đóng: khỏi vẽ
     if (cv.width !== Math.round(r.width * dpr) || cv.height !== Math.round(r.height * dpr)) { cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); }
     var t = coXoay(), dem = Math.min(40, r.width * 0.06), duoi = 0;
     // chừa chỗ cho thanh nút nổi dưới ảnh của công cụ đang mở, để thanh không đè lên ảnh
@@ -164,6 +165,7 @@
     if (noi) duoi = Math.max(0, noi.offsetHeight + 14 - dem / 2);
     var sc = Math.min((r.width - 2 * dem) / t.w, (r.height - 2 * dem - duoi) / t.h);
     nhin = { ox: (r.width - t.w * sc) / 2, oy: (r.height - duoi - t.h * sc) / 2, sc: sc, W: r.width, H: r.height, dpr: dpr };
+    return true;
   }
   function tuNhinSangXoay(px, py) { return [(px - nhin.ox) / nhin.sc, (py - nhin.oy) / nhin.sc]; }
   function tuNhinSangGoc(px, py) { var u = tuNhinSangXoay(px, py); return apMT(nghichMT(maTranXoay()), u[0], u[1]); }
@@ -173,8 +175,7 @@
   /* ===== 5. VẼ KHUNG NHÌN ===== */
   function henVe() { if (!st.henVe) st.henVe = requestAnimationFrame(function () { st.henVe = 0; ve(); }); }
   function ve() {
-    if (!st.mo || !st.src) return;
-    tinhNhin();
+    if (!st.mo || !st.src || !tinhNhin()) return;
     var cv = $('ca-ve'), g = cv.getContext('2d'), M = maTranXoay();
     g.setTransform(nhin.dpr, 0, 0, nhin.dpr, 0, 0);
     g.clearRect(0, 0, nhin.W, nhin.H);
@@ -428,8 +429,7 @@
   function ghepVaoMa() {
     var c = xuatCanvas(CH.XUAT_GHEP);
     ghiHop('ghép vào mã', { co: c.width + 'x' + c.height, xoay: st.xoay * 90, cat: st.tiLe || 'tự do' });
-    dong();
-    window.KhoiQR.dungAnh(c, { daChinh: true });
+    window.KhoiQR.dungAnh(c, { daChinh: true });   // ảnh vẫn ở lại trình chỉnh: chỉnh tiếp rồi ghép lại được
   }
   function taiAnh() {
     var c = xuatCanvas(CH.XUAT_TOI_DA, true), a = document.createElement('a');
@@ -440,24 +440,32 @@
   }
 
   /* ===== 9. MỞ / ĐÓNG, GẮN SỰ KIỆN ===== */
-  var truocKhiMo = null;
+  /* Tải ảnh lên (tab Ảnh hoặc nút trong tab Chỉnh): nạp vào trình chỉnh rồi mở tab Chỉnh. */
   function mo(tep) {
-    st.tep = tep; truocKhiMo = document.activeElement;
-    $('ca').hidden = false; st.mo = true;
-    document.documentElement.style.overflow = 'hidden'; if (window.TK && TK.lenis) TK.lenis.stop();
-    chonCu('khung');
+    st.tep = tep;
     napTep(tep, function (ok) {
-      if (!ok) { dong(); var b = $('anh-tt'); if (b) { b.textContent = CHU.anhHong; b.classList.add('la-loi'); } return; }
-      setTimeout(function () { $('ca-ghep').focus({ preventScroll: true }); }, 30);
+      if (!ok) { var b = $('anh-tt'); if (b) { b.textContent = CHU.anhHong; b.classList.add('la-loi'); } return; }
+      st.mo = true; $('ca').hidden = false; $('ca-trong').hidden = true;
+      $('ca-bang-tren-ma').appendChild($('ca-tren-ma'));   // các thanh hình trên mã vào mục công cụ "Trên mã"
+      chonCu('khung');
+      window.KhoiQR.moTab('chinh');
+      datBoCuc(); henVe(); henXemMa();
     });
   }
-  function dong() {
+  /* Bỏ ảnh đang chỉnh (bấm Bỏ ảnh, Dùng ảnh mẫu): trả tab Chỉnh về như cũ và giải phóng bộ nhớ ảnh lớn. */
+  function bo() {
     if (!st.mo) return;
-    st.mo = false; $('ca').hidden = true;
-    document.documentElement.style.overflow = ''; if (window.TK && TK.lenis) TK.lenis.start();
-    // giải phóng bộ nhớ ảnh lớn; lần mở sau nạp lại từ tệp
-    st.src = st.lop = st.lopG = st.lopAnh = st.srcDu = st.mask = null; st.lichSu = []; st.buoc = -1;
-    if (truocKhiMo && truocKhiMo.focus) truocKhiMo.focus({ preventScroll: true });
+    st.mo = false; $('ca').hidden = true; $('ca-trong').hidden = false;
+    $('ca-trong').parentNode.insertBefore($('ca-tren-ma'), $('ca').nextSibling);
+    st.src = st.lop = st.lopG = st.lopAnh = st.srcDu = st.mask = null; st.lichSu = []; st.buoc = -1; st.tep = null;
+    datBoCuc(); ghiHop('bỏ ảnh đang chỉnh');
+  }
+  /* Đang chỉnh ảnh và tab Chỉnh đang mở: cửa sổ công cụ rộng ra, khối thu nhỏ sang cột trái. app.js báo mỗi lần đổi tab. */
+  var tabDangMo = '';
+  function khiDoiTab(trang) { tabDangMo = trang; datBoCuc(); if (trang === 'chinh') henVe(); }
+  function datBoCuc() {
+    var k = document.querySelector('#khoi-qr .kqr'), bat = st.mo && tabDangMo === 'chinh';
+    if (k && k.classList.contains('dang-chinh') !== bat) k.classList.toggle('dang-chinh', bat);
   }
   function chonCu(cu) {
     st.cu = cu;
@@ -478,7 +486,6 @@
     $('ca-rong').value = st.coRiengW || ''; $('ca-cao').value = st.coRiengH || '';
     var ts = window.KhoiQR && window.KhoiQR.thamSoGhep ? window.KhoiQR.thamSoGhep() : null;
     if (ts) {
-      $('ca-giu-mau').checked = ts.giuMau;
       Array.prototype.forEach.call(document.querySelectorAll('#ca [data-png]'), function (b) { b.setAttribute('aria-pressed', String(+b.dataset.png === ts.coPng)); });
     }
     $('ca-but-giu').disabled = $('ca-but-xoa').disabled = !st.butKhep;
@@ -536,7 +543,7 @@
   }
 
   function gan() {
-    $('ca-dong').addEventListener('click', function () { ghiHop('đóng, không ghép'); dong(); });
+    $('ca-tai-len').addEventListener('click', function () { ghiHop('bấm Tải ảnh lên (tab Chỉnh)'); $('tep-anh').click(); });
     $('ca-ghep').addEventListener('click', ghepVaoMa);
     $('ca-lui').addEventListener('click', function () { veBuoc(st.buoc - 1); ghiHop('hoàn tác'); });
     $('ca-toi').addEventListener('click', function () { veBuoc(st.buoc + 1); ghiHop('làm lại'); });
@@ -579,25 +586,18 @@
       $(p[0]).addEventListener('input', function () { st[p[1]] = +this.value; $(p[0] + '-gt').textContent = (st[p[1]] > 0 ? '+' : '') + st[p[1]]; henDungLop(); });
       $(p[0]).addEventListener('change', function () { ghiBuoc(); ghiHop('màu', { thanh: p[1], giaTri: st[p[1]] }); });
     });
-    $('ca-giu-mau').addEventListener('change', function () { window.KhoiQR.datGiuMau(this.checked); henXemMa(); });
+    $('ca-tren-ma').addEventListener('input', henXemMa); $('ca-tren-ma').addEventListener('change', henXemMa);   // thanh trên mã đổi: thử quét lại
     Array.prototype.forEach.call(document.querySelectorAll('#ca [data-png]'), function (b) { b.addEventListener('click', function () { window.KhoiQR.datCoPng(+b.dataset.png); dongBoBang(); }); });
     $('ca-tai').addEventListener('click', taiAnh);
     $('ca').addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { e.preventDefault(); ghiHop('đóng bằng Esc'); dong(); return; }
       var phim = (e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z');
       if (phim && !/INPUT/.test(e.target.tagName)) { e.preventDefault(); veBuoc(st.buoc + (e.shiftKey ? 1 : -1)); }
-      if (e.key === 'Tab') {   // giữ tiêu điểm trong hộp thoại
-        var ds = Array.prototype.filter.call($('ca').querySelectorAll('button, input'), function (x) { return !x.disabled && x.offsetParent; });
-        if (!ds.length) return;
-        if (e.shiftKey && document.activeElement === ds[0]) { e.preventDefault(); ds[ds.length - 1].focus(); }
-        else if (!e.shiftKey && document.activeElement === ds[ds.length - 1]) { e.preventDefault(); ds[0].focus(); }
-      }
     });
-    window.addEventListener('resize', henVe);
+    if (window.ResizeObserver) new ResizeObserver(henVe).observe($('ca-ve')); else window.addEventListener('resize', henVe);
     ganKeoTha();
     $('ca-co-co-gt').textContent = st.coCo + ' px'; $('ca-sai-so-gt').textContent = st.saiSo;
   }
 
   gan();
-  window.ChinhAnhQR = { mo: mo, dong: dong, trangThai: function () { return { mo: st.mo, w: st.w, h: st.h, cu: st.cu, buoc: st.buoc, soBuoc: st.lichSu.length, xoay: st.xoay, latX: st.latX, latY: st.latY, cat: st.cat, tiLe: st.tiLe, but: st.but.length, butKhep: st.butKhep, sang: st.sang, trong: st.mask ? Array.prototype.filter.call(st.mask, function (v) { return v < 128; }).length : 0 }; } };
+  window.ChinhAnhQR = { mo: mo, bo: bo, khiDoiTab: khiDoiTab, trangThai: function () { return { mo: st.mo, w: st.w, h: st.h, cu: st.cu, buoc: st.buoc, soBuoc: st.lichSu.length, xoay: st.xoay, latX: st.latX, latY: st.latY, cat: st.cat, tiLe: st.tiLe, but: st.but.length, butKhep: st.butKhep, sang: st.sang, trong: st.mask ? Array.prototype.filter.call(st.mask, function (v) { return v < 128; }).length : 0 }; } };
 })();
