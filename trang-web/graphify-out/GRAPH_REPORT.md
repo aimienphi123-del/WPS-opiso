@@ -1,7 +1,7 @@
 # Graph Report - trang-web  (2026-11-20)
 
 ## Corpus Check
-- 35 files · ~91,013 words
+- 35 files · ~91,698 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 2, .css 2)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `60f8e63c`
+- Built from commit: `f4069916`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -48,12 +48,12 @@
 ## God Nodes (most connected - your core abstractions)
 1. `khoiDong()` - 24 edges
 2. `gan()` - 23 edges
-3. `yeuCauGhep()` - 20 edges
-4. `taoBoVe()` - 20 edges
-5. `henVe()` - 20 edges
+3. `taoBoVe()` - 20 edges
+4. `henVe()` - 20 edges
+5. `yeuCauGhep()` - 20 edges
 6. `ganKeo()` - 18 edges
-7. `capNhatNutMat()` - 17 edges
-8. `ganKeoTha()` - 17 edges
+7. `ganKeoTha()` - 17 edges
+8. `capNhatNutMat()` - 17 edges
 9. `xepKhoi()` - 16 edges
 10. `capNhatCuaSo()` - 15 edges
 
@@ -62,12 +62,12 @@
   DU-AN.md → khoi-qr/app.js
 - `Sửa cái gì thì mở đâu` --references--> `veTienDo()`  [INFERRED]
   DU-AN.md → khoi-qr/app.js
-- `motMat()` --indirect_call--> `f()`  [INFERRED]
-  khoi-qr/app.js → khoi-qr/omggif.js
 - `buoc()` --indirect_call--> `d()`  [INFERRED]
   khoi-qr/app.js → khoi-qr/jsqr.min.js
-- `suaChoDeQuet()` --indirect_call--> `buoc()`  [INFERRED]
-  khoi-qr/chinh-anh.js → khoi-qr/app.js
+- `xong()` --indirect_call--> `i()`  [INFERRED]
+  khoi-qr/chinh-anh.js → khoi-qr/jsqr.min.js
+- `chay()` --indirect_call--> `vong()`  [INFERRED]
+  canh-3d/bien-3d.js → canh-3d/canh-3d.js
 
 ## Import Cycles
 - None detected.

@@ -134,6 +134,9 @@
     });
     // cuộn xuống: chữ nền trôi chậm và to dần, ảnh trôi chậm hơn chữ, khối chữ mờ đi
     const hero = $('#dau');
+    // căn giữa chữ nền và ảnh giao hẳn cho GSAP (xPercent, đúng cả khi đổi cỡ cửa sổ); thuộc tính translate để riêng cho phần lệch theo con trỏ.
+    // Không làm vậy thì GSAP gộp "translate: -50%" của CSS vào transform, rồi phần lệch theo con trỏ cộng thêm -50% lần nữa: ảnh nhảy sang trái nửa bề ngang.
+    ['.to', '#anh'].forEach((s) => { const e = $(s); e.style.translate = 'none'; G.set(e, { xPercent: -50, x: 0 }); });
     G.fromTo('.to', { y: 0, scale: 1 }, { y: -160, scale: 1.12, ease: 'none', immediateRender: false, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
     G.fromTo('#anh', { y: 0 }, { y: -60, ease: 'none', immediateRender: false, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
     G.fromTo('.hero-trai, .hero-phai', { y: 0, opacity: 1 }, { y: -120, opacity: 0, ease: 'none', immediateRender: false, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
@@ -142,7 +145,7 @@
       const to = $('.to'), anh = $('#anh'); let mx = 0, my = 0, cx = 0, cy = 0, dangVe = false;
       const lech = () => {
         cx += (mx - cx) * 0.06; cy += (my - cy) * 0.06;
-        to.style.translate = `calc(-50% + ${cx * -26}px) ${cy * -14}px`; anh.style.translate = `calc(-50% + ${cx * 14}px) ${cy * 6}px`;
+        to.style.translate = `${cx * -26}px ${cy * -14}px`; anh.style.translate = `${cx * 14}px ${cy * 6}px`;
         if (Math.abs(mx - cx) + Math.abs(my - cy) > 0.0005) requestAnimationFrame(lech); else dangVe = false;
       };
       hero.addEventListener('pointermove', (e) => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; if (!dangVe) { dangVe = true; requestAnimationFrame(lech); } });

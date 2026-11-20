@@ -85,6 +85,7 @@ Khi ghép, lệnh `dung.py` làm theo thứ tự sau:
 
 - **Màu một chủ đề, bo góc, tốc độ chuyển động:** `nguon/cau-hinh.css`.
 - **Thêm, sửa app; thêm phim; đổi bước dự án:** `nguon/du-lieu.js`. Thêm app là thêm một dòng trong `SP`.
+- **Bố cục phần Liên hệ:** máy tính: thẻ chân dung bên trái, thông tin liên hệ bên phải (`.lh2 > .tdd { order: -1 }`); màn hẹp: thông tin trước, thẻ sau. Mặt sau thẻ có mã QR Zalo (SVG tạo sẵn từ link Zalo đang có trên trang, `zaloapp.com/qr/p/c2zq8n5qpjs7`), đặt giữa mã vạch và chữ ký; đổi link Zalo thì phải tạo lại SVG này.
 - **Thẻ chân dung ở phần Liên hệ:** khối `tdd` trong `nguon/lien-he.html`. Thẻ dùng chung ảnh của màn đầu, không nhúng lại. Mặt trước là khung máy quay, rê chuột thì nghiêng 3D, bấm (hoặc Enter) thì lật. Chữ mặt sau đã được chủ trang duyệt từng dòng, muốn đổi thì hỏi trước.
 - **Motion graphic của một app:** thẻ `<template id="mg-<mã app>">` trong `nguon/san-pham.html`.
 - **Một phần của trang:** mở đúng tệp phần đó. Kiểu, khung và mã của phần nằm chung một tệp.
@@ -151,6 +152,7 @@ Phải giữ. Muốn đổi thì hỏi trước.
   - Không có chữ "Đang nhận việc", không có chấm online hay offline. Thanh đầu trang chỉ có giờ TP.HCM.
   - Trang nghiêm túc, thể hiện kỹ năng, không kêu gọi. Phần cuối tên là "Thông tin liên hệ".
   - Chỗ nào đã có motion graphic minh hoạ thì bỏ chữ giải thích thừa.
+  - Phần Đang làm không có tiêu đề nhỏ "Đang làm." (chủ trang bỏ ngày 20/11/2026); `#dl2-dau` chỉ còn nhãn trạng thái.
   - Chữ thừa là chữ nói lại điều người xem đã thấy trên màn hình (nhãn lặp lại ô hay nút), hoặc lời khuyên không làm họ đổi cách dùng. Chữ cần giữ là điều họ không tự thấy được mà ảnh hưởng tới việc họ làm: báo lỗi, kết quả sau khi bấm, ảnh không gửi đi, đánh đổi khi chỉnh.
 - **Phong cách:**
   - Chill, trầm ổn.
