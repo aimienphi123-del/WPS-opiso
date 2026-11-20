@@ -1,17 +1,17 @@
-# Graph Report - trang-web  (2026-11-19)
+# Graph Report - trang-web  (2026-11-20)
 
 ## Corpus Check
-- 35 files · ~91,050 words
+- 35 files · ~91,013 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 2, .css 2)
 
 ## Summary
-- 396 nodes · 877 edges · 33 communities (23 shown, 10 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 70 edges (avg confidence: 0.85)
+- 396 nodes · 878 edges · 32 communities (22 shown, 10 thin omitted)
+- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 71 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `59167992`
+- Built from commit: `60f8e63c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -44,36 +44,35 @@
 - khoiDong
 - capNhatNutMat
 - henVe
-- chayHieuUngTaiGiay
 
 ## God Nodes (most connected - your core abstractions)
 1. `khoiDong()` - 24 edges
 2. `gan()` - 23 edges
-3. `henVe()` - 20 edges
+3. `yeuCauGhep()` - 20 edges
 4. `taoBoVe()` - 20 edges
-5. `yeuCauGhep()` - 20 edges
+5. `henVe()` - 20 edges
 6. `ganKeo()` - 18 edges
-7. `ganKeoTha()` - 17 edges
-8. `capNhatNutMat()` - 17 edges
+7. `capNhatNutMat()` - 17 edges
+8. `ganKeoTha()` - 17 edges
 9. `xepKhoi()` - 16 edges
 10. `capNhatCuaSo()` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `Sửa cái gì thì mở đâu` --references--> `chayHieuUngTaiGiay()`  [INFERRED]
+  DU-AN.md → khoi-qr/app.js
 - `Sửa cái gì thì mở đâu` --references--> `veTienDo()`  [INFERRED]
   DU-AN.md → khoi-qr/app.js
-- `suaChoDeQuet()` --indirect_call--> `buoc()`  [INFERRED]
-  khoi-qr/chinh-anh.js → khoi-qr/app.js
-- `xong()` --indirect_call--> `i()`  [INFERRED]
-  khoi-qr/chinh-anh.js → khoi-qr/jsqr.min.js
+- `motMat()` --indirect_call--> `f()`  [INFERRED]
+  khoi-qr/app.js → khoi-qr/omggif.js
 - `buoc()` --indirect_call--> `d()`  [INFERRED]
   khoi-qr/app.js → khoi-qr/jsqr.min.js
-- `chay()` --indirect_call--> `vong()`  [INFERRED]
-  canh-3d/bien-3d.js → canh-3d/canh-3d.js
+- `suaChoDeQuet()` --indirect_call--> `buoc()`  [INFERRED]
+  khoi-qr/chinh-anh.js → khoi-qr/app.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (33 total, 10 thin omitted)
+## Communities (32 total, 10 thin omitted)
 
 ### Community 0 - "ref_playwright"
 Cohesion: 0.15
@@ -92,8 +91,8 @@ Cohesion: 0.33
 Nodes (5): { chromium, devices }, fs, path, PHAN, RA
 
 ### Community 4 - "Trang web cá nhân của Bùi Tuấn Khanh"
-Cohesion: 0.17
-Nodes (11): Bản đồ dự án (graphify), Cấu trúc thư mục, Hiệu năng (đã làm), Kiểm tra trước khi giao, Một tệp phần trong `nguon/` gồm những gì, Những điều chủ trang đã chốt, Sửa cái gì thì mở đâu, Thứ tự các phần trên trang (+3 more)
+Cohesion: 0.14
+Nodes (15): Bản đồ dự án (graphify), Cấu trúc thư mục, Hiệu năng (đã làm), Kiểm tra trước khi giao, Một tệp phần trong `nguon/` gồm những gì, Những điều chủ trang đã chốt, Sửa cái gì thì mở đâu, Thứ tự các phần trên trang (+7 more)
 
 ### Community 5 - "chup-moc.cjs"
 Cohesion: 0.33
@@ -163,10 +162,6 @@ Nodes (17): capNhatNutMat(), giaiMa(), huongCuaMat(), khungHut(), nhanKetQua(), 
 Cohesion: 0.16
 Nodes (19): batDauXep(), onErr(), onMsg(), trenTrang(), capNhatDong(), chayDong(), chinhChoMay(), ganDong() (+11 more)
 
-### Community 33 - "chayHieuUngTaiGiay"
-Cohesion: 0.83
-Nodes (4): chayHieuUngTaiGiay(), drawPaper3D(), drawTexTri(), frame()
-
 ## Knowledge Gaps
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -183,7 +178,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.118) - this node is a cross-community bridge._
 - **Are the 7 inferred relationships involving `gan()` (e.g. with `apCoRieng()` and `ghepVaoMa()`) actually correct?**
   _`gan()` has 7 INFERRED edges - model-reasoned connections that need verification._
-- **Should `may.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.08773784355179703 - nodes in this community are weakly interconnected._
+- **Should `Trang web cá nhân của Bùi Tuấn Khanh` be split into smaller, more focused modules?**
+  _Cohesion score 0.14166666666666666 - nodes in this community are weakly interconnected._
 - **Why does `capNhatCuaSo()` connect `capNhatCuaSo` to `Trang web cá nhân của Bùi Tuấn Khanh`, `capNhatNutMat`, `khoiDong`, `capNhatNutMat`, `henVe`?**
-  _High betweenness centrality (0.053) - this node is a cross-community bridge._
+  _High betweenness centrality (0.052) - this node is a cross-community bridge._
